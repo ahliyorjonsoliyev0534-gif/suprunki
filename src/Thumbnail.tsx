@@ -1,11 +1,12 @@
 import React from "react";
 import { AbsoluteFill, Img, staticFile } from "remotion";
 import { Background } from "./components/Background";
+import { MascotSvg } from "./components/Mascot";
 import { TITLE_FONT } from "./fonts";
 import type { VideoProps } from "./types";
 
 /** 1280x720 YouTube thumbnail: chapda katta matn, o'ngda personaj yoki sahna rasmi. */
-export const Thumbnail: React.FC<VideoProps> = ({ scenes, thumbnailText, channelName }) => {
+export const Thumbnail: React.FC<VideoProps> = ({ scenes, thumbnailText, channelName, host }) => {
   const photo = scenes.find((s) => s.image && s.imageKind === "photo");
   const character = scenes.find((s) => s.image && s.imageKind === "character");
   const words = (thumbnailText || "").toUpperCase().split(/\s+/).filter(Boolean);
@@ -31,8 +32,22 @@ export const Thumbnail: React.FC<VideoProps> = ({ scenes, thumbnailText, channel
             filter: "drop-shadow(0 0 30px rgba(255,255,255,0.7))",
           }}
         />
+      ) : host ? (
+        <div
+          style={{
+            position: "absolute",
+            right: 40,
+            bottom: -10,
+            transform: "rotate(-8deg)",
+            filter: "drop-shadow(0 0 30px rgba(255,255,255,0.6))",
+          }}
+        >
+          <MascotSvg mouthOpen={0.9} blink={0} size={420} look={-1} />
+        </div>
       ) : null}
-      <AbsoluteFill style={{ justifyContent: "center", paddingLeft: 55, paddingRight: character ? 520 : 55 }}>
+      <AbsoluteFill
+        style={{ justifyContent: "center", paddingLeft: 55, paddingRight: character || host ? 480 : 55 }}
+      >
         <div style={{ fontFamily: TITLE_FONT, fontSize: words.length > 3 ? 115 : 145, lineHeight: 1.0 }}>
           {words.map((word, i) => (
             <span

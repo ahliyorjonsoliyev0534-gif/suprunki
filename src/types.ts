@@ -28,6 +28,8 @@ export type VideoProps = {
   thumbnailText: string;
   music: string | null;
   musicVolume: number;
+  /** Kanal maskoti "Coree" videoda ko'rinsinmi */
+  host: boolean;
   scenes: SceneProps[];
 };
 

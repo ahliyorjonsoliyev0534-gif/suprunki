@@ -51,7 +51,7 @@ export const Captions: React.FC<{ words: Word[] }> = ({ words }) => {
           fontSize,
           lineHeight: 1.15,
           textAlign: "center",
-          maxWidth: vertical ? "88%" : "80%",
+          maxWidth: vertical ? "88%" : "68%",
           transform: `scale(${0.8 + pop * 0.2})`,
           textTransform: vertical ? "uppercase" : "none",
           letterSpacing: 1,
@@ -65,7 +65,7 @@ export const Captions: React.FC<{ words: Word[] }> = ({ words }) => {
               style={{
                 color: active ? "#FFE600" : "white",
                 display: "inline-block",
-                margin: "0 0.18em",
+                margin: "0 0.24em",
                 transform: active ? "scale(1.12) translateY(-4%)" : "none",
                 WebkitTextStroke: `${fontSize * 0.09}px black`,
                 paintOrder: "stroke fill",

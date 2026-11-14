@@ -1,10 +1,12 @@
 // Butun jarayon: mavzu -> ssenariy -> ovoz -> rasmlar -> Remotion render -> (YouTube)
+import crypto from "node:crypto";
 import fs from "node:fs/promises";
 import { existsSync } from "node:fs";
 import path from "node:path";
 import { FPS, SIZES, type SceneProps, type VideoFormat, type VideoProps } from "../src/types";
 import { log, settings } from "./config";
 import { characterLibrary, sceneImage } from "./images";
+import { generateMusic } from "./music";
 import { renderJob } from "./render";
 import { ScriptWriter, wordCount, type VideoScript } from "./script-writer";
 import { audioDurationSeconds, synthesize } from "./tts";
@@ -51,14 +53,26 @@ export const addIdeas = async (format: VideoFormat, count: number): Promise<stri
 const slug = (text: string): string =>
   text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 50) || "video";
 
-const pickMusic = async (jobDir: string): Promise<string | null> => {
+/**
+ * Fon musiqasi:
+ *   MUSIC_MODE=generated - har safar yangi original beat (standart, agar assets/music bo'sh bo'lsa)
+ *   MUSIC_MODE=assets    - assets/music dagi treklardan biri
+ *   MUSIC_MODE=off       - musiqasiz
+ */
+const pickMusic = async (jobDir: string, seedText: string): Promise<string | null> => {
+  if (settings.musicMode === "off") return null;
   const dir = path.join(settings.assetsDir, "music");
   const files = (await fs.readdir(dir).catch(() => [] as string[])).filter((f) => /\.(mp3|wav|m4a|ogg)$/i.test(f));
-  if (!files.length) return null;
-  const file = files[Math.floor(Math.random() * files.length)];
-  const rel = `music${path.extname(file).toLowerCase()}`;
-  await fs.copyFile(path.join(dir, file), path.join(jobDir, rel));
-  return rel;
+  if (settings.musicMode !== "generated" && files.length) {
+    const file = files[Math.floor(Math.random() * files.length)];
+    const rel = `music${path.extname(file).toLowerCase()}`;
+    await fs.copyFile(path.join(dir, file), path.join(jobDir, rel));
+    return rel;
+  }
+  const seed = parseInt(crypto.createHash("md5").update(seedText).digest("hex").slice(0, 8), 16);
+  const { bpm } = await generateMusic(path.join(jobDir, "music.wav"), seed);
+  log(`Original musiqa yaratildi (${bpm} BPM)`);
+  return "music.wav";
 };
 
 /** Ssenariydan ovoz va rasmlarni tayyorlab, Remotion props'ini qaytaradi. */
@@ -101,8 +115,9 @@ export const prepareAssets = async (
     channelName: settings.channelName,
     title: script.title,
     thumbnailText: script.thumbnailText,
-    music: await pickMusic(jobDir),
+    music: await pickMusic(jobDir, `${script.title}-${Date.now()}`),
     musicVolume: settings.musicVolume,
+    host: settings.host,
     scenes,
   };
 };

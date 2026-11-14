@@ -20,6 +20,11 @@ Mavzu → Ssenariy (OpenAI) → Ovoz (Edge-TTS) → Rasmlar (sizniki yoki AI)
 - `short`: vertikal 1080×1920, taxminan 50 soniya. Pastda TikTok uslubidagi subtitr, tepada progress chizig'i.
 - `long`: gorizontal 1920×1080, uzunligini o'zingiz berasiz (3, 10, 20 daqiqa). Thumbnail ham avtomatik yasaladi.
 
+**Kontent original bo'lishi uchun:**
+- **Coree.** Kanalning o'z maskot-boshlovchisi, noldan chizilgan original personaj. Har videoda ekran burchagida turadi, gapirganda og'zi qimirlaydi, ko'zlarini pirpiratadi. Thumbnail'da ham chiqadi. Ssenariy Coree nomidan, birinchi shaxsda, o'z fikri va hazillari bilan yoziladi.
+- **Original musiqa.** Har video uchun yangi beat avtomatik yaratiladi: tempo, tonallik, akkordlar va melodiya har safar boshqacha. Tayyor trek ishlatilmaydi, shuning uchun Content ID muammosi bo'lmaydi.
+- **8 xil format.** Top-ro'yxat, fan nazariya, "what if" hikoya, viktorina, "mif yoki fakt", versus jang, personaj haqida batafsil, "oldin va keyin". Har video uchun tasodifiy biri tanlanadi, shuning uchun kanal bir xil shablonda ko'rinmaydi.
+
 **Videoda nimalar bor:**
 - Personaj sakrab chiqadi va musiqa ritmida tebranadi.
 - AI rasmlarda zoom va pan harakati bo'ladi.
@@ -92,7 +97,7 @@ Natija `output/<sana>-<mavzu>/` papkasiga tushadi. Ichida `video.mp4`, `thumbnai
 
 **Sifatni oshirish uchun:**
 - `assets/characters/` papkasiga personaj rasmlarini qo'ying (masalan `oren.png`, `raddy.png`). Shunda videolar haqiqiy Sprunki ko'rinishida chiqadi.
-- `assets/music/` papkasiga mualliflik huquqidan xoli musiqa qo'ying.
+- O'z musiqangizni ishlatmoqchi bo'lsangiz, `assets/music/` papkasiga qo'ying. Bo'sh qolsa, original beat yaratiladi.
 
 ## 4. To'liq avtomatik rejim: GitHub Actions (bepul, kompyuter yoqiq turishi shart emas)
 
@@ -126,11 +131,13 @@ src/                    Remotion (video dizayni, React)
   components/
     SceneVisual.tsx     personaj sahnasi / AI rasm (Ken Burns) / nom kartasi
     Captions.tsx        TikTok uslubidagi subtitr
+    Mascot.tsx          Coree, kanal maskoti (SVG, gapirganda og'zi qimirlaydi)
     Background.tsx      animatsion gradient fon
 pipeline/               Node (avtomatlashtirish)
   script-writer.ts      OpenAI: mavzular, ssenariy, sarlavha, tavsif, teglar
   tts.ts                Edge-TTS ovoz va so'zlar vaqti
   images.ts             personaj rasmlari va Pollinations AI
+  music.ts              original fon musiqasi generatori
   render.ts             Remotion render (video + thumbnail)
   youtube.ts            OAuth va yuklash
   pipeline.ts           hammasini bog'laydi

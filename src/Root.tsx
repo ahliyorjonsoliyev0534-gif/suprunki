@@ -12,6 +12,7 @@ const demo: VideoProps = {
   thumbnailText: "SECRET OF OREN",
   music: null,
   musicVolume: 0.1,
+  host: true,
   scenes: [
     {
       audio: null,

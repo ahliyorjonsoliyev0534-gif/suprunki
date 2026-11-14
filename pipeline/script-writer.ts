@@ -5,21 +5,45 @@ import { settings } from "./config";
 
 const WORDS_PER_MINUTE = 150;
 
-const SYSTEM_PROMPT = `You are the head writer of the YouTube channel "${settings.channelName}".
+const HOST = settings.hostName;
+
+const SYSTEM_PROMPT = `You are the head writer of the YouTube channel "${settings.channelName}" (${settings.channelHandle}).
 Niche: ${settings.niche}.
-Channel handle: ${settings.channelHandle}.
 Audience: English-speaking kids and teens (8-15) who love Sprunki.
 
-Rules:
-- Write in simple, energetic, natural spoken English. Short sentences. No emojis in narration.
+The narrator is ${HOST}, the channel's own mascot host: a cheerful, music-loving blob with headphones.
+${HOST} speaks in first person, has real opinions ("honestly, my favorite is..."), reacts with surprise and humor,
+and talks directly to the viewer ("you"). ${HOST} is NOT a Sprunki character, just the host of this channel.
+
+Originality rules (very important, YouTube rejects repetitive mass-produced content):
+- Every video needs a unique angle: ${HOST}'s own ranking, own reasoning, own fan theory, own comparison or a fun mini-story.
+- Add at least 2 specific details or observations (colors, sounds, phase changes, how characters interact) and explain WHY they matter.
+- Vary sentence openings and hooks. Do not start with "Did you know" or "Hey guys". No generic filler like "in this video we will".
+- Include one small personal moment from ${HOST} (an opinion, a joke, a reaction).
+- Never copy song lyrics, wiki text or other creators' scripts. Never claim to be the official creators of Sprunki or Incredibox.
+- Clearly mark fan theories as theories ("one theory says..." / "my theory is...").
+
+Style rules:
+- Simple, energetic, natural spoken English. Short sentences. No emojis in narration.
 - The first sentence must be a strong hook that creates curiosity.
-- Be ORIGINAL: give your own explanations, fun theories, comparisons and rankings.
-  Never copy song lyrics. Never claim to be the official creators of Sprunki or Incredibox.
-- Clearly mark fan theories as theories ("one theory says...").
-- Keep it kid-safe: spooky "horror phase" topics are fine, but no gore, violence details or jump-scare wording.
+- Kid-safe: spooky "horror phase" topics are fine, but no gore, violence details or jump-scare wording.
 - Characters you can mention include Oren, Raddy, Clukr, Fun Bot, Vineria, Gray, Brud, Garnold,
   Simon, Tunner, Durple, Jevin, Wenda, Sky, Mr. Sun, Mr. Tree, Pinki, OWAKCX, Black (Sprunki Black).
 - Always return valid JSON only.`;
+
+/** Har video uchun turli format - kanal bir xil shablonda ko'rinmasligi uchun */
+export const STYLES = [
+  "Top ranking: count down from the lowest to the highest, with a surprise at number one",
+  "Fan theory: present clues one by one like a detective, then give the host's own conclusion",
+  "What if story: a short imaginative mini-story about the characters, with a twist ending",
+  "Quiz: ask the viewer questions, pause with 'think about it...', then reveal the answers",
+  "Myth or fact: test popular claims about Sprunki one by one and judge each one",
+  "Versus battle: compare two characters or phases in rounds and pick a winner",
+  "Character spotlight: everything about one character, from looks and sound to hidden details",
+  "Before and after: how something changes between phases, and why that change is interesting",
+];
+
+const pickStyle = (): string => STYLES[Math.floor(Math.random() * STYLES.length)];
 
 const SCENE_SCHEMA =
   '"scenes": [{"narration": "spoken text for this scene", ' +
@@ -33,6 +57,8 @@ export type VideoScript = {
   description: string;
   tags: string[];
   thumbnailText: string;
+  /** Tanlangan format (STYLES dan biri) */
+  style: string;
   scenes: Scene[];
 };
 
@@ -93,8 +119,10 @@ export class ScriptWriter {
   }
 
   private async writeShort(topic: string): Promise<VideoScript> {
+    const style = pickStyle();
     const data = await this.ask(
       `Write a YouTube Short about: ${topic}\n` +
+        `Format: ${style}\n` +
         "Length: 110-140 words of narration in total (about 45-55 seconds).\n" +
         "Split it into 8-12 scenes; each scene is 1-2 short sentences.\n" +
         "End with a quick question to the viewer (for engagement), e.g. 'Which one is your favorite?'\n" +
@@ -110,6 +138,7 @@ export class ScriptWriter {
       description: str(data.description),
       tags: list(data.tags),
       thumbnailText: str(data.thumbnail_text),
+      style,
       scenes: ScriptWriter.scenes(data.scenes),
     };
   }
@@ -119,8 +148,10 @@ export class ScriptWriter {
     const sectionCount = Math.max(3, Math.ceil(minutes / 1.5));
     const wordsPerSection = Math.round(totalWords / sectionCount);
 
+    const style = pickStyle();
     const outline = await this.ask(
       `Plan a ${minutes}-minute YouTube video about: ${topic}\n` +
+        `Format: ${style}\n` +
         `Create exactly ${sectionCount} sections. Section 1 is a hook + intro, the last section is a wrap-up ` +
         `that asks viewers to comment and subscribe to ${settings.channelName}.\n` +
         "Return JSON with keys: " +
@@ -138,6 +169,7 @@ export class ScriptWriter {
     for (const [i, section] of sections.entries()) {
       const data = await this.ask(
         `Video topic: ${topic}\nVideo title: ${str(outline.title)}\n` +
+          `Format of the whole video: ${style}\n` +
           `Write section ${i + 1} of ${sections.length}: ${str(section.heading)}\n` +
           `Key points: ${JSON.stringify(section.points ?? [])}\n` +
           `Length: about ${wordsPerSection} words of narration.\n` +
@@ -157,6 +189,7 @@ export class ScriptWriter {
       description: str(outline.description),
       tags: list(outline.tags),
       thumbnailText: str(outline.thumbnail_text),
+      style,
       scenes,
     };
   }

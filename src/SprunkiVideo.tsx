@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import {
   AbsoluteFill,
   Audio,
@@ -9,8 +9,9 @@ import {
   useVideoConfig,
 } from "remotion";
 import { Captions } from "./components/Captions";
+import { Mascot } from "./components/Mascot";
 import { SceneVisual } from "./components/SceneVisual";
-import type { SceneProps, VideoProps } from "./types";
+import { FPS, type SceneProps, type VideoProps, type Word } from "./types";
 
 const Flash: React.FC = () => {
   const frame = useCurrentFrame();
@@ -46,8 +47,19 @@ const Scene: React.FC<{ scene: SceneProps; index: number }> = ({ scene, index })
   </AbsoluteFill>
 );
 
-export const SprunkiVideo: React.FC<VideoProps> = ({ scenes, music, musicVolume, format }) => {
+export const SprunkiVideo: React.FC<VideoProps> = ({ scenes, music, musicVolume, format, host }) => {
   const { durationInFrames, fps } = useVideoConfig();
+
+  // Maskot butun video davomida turadi, shuning uchun so'zlar vaqtini umumiy vaqt chizig'iga o'tkazamiz
+  const allWords = useMemo(() => {
+    const words: Word[] = [];
+    let offsetMs = 0;
+    for (const scene of scenes) {
+      for (const w of scene.words) words.push({ ...w, startMs: w.startMs + offsetMs, endMs: w.endMs + offsetMs });
+      offsetMs += (scene.durationInFrames / FPS) * 1000;
+    }
+    return words;
+  }, [scenes]);
   return (
     <AbsoluteFill style={{ backgroundColor: "black" }}>
       <Series>
@@ -57,6 +69,7 @@ export const SprunkiVideo: React.FC<VideoProps> = ({ scenes, music, musicVolume,
           </Series.Sequence>
         ))}
       </Series>
+      {host ? <Mascot words={allWords} /> : null}
       {format === "short" ? <ProgressBar /> : null}
       {music ? (
         <Audio

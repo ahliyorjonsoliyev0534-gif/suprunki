@@ -37,7 +37,12 @@ export const settings = {
       "bold black outlines, playful music stage background, 2D vector art, high detail",
   ),
 
-  musicVolume: Number(env("MUSIC_VOLUME", "0.10")),
+  musicVolume: Number(env("MUSIC_VOLUME", "0.12")),
+  musicMode: env("MUSIC_MODE", "auto") as "auto" | "generated" | "assets" | "off",
+
+  /** Kanal maskoti "Coree" videolarda boshlovchi bo'lib chiqadi */
+  host: bool("HOST_MASCOT", true),
+  hostName: env("HOST_NAME", "Coree"),
 
   madeForKids: bool("MADE_FOR_KIDS", true),
   defaultPrivacy: env("YT_PRIVACY", "private") as "private" | "unlisted" | "public",
