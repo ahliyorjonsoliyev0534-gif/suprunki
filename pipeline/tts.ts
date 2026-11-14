@@ -54,7 +54,40 @@ export const synthesize = async (text: string, dir: string, retries = 4): Promis
       tts.close();
     }
   }
-  throw new Error(`Ovoz yaratib bo'lmadi: ${String(lastError)}`);
+  // Oxirgi chora: so'z vaqtlarisiz ovoz olamiz va vaqtlarni so'z uzunligiga qarab taxminlaymiz
+  try {
+    return await synthesizeWithoutTimings(text, dir);
+  } catch (error) {
+    throw new Error(`Ovoz yaratib bo'lmadi: ${String(lastError)} / ${String(error)}`);
+  }
+};
+
+const synthesizeWithoutTimings = async (text: string, dir: string): Promise<{ audio: string; words: Word[] }> => {
+  const tts = new MsEdgeTTS();
+  try {
+    await tts.setMetadata(settings.voice, OUTPUT_FORMAT.AUDIO_24KHZ_96KBITRATE_MONO_MP3);
+    const { audioFilePath } = await tts.toFile(dir, escapeXml(text), { rate: settings.voiceRate, pitch: settings.voicePitch });
+    const audio = path.join(dir, "audio.mp3");
+    if (audioFilePath !== audio) await fs.rename(audioFilePath, audio);
+    return { audio, words: estimateWords(text, (await audioDurationSeconds(audio)) * 1000) };
+  } finally {
+    tts.close();
+  }
+};
+
+/** So'zlar vaqtini taxminlash: har so'zga uzunligiga mos ulush beriladi */
+export const estimateWords = (text: string, totalMs: number): Word[] => {
+  const tokens = text.split(/\s+/).filter(Boolean);
+  const weights = tokens.map((t) => t.replace(/[^a-z0-9]/gi, "").length + 2);
+  const sum = weights.reduce((a, b) => a + b, 0) || 1;
+  const usable = Math.max(0, totalMs - 150);
+  let cursor = 0;
+  return tokens.map((token, i) => {
+    const length = (weights[i] / sum) * usable;
+    const word = { text: token, startMs: cursor, endMs: cursor + length * 0.9 };
+    cursor += length;
+    return word;
+  });
 };
 
 /** Edge so'zlarni tinish belgilarisiz qaytaradi; asl matndagi vergul/nuqtalarni qaytarib qo'yamiz. */

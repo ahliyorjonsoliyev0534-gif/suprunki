@@ -40,6 +40,9 @@ export const findCharacter = (character: string, library: CharacterLibrary): str
   return null;
 };
 
+const MIN_GAP_MS = 4000;
+let lastRequestAt = 0;
+
 const pollinations = async (prompt: string, width: number, height: number, seed: number, out: string, retries = 4): Promise<boolean> => {
   const scale = 1280 / Math.max(width, height);
   const w = Math.round(width * scale);
@@ -50,8 +53,14 @@ const pollinations = async (prompt: string, width: number, height: number, seed:
     `?width=${w}&height=${h}&seed=${seed}&nologo=true&model=flux`;
 
   for (let attempt = 0; attempt < retries; attempt++) {
+    // Bepul xizmatni ortiqcha yuklamaslik uchun so'rovlar orasida pauza
+    const sinceLast = Date.now() - lastRequestAt;
+    if (sinceLast < MIN_GAP_MS) await new Promise((r) => setTimeout(r, MIN_GAP_MS - sinceLast));
+    lastRequestAt = Date.now();
+    let rateLimited = false;
     try {
       const response = await fetch(url, { signal: AbortSignal.timeout(120_000) });
+      rateLimited = response.status === 429;
       if (response.ok && (response.headers.get("content-type") ?? "").startsWith("image")) {
         await fs.writeFile(out, Buffer.from(await response.arrayBuffer()));
         return true;
@@ -59,7 +68,7 @@ const pollinations = async (prompt: string, width: number, height: number, seed:
     } catch {
       // tarmoq xatosi - qayta urinamiz
     }
-    await new Promise((r) => setTimeout(r, 5000 * (attempt + 1)));
+    await new Promise((r) => setTimeout(r, (rateLimited ? 20_000 : 5000) * (attempt + 1)));
   }
   return false;
 };
