@@ -13,7 +13,10 @@ export type Accessory =
   | "halo"
   | "starEars"
   | "visor"
-  | "bowtie";
+  | "bowtie"
+  | "none";
+
+export type CrewShape = "capsule" | "sax" | "ukulele" | "tree" | "cheese";
 
 export type CrewMember = {
   id: string;
@@ -22,6 +25,8 @@ export type CrewMember = {
   accent: string;
   accessory: Accessory;
   eyes: "round" | "sleepy" | "happy";
+  /** Tana shakli: capsule = oddiy Crew, qolganlari = "Band" (jonli asboblar) */
+  shape?: CrewShape;
 };
 
 export const CREW: CrewMember[] = [
@@ -37,7 +42,15 @@ export const CREW: CrewMember[] = [
   { id: "grimm", name: "Grimm", color: "#6B6B7B", accent: "#B8B8C8", accessory: "starEars", eyes: "sleepy" },
   { id: "mintz", name: "Mintz", color: "#7FFFD4", accent: "#1E1E1E", accessory: "visor", eyes: "round" },
   { id: "bongo", name: "Bongo", color: "#B07B4F", accent: "#FF3D6B", accessory: "bowtie", eyes: "happy" },
+  // --- Band: jonli musiqa asboblari ---
+  { id: "saxo", name: "Saxo", color: "#F5C542", accent: "#B8860B", accessory: "none", eyes: "round", shape: "sax" },
+  { id: "uku", name: "Uku", color: "#C8743A", accent: "#6B3A12", accessory: "none", eyes: "round", shape: "ukulele" },
+  { id: "barky", name: "Barky", color: "#8B5A2B", accent: "#4CCB5A", accessory: "none", eyes: "round", shape: "tree" },
+  { id: "brie", name: "Brie", color: "#FFE680", accent: "#D6304A", accessory: "none", eyes: "round", shape: "cheese" },
 ];
+
+/** Videolarda bosh rolda chiqadigan "Band" personajlari */
+export const BAND_IDS = ["saxo", "uku", "barky", "brie"];
 
 /** Rang almashtirish formatlari uchun yorqin palitra */
 export const PARTY_COLORS = [

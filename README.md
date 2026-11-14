@@ -21,7 +21,7 @@ Mavzu → Ssenariy (OpenAI) → Ovoz (Edge-TTS) → Rasmlar (sizniki yoki AI)
 - `long`: gorizontal 1920×1080, uzunligini o'zingiz berasiz (3, 10, 20 daqiqa). Thumbnail ham avtomatik yasaladi.
 
 **Coree Crew Shorts (ovozsiz, OpenAI kerak emas, butunlay bepul):**
-Kanalingizda eng ko'p ko'rilgan Shorts turlari bo'yicha, lekin 12 ta **original** personaj bilan yasaladi: Coree, Zappi, Moxi, Leafy, Bloop, Rexo, Tiko, Pluma, Nova, Grimm, Mintz, Bongo. Har bir video 7–10 soniya davom etadi, original beat bilan va loop qilib ko'rishga mos.
+Kanalingizda eng ko'p ko'rilgan Shorts turlari bo'yicha, lekin **original** personajlar bilan yasaladi. Bosh rolda doim **Band** chiqadi: jonli musiqa asboblari 🎷 Saxo, 🎸 Uku, 🌳 Barky va 🧀 Brie. Ularga 12 ta Crew personaji qo'shiladi: Coree, Zappi, Moxi, Leafy, Bloop, Rexo, Tiko, Pluma, Nova, Grimm, Mintz, Bongo. Har bir video 7–10 soniya davom etadi, original beat bilan va loop qilib ko'rishga mos.
 - `party`: "Color Party", hamma birma-bir bitta personajga aylanadi, har biri o'z rangida.
 - `horror`: "Normal vs Horror", ekran chaqmoq bilan ikkiga bo'lingan, neon ranglar. Qon yo'q, bolalar uchun xavfsiz.
 - `pick`: "Pick One", 3 ta personaj, 3-2-1 sanash, g'olib tanlanadi va konfetti tushadi.
@@ -146,7 +146,7 @@ src/                    Remotion (video dizayni, React)
     SceneVisual.tsx     personaj sahnasi / AI rasm (Ken Burns) / nom kartasi
     Captions.tsx        TikTok uslubidagi subtitr
     Mascot.tsx          Coree, kanal maskoti (SVG, gapirganda og'zi qimirlaydi)
-  crew/                 Coree Crew: 12 ta original personaj va 3 ta Shorts formati
+  crew/                 Coree Crew: Band (asboblar) va 12 ta personaj, 3 ta Shorts formati
     Background.tsx      animatsion gradient fon
 pipeline/               Node (avtomatlashtirish)
   script-writer.ts      OpenAI: mavzular, ssenariy, sarlavha, tavsif, teglar

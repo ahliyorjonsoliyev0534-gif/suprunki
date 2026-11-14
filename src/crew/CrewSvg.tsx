@@ -1,5 +1,6 @@
 import React from "react";
 import type { Accessory, CrewMember } from "./characters";
+import { InstrumentSvg } from "./InstrumentSvg";
 
 export type CrewLook = "normal" | "horror";
 
@@ -82,6 +83,8 @@ const AccessoryShape: React.FC<{ type: Accessory; accent: string; ink: string; b
       return null; // ko'z ustida chiziladi
     case "bowtie":
       return null; // tanada chiziladi
+    case "none":
+      return null;
   }
 };
 
@@ -96,6 +99,11 @@ export const CrewSvg: React.FC<Props> = ({
   lookX = 0,
   mood = "smile",
 }) => {
+  if (member.shape && member.shape !== "capsule") {
+    return (
+      <InstrumentSvg member={member} size={size} colorOverride={colorOverride} look={look} mouthOpen={mouthOpen} blink={blink} lookX={lookX} mood={mood} />
+    );
+  }
   const horror = look === "horror";
   const ink = horror ? "#FF2E2E" : "#111";
   const body = horror ? "#0B0B0B" : colorOverride ?? member.color;

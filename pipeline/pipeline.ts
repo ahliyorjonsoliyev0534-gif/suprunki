@@ -3,7 +3,7 @@ import crypto from "node:crypto";
 import fs from "node:fs/promises";
 import { existsSync } from "node:fs";
 import path from "node:path";
-import { CREW, memberById } from "../src/crew/characters";
+import { BAND_IDS, CREW, memberById } from "../src/crew/characters";
 import { CREW_BEATS, type CrewProps, type CrewStyle } from "../src/crew/types";
 import { FPS, SIZES, type SceneProps, type VideoFormat, type VideoProps } from "../src/types";
 import { log, settings } from "./config";
@@ -228,8 +228,11 @@ export const makeCrew = async (opts: {
 }): Promise<HistoryItem> => {
   const style: CrewStyle = !opts.style || opts.style === "random" ? pick(CREW_STYLES) : opts.style;
   const seed = Math.floor(Math.random() * 1_000_000);
-  const members = shuffle(CREW.map((m) => m.id));
-  const featured = members[members.length - 1];
+  // Band (saksofon, ukulele, daraxt, pishloq) har doim birinchi o'rinda, qolgan Crew ulardan keyin
+  const band = shuffle(BAND_IDS);
+  const others = shuffle(CREW.map((m) => m.id).filter((id) => !BAND_IDS.includes(id)));
+  const members = [...band, ...others];
+  const featured = band[0];
 
   const stamp = new Date().toISOString().replace(/[-:]/g, "").replace("T", "-").slice(0, 15);
   const jobDir = path.join(settings.outputDir, `${stamp}-crew-${style}`);
