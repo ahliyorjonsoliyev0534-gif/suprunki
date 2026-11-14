@@ -34,16 +34,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-node@v4
         with:
-          python-version: "3.12"
-          cache: pip
-
-      - name: FFmpeg o'rnatish
-        run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+          node-version: 22
+          cache: npm
 
       - name: Kutubxonalar
-        run: pip install -r requirements.txt
+        run: npm ci
 
       - name: Video yasash va yuklash
         env:
@@ -52,7 +49,7 @@ jobs:
           TTS_VOICE: ${{ vars.TTS_VOICE }}
           MADE_FOR_KIDS: ${{ vars.MADE_FOR_KIDS }}
         run: >
-          python -m sprunki_studio auto
+          npm run auto --
           --shorts "${{ inputs.shorts || '2' }}"
           --long "${{ inputs.long || '0' }}"
           --minutes "${{ inputs.minutes || '8' }}"
@@ -67,6 +64,7 @@ jobs:
             output/**/video.mp4
             output/**/thumbnail.jpg
             output/**/script.json
+            output/**/props.json
           retention-days: 3
           if-no-files-found: ignore
 
