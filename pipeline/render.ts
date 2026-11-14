@@ -4,13 +4,14 @@ import os from "node:os";
 import path from "node:path";
 import { bundle } from "@remotion/bundler";
 import { renderMedia, renderStill, selectComposition } from "@remotion/renderer";
+import type { CrewProps } from "../src/crew/types";
 import type { VideoProps } from "../src/types";
 import { log, ROOT, settings } from "./config";
 
 export const renderJob = async (
   jobDir: string,
-  props: VideoProps,
-  opts: { thumbnail: boolean },
+  props: VideoProps | CrewProps,
+  opts: { thumbnail: boolean; composition?: "SprunkiVideo" | "CrewShort" },
 ): Promise<{ video: string; thumbnail: string | null }> => {
   await fs.writeFile(path.join(jobDir, "props.json"), JSON.stringify(props, null, 2));
 
@@ -25,7 +26,7 @@ export const renderJob = async (
   const inputProps = props as unknown as Record<string, unknown>;
   const browserExecutable = settings.browserExecutable;
 
-  const composition = await selectComposition({ serveUrl, id: "SprunkiVideo", inputProps, browserExecutable });
+  const composition = await selectComposition({ serveUrl, id: opts.composition ?? "SprunkiVideo", inputProps, browserExecutable });
   const video = path.join(jobDir, "video.mp4");
   let lastPercent = -1;
   await renderMedia({

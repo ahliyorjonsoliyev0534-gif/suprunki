@@ -2,6 +2,7 @@ import React from "react";
 import { CalculateMetadataFunction, Composition, Still } from "remotion";
 import { SprunkiVideo } from "./SprunkiVideo";
 import { Thumbnail } from "./Thumbnail";
+import { CrewShort, crewDemo, type CrewProps } from "./crew/CrewShort";
 import { FPS, SIZES, type VideoProps } from "./types";
 
 // Studio'da (npm run dev) ochilganda ko'rinadigan namuna
@@ -50,6 +51,13 @@ const metadata: CalculateMetadataFunction<VideoProps> = ({ props }) => {
   };
 };
 
+const crewMetadata: CalculateMetadataFunction<CrewProps> = ({ props }) => ({
+  durationInFrames: props.durationInFrames,
+  fps: FPS,
+  width: 1080,
+  height: 1920,
+});
+
 export const RemotionRoot: React.FC = () => (
   <>
     <Composition
@@ -58,6 +66,16 @@ export const RemotionRoot: React.FC = () => (
       defaultProps={demo}
       calculateMetadata={metadata}
       durationInFrames={165}
+      fps={FPS}
+      width={1080}
+      height={1920}
+    />
+    <Composition
+      id="CrewShort"
+      component={CrewShort}
+      defaultProps={crewDemo}
+      calculateMetadata={crewMetadata}
+      durationInFrames={crewDemo.durationInFrames}
       fps={FPS}
       width={1080}
       height={1920}

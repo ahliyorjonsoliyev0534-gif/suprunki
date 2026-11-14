@@ -3,6 +3,8 @@ import crypto from "node:crypto";
 import fs from "node:fs/promises";
 import { existsSync } from "node:fs";
 import path from "node:path";
+import { CREW, memberById } from "../src/crew/characters";
+import { CREW_BEATS, type CrewProps, type CrewStyle } from "../src/crew/types";
 import { FPS, SIZES, type SceneProps, type VideoFormat, type VideoProps } from "../src/types";
 import { log, settings } from "./config";
 import { characterLibrary, sceneImage } from "./images";
@@ -17,7 +19,7 @@ const SCENE_PAD_SECONDS = 0.3;
 export const MAX_MINUTES: Record<VideoFormat, number> = { short: 0.95, long: 30 };
 
 type QueueItem = { topic: string; format: VideoFormat };
-type HistoryItem = { topic: string; format: VideoFormat; title: string; folder: string; created: string; videoId: string | null };
+type HistoryItem = { topic: string; format: VideoFormat | "crew"; title: string; folder: string; created: string; videoId: string | null };
 
 const load = async <T>(file: string): Promise<T[]> =>
   existsSync(file) ? (JSON.parse(await fs.readFile(file, "utf8")) as T[]) : [];
@@ -182,6 +184,99 @@ export const make = async (opts: {
     log(`Yuklandi: https://youtu.be/${record.videoId}`);
   }
 
+  await save(HISTORY_FILE, [...(await load<HistoryItem>(HISTORY_FILE)), record]);
+  return record;
+};
+
+// ------------------------------------------------------------------ Coree Crew (ovozsiz, OpenAI kerak emas)
+export const CREW_STYLES: CrewStyle[] = ["party", "horror", "pick"];
+
+const pick = <T>(items: T[]): T => items[Math.floor(Math.random() * items.length)];
+const shuffle = <T>(items: T[]): T[] => [...items].sort(() => Math.random() - 0.5);
+
+const crewMeta = (style: CrewStyle, props: CrewProps) => {
+  const [a, b, c] = props.members.slice(0, 3).map((id) => memberById(id).name);
+  const star = memberById(props.featured).name;
+  const titles: Record<CrewStyle, string[]> = {
+    party: [`Everyone Turns Into ${star}! 🎨`, `${star} Color Party! Which Color Wins?`, `What If Everyone Became ${star}? 🎵`],
+    horror: [`${a} Normal vs HORROR ⚡`, `Normal vs Horror: Who Is Scariest? 😱`, `${a}, ${b} & More: Horror Versions ⚡`],
+    pick: [`Pick One: ${a}, ${b} or ${c}? 🤔`, `Who Would You Pick? ${a} vs ${b} vs ${c}`, `Only ONE Can Win! Pick Fast! ⏱️`],
+  };
+  const title = `${pick(titles[style])} #shorts`;
+  const description =
+    `Meet the Coree Crew, ${settings.channelName}'s own music-loving characters! ` +
+    (style === "party"
+      ? `Watch everyone turn into ${star}. Which color is your favorite?`
+      : style === "horror"
+        ? "Normal or horror version, which one do you like more?"
+        : `${a}, ${b} or ${c}? Comment who you picked!`) +
+    `\n\nSubscribe to ${settings.channelHandle} for new Coree Crew Shorts every day!\n` +
+    `https://www.youtube.com/${settings.channelHandle}?sub_confirmation=1\n\n` +
+    "#shorts #coreecrew #animation #funny #musicgame";
+  const tags = [
+    "coree crew", "sprunki style", "incredibox style", "color swap", "normal vs horror", "pick one",
+    "animation shorts", "funny animation", "music game", "cute characters", "satisfying", star, a, b, c,
+  ];
+  return { title, description, tags };
+};
+
+export const makeCrew = async (opts: {
+  style?: CrewStyle | "random";
+  upload?: boolean;
+  privacy?: "private" | "unlisted" | "public";
+  publishAt?: string | null;
+}): Promise<HistoryItem> => {
+  const style: CrewStyle = !opts.style || opts.style === "random" ? pick(CREW_STYLES) : opts.style;
+  const seed = Math.floor(Math.random() * 1_000_000);
+  const members = shuffle(CREW.map((m) => m.id));
+  const featured = members[members.length - 1];
+
+  const stamp = new Date().toISOString().replace(/[-:]/g, "").replace("T", "-").slice(0, 15);
+  const jobDir = path.join(settings.outputDir, `${stamp}-crew-${style}`);
+  await fs.mkdir(jobDir, { recursive: true });
+
+  const { bpm } = await generateMusic(path.join(jobDir, "music.wav"), seed);
+  log(`Coree Crew: ${style}, ${bpm} BPM`);
+
+  const props: CrewProps = {
+    style,
+    featured,
+    members,
+    bpm,
+    seed,
+    music: "music.wav",
+    musicVolume: 0.9,
+    channelName: settings.channelName,
+    durationInFrames: Math.ceil(((CREW_BEATS[style] * 60) / bpm) * FPS),
+    pickIndex: seed % 3,
+  };
+  const meta = crewMeta(style, props);
+  await save(path.join(jobDir, "script.json"), { ...meta, style });
+
+  const result = await renderJob(jobDir, props, { thumbnail: false, composition: "CrewShort" });
+  log(`Video tayyor: ${result.video} (${(props.durationInFrames / FPS).toFixed(1)} s)`);
+
+  const record: HistoryItem = {
+    topic: `crew:${style}:${featured}`,
+    format: "crew",
+    title: meta.title,
+    folder: path.relative(settings.outputDir, jobDir),
+    created: new Date().toISOString(),
+    videoId: null,
+  };
+  if (opts.upload) {
+    const { upload } = await import("./youtube");
+    log("YouTube'ga yuklanmoqda");
+    record.videoId = await upload({
+      video: result.video,
+      title: meta.title,
+      description: meta.description,
+      tags: meta.tags,
+      privacy: opts.privacy,
+      publishAt: opts.publishAt,
+    });
+    log(`Yuklandi: https://youtu.be/${record.videoId}`);
+  }
   await save(HISTORY_FILE, [...(await load<HistoryItem>(HISTORY_FILE)), record]);
   return record;
 };

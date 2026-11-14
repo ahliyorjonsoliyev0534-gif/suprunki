@@ -20,6 +20,17 @@ Mavzu → Ssenariy (OpenAI) → Ovoz (Edge-TTS) → Rasmlar (sizniki yoki AI)
 - `short`: vertikal 1080×1920, standart uzunligi 20 soniya (`SHORT_SECONDS` yoki `--seconds` bilan o'zgartiriladi). 30 soniyadan qisqa Shorts'ning oxiri boshiga ulanib ketadi (loop), shuning uchun qayta-qayta ko'riladi. Pastda TikTok uslubidagi subtitr, tepada progress chizig'i.
 - `long`: gorizontal 1920×1080, uzunligini o'zingiz berasiz (3, 10, 20 daqiqa). Thumbnail ham avtomatik yasaladi.
 
+**Coree Crew Shorts (ovozsiz, OpenAI kerak emas, butunlay bepul):**
+Kanalingizda eng ko'p ko'rilgan Shorts turlari bo'yicha, lekin 12 ta **original** personaj bilan yasaladi: Coree, Zappi, Moxi, Leafy, Bloop, Rexo, Tiko, Pluma, Nova, Grimm, Mintz, Bongo. Har bir video 7–10 soniya davom etadi, original beat bilan va loop qilib ko'rishga mos.
+- `party`: "Color Party", hamma birma-bir bitta personajga aylanadi, har biri o'z rangida.
+- `horror`: "Normal vs Horror", ekran chaqmoq bilan ikkiga bo'lingan, neon ranglar. Qon yo'q, bolalar uchun xavfsiz.
+- `pick`: "Pick One", 3 ta personaj, 3-2-1 sanash, g'olib tanlanadi va konfetti tushadi.
+
+```bash
+npm run make -- --format crew                  # tasodifiy format
+npm run make -- --format crew --style party --upload --privacy public
+```
+
 **Kontent original bo'lishi uchun:**
 - **Coree.** Kanalning o'z maskot-boshlovchisi, noldan chizilgan original personaj. Har videoda ekran burchagida turadi, gapirganda og'zi qimirlaydi, ko'zlarini pirpiratadi. Thumbnail'da ham chiqadi. Ssenariy Coree nomidan, birinchi shaxsda, o'z fikri va hazillari bilan yoziladi.
 - **Original musiqa.** Har video uchun yangi beat avtomatik yaratiladi: tempo, tonallik, akkordlar va melodiya har safar boshqacha. Tayyor trek ishlatilmaydi, shuning uchun Content ID muammosi bo'lmaydi.
@@ -86,8 +97,8 @@ npm run make -- --format short --upload --privacy public
 # Oldindan mavzular tayyorlab qo'yish (data/topics.json ga yoziladi, xohlasangiz tahrirlang)
 npm run ideas -- --format short -n 20
 
-# Avtopilot: 3 ta Short va 1 ta uzun video, har biri 4 soat oralig'ida ochiladi
-npm run auto -- --shorts 3 --long 1 --minutes 8 --spread-hours 4
+# Avtopilot: 2 ta Crew Short, 1 ta ovozli Short va 1 ta uzun video, har biri 4 soat oralig'ida ochiladi
+npm run auto -- --crew 2 --shorts 1 --long 1 --minutes 8 --spread-hours 4
 
 # Tayyor videoni Remotion Studio'da ko'rish va dizaynini sozlash
 npm run preview -- output/<video-papkasi>
@@ -108,7 +119,7 @@ Natija `output/<sana>-<mavzu>/` papkasiga tushadi. Ichida `video.mp4`, `thumbnai
    - `OPENAI_API_KEY`: OpenAI kalitingiz.
    - `YT_TOKEN_JSON`: `token.json` faylining **butun ichidagi matni**.
 2. Ixtiyoriy: **Variables** bo'limida `YT_PRIVACY` (`public`), `TTS_VOICE`, `MADE_FOR_KIDS` ni sozlashingiz mumkin.
-3. Bu kod `main` branchiga qo'shilgach, tizim har kuni 19:23 da (Toshkent vaqti) 2 ta Short yasab yuklaydi. Qo'lda ishga tushirish: **Actions → Sprunki Autopilot → Run workflow**.
+3. Bu kod `main` branchiga qo'shilgach, tizim har kuni 19:23 da (Toshkent vaqti) 2 ta Coree Crew Short va 1 ta ovozli Short yasab yuklaydi. `OPENAI_API_KEY` qo'shilmagan bo'lsa ham Crew Shorts ishlayveradi, buning uchun faqat `YT_TOKEN_JSON` kifoya. Qo'lda ishga tushirish: **Actions → Sprunki Autopilot → Run workflow**.
 4. Tayyor videolarni Actions sahifasidan 3 kun davomida yuklab olib ko'rishingiz mumkin.
 
 ---
@@ -135,6 +146,7 @@ src/                    Remotion (video dizayni, React)
     SceneVisual.tsx     personaj sahnasi / AI rasm (Ken Burns) / nom kartasi
     Captions.tsx        TikTok uslubidagi subtitr
     Mascot.tsx          Coree, kanal maskoti (SVG, gapirganda og'zi qimirlaydi)
+  crew/                 Coree Crew: 12 ta original personaj va 3 ta Shorts formati
     Background.tsx      animatsion gradient fon
 pipeline/               Node (avtomatlashtirish)
   script-writer.ts      OpenAI: mavzular, ssenariy, sarlavha, tavsif, teglar

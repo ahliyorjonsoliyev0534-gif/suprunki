@@ -6,7 +6,8 @@
 //   npm run make -- --format short --seconds 45      45 soniyalik Short
 //   npm run make -- --format long --minutes 10 --topic "Every Sprunki Character Explained"
 //   npm run make -- --format short --upload --privacy public
-//   npm run auto -- --shorts 2 --long 1              avtopilot: yasab yuklaydi
+//   npm run make -- --format crew --style party      Coree Crew Short (party | horror | pick | random), OpenAI kerak emas
+//   npm run auto -- --crew 2 --shorts 1 --long 0     avtopilot: yasab yuklaydi
 //   npm run preview -- output/<papka>                tayyor videoni Remotion Studio'da ochish
 import { spawnSync } from "node:child_process";
 import { existsSync, readdirSync } from "node:fs";
@@ -32,6 +33,8 @@ const { values, positionals } = parseArgs({
     shorts: { type: "string", default: "2" },
     long: { type: "string", default: "0" },
     "spread-hours": { type: "string", default: "0" },
+    style: { type: "string", default: "random" },
+    crew: { type: "string", default: "0" },
   },
 });
 
@@ -39,7 +42,7 @@ const format = values.format as VideoFormat;
 const privacy = values.privacy as "private" | "unlisted" | "public" | undefined;
 
 const main = async (): Promise<void> => {
-  if (!["short", "long"].includes(format)) throw new Error("--format short yoki long bo'lishi kerak");
+  if (!["short", "long", "crew"].includes(format)) throw new Error("--format short, long yoki crew bo'lishi kerak");
   switch (command) {
     case "auth": {
       const { authorize, channelInfo } = await import("./youtube");
@@ -84,6 +87,16 @@ const main = async (): Promise<void> => {
     }
 
     case "make": {
+      if ((format as string) === "crew") {
+        const { makeCrew } = await import("./pipeline");
+        await makeCrew({
+          style: values.style as "party" | "horror" | "pick" | "random",
+          upload: values.upload,
+          privacy,
+          publishAt: values["publish-at"],
+        });
+        return;
+      }
       const { make } = await import("./pipeline");
       await make({
         topic: values.topic,
@@ -99,18 +112,25 @@ const main = async (): Promise<void> => {
 
     case "auto": {
       // Bir nechta video yasaydi; --spread-hours berilsa, har biri shuncha soat oralig'ida ochiladi
-      const { make } = await import("./pipeline");
-      const jobs: VideoFormat[] = [
-        ...Array<VideoFormat>(Number(values.shorts)).fill("short"),
-        ...Array<VideoFormat>(Number(values.long)).fill("long"),
+      const { make, makeCrew } = await import("./pipeline");
+      type Job = VideoFormat | "crew";
+      let jobs: Job[] = [
+        ...Array<Job>(Number(values.crew)).fill("crew"),
+        ...Array<Job>(Number(values.shorts)).fill("short"),
+        ...Array<Job>(Number(values.long)).fill("long"),
       ];
+      if (!settings.openaiApiKey && jobs.some((j) => j !== "crew")) {
+        console.warn("OPENAI_API_KEY yo'q: ovozli videolar o'tkazib yuboriladi, faqat Coree Crew Shorts yasaladi.");
+        jobs = jobs.filter((j) => j === "crew");
+      }
       const spread = Number(values["spread-hours"]);
       const start = Date.now() + 60 * 60 * 1000;
       let failures = 0;
       for (const [i, jobFormat] of jobs.entries()) {
         const publishAt = spread > 0 ? new Date(start + i * spread * 3600_000).toISOString().replace(/\.\d+Z$/, "Z") : null;
         try {
-          await make({ format: jobFormat, minutes: Number(values.minutes), upload: true, privacy, publishAt });
+          if (jobFormat === "crew") await makeCrew({ style: "random", upload: true, privacy, publishAt });
+          else await make({ format: jobFormat, minutes: Number(values.minutes), upload: true, privacy, publishAt });
         } catch (error) {
           failures++;
           console.error(error);

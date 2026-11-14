@@ -57,7 +57,7 @@ export const settings = {
   browserExecutable: env("REMOTION_BROWSER_EXECUTABLE") || null,
 
   assetsDir: path.join(ROOT, "assets"),
-  outputDir: path.join(ROOT, env("OUTPUT_DIR", "output")),
+  outputDir: path.resolve(ROOT, env("OUTPUT_DIR", "output")),
   dataDir: path.join(ROOT, "data"),
 };
 

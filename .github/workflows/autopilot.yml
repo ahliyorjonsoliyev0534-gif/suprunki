@@ -7,9 +7,12 @@ on:
     - cron: "23 14 * * *" # har kuni 14:23 UTC (Toshkent vaqti 19:23)
   workflow_dispatch:
     inputs:
-      shorts:
-        description: "Nechta Short"
+      crew:
+        description: "Nechta Coree Crew Short (ovozsiz, OpenAI kerak emas)"
         default: "2"
+      shorts:
+        description: "Nechta ovozli Short (OpenAI kerak)"
+        default: "1"
       long:
         description: "Nechta uzun video"
         default: "0"
@@ -48,8 +51,8 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           YT_TOKEN_JSON: ${{ secrets.YT_TOKEN_JSON }}
         run: |
-          if [ -z "$OPENAI_API_KEY" ] || [ -z "$YT_TOKEN_JSON" ]; then
-            echo "::warning::OPENAI_API_KEY yoki YT_TOKEN_JSON secret'i qo'shilmagan. README 4-bo'limiga qarang. Video yasalmadi."
+          if [ -z "$YT_TOKEN_JSON" ]; then
+            echo "::warning::YT_TOKEN_JSON secret'i qo'shilmagan. README 4-bo'limiga qarang. Video yasalmadi."
             echo "ready=false" >> "$GITHUB_OUTPUT"
           else
             echo "ready=true" >> "$GITHUB_OUTPUT"
@@ -64,7 +67,8 @@ jobs:
           MADE_FOR_KIDS: ${{ vars.MADE_FOR_KIDS }}
         run: >
           npm run auto --
-          --shorts "${{ inputs.shorts || '2' }}"
+          --crew "${{ inputs.crew || '2' }}"
+          --shorts "${{ inputs.shorts || '1' }}"
           --long "${{ inputs.long || '0' }}"
           --minutes "${{ inputs.minutes || '8' }}"
           --privacy "${{ inputs.privacy || vars.YT_PRIVACY || 'private' }}"
