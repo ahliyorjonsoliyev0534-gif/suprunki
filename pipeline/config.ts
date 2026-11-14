@@ -37,6 +37,9 @@ export const settings = {
       "bold black outlines, playful music stage background, 2D vector art, high detail",
   ),
 
+  /** Shorts uzunligi (soniya). Kanal statistikasi: eng ko'p ko'rilganlar 7-15 soniyalik, qayta-qayta ko'rilgan */
+  shortSeconds: Number(env("SHORT_SECONDS", "20")),
+
   musicVolume: Number(env("MUSIC_VOLUME", "0.12")),
   musicMode: env("MUSIC_MODE", "auto") as "auto" | "generated" | "assets" | "off",
 

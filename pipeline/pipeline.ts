@@ -126,6 +126,8 @@ export const make = async (opts: {
   topic?: string | null;
   format: VideoFormat;
   minutes: number;
+  /** Faqat short uchun: uzunlik soniyada (standart SHORT_SECONDS) */
+  seconds?: number;
   upload?: boolean;
   privacy?: "private" | "unlisted" | "public";
   publishAt?: string | null;
@@ -141,7 +143,7 @@ export const make = async (opts: {
   await fs.mkdir(jobDir, { recursive: true });
 
   log("Ssenariy yozilmoqda (OpenAI)");
-  const script = await writer.write(topic, format, minutes);
+  const script = await writer.write(topic, format, minutes, opts.seconds);
   if (!script.scenes.length) throw new Error("Ssenariy bo'sh qaytdi");
   await save(path.join(jobDir, "script.json"), script);
   log(`Ssenariy tayyor: ${script.scenes.length} sahna, ${wordCount(script)} so'z`);

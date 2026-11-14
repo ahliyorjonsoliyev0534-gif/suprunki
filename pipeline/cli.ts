@@ -2,7 +2,8 @@
 //   npm run auth                                     bir marta: YouTube'ga ulanish
 //   npm run check                                    sozlamalarni tekshirish
 //   npm run ideas -- --format short -n 20            mavzular navbatini to'ldirish
-//   npm run make -- --format short                   1 ta Short (mavzu avtomatik)
+//   npm run make -- --format short                   1 ta Short (mavzu avtomatik, SHORT_SECONDS uzunlikda)
+//   npm run make -- --format short --seconds 45      45 soniyalik Short
 //   npm run make -- --format long --minutes 10 --topic "Every Sprunki Character Explained"
 //   npm run make -- --format short --upload --privacy public
 //   npm run auto -- --shorts 2 --long 1              avtopilot: yasab yuklaydi
@@ -23,6 +24,7 @@ const { values, positionals } = parseArgs({
     format: { type: "string", default: "short" },
     topic: { type: "string" },
     minutes: { type: "string", default: "8" },
+    seconds: { type: "string" },
     upload: { type: "boolean", default: false },
     privacy: { type: "string" },
     "publish-at": { type: "string" },
@@ -87,6 +89,7 @@ const main = async (): Promise<void> => {
         topic: values.topic,
         format,
         minutes: Number(values.minutes),
+        seconds: values.seconds ? Number(values.seconds) : undefined,
         upload: values.upload,
         privacy,
         publishAt: values["publish-at"],

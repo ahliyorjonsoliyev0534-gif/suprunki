@@ -114,18 +114,27 @@ export class ScriptWriter {
     return list(data.ideas).slice(0, count);
   }
 
-  write(topic: string, format: VideoFormat, minutes: number): Promise<VideoScript> {
-    return format === "short" ? this.writeShort(topic) : this.writeLong(topic, minutes);
+  /** short uchun `minutes` o'rniga `seconds` ishlatiladi */
+  write(topic: string, format: VideoFormat, minutes: number, seconds = settings.shortSeconds): Promise<VideoScript> {
+    return format === "short" ? this.writeShort(topic, seconds) : this.writeLong(topic, minutes);
   }
 
-  private async writeShort(topic: string): Promise<VideoScript> {
+  private async writeShort(topic: string, seconds: number): Promise<VideoScript> {
     const style = pickStyle();
+    const words = Math.round(seconds * 2.6);
+    const sceneCount = Math.max(3, Math.round(seconds / 4.5));
+    // Juda qisqa Shorts takror-takror ko'riladi (loop): oxiri boshiga ulanib ketsa, ko'rish vaqti oshadi
+    const ending =
+      seconds <= 30
+        ? "Make it LOOP: the last sentence should flow naturally back into the first sentence, so the video feels seamless on replay. No outro, no 'subscribe'.\n"
+        : "End with a quick question to the viewer (for engagement), e.g. 'Which one is your favorite?'\n";
     const data = await this.ask(
       `Write a YouTube Short about: ${topic}\n` +
-        `Format: ${style}\n` +
-        "Length: 110-140 words of narration in total (about 45-55 seconds).\n" +
-        "Split it into 8-12 scenes; each scene is 1-2 short sentences.\n" +
-        "End with a quick question to the viewer (for engagement), e.g. 'Which one is your favorite?'\n" +
+        `Format: ${style} (compressed to fit the length)\n` +
+        `Length: about ${words} words of narration in total (about ${seconds} seconds). Every word must earn its place.\n` +
+        `Split it into ${sceneCount} scenes; each scene is one short sentence.\n` +
+        "The very first words must hook instantly (no greeting, no name intro).\n" +
+        ending +
         "Return JSON with keys: " +
         '"title" (max 70 chars, must include #shorts and the word Sprunki), ' +
         '"description" (2-3 sentences + 5 hashtags), ' +

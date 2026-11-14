@@ -17,7 +17,7 @@ Mavzu → Ssenariy (OpenAI) → Ovoz (Edge-TTS) → Rasmlar (sizniki yoki AI)
 | Har kuni avtomatik ishlash | GitHub Actions | Bepul |
 
 **Formatlar:**
-- `short`: vertikal 1080×1920, taxminan 50 soniya. Pastda TikTok uslubidagi subtitr, tepada progress chizig'i.
+- `short`: vertikal 1080×1920, standart uzunligi 20 soniya (`SHORT_SECONDS` yoki `--seconds` bilan o'zgartiriladi). 30 soniyadan qisqa Shorts'ning oxiri boshiga ulanib ketadi (loop), shuning uchun qayta-qayta ko'riladi. Pastda TikTok uslubidagi subtitr, tepada progress chizig'i.
 - `long`: gorizontal 1920×1080, uzunligini o'zingiz berasiz (3, 10, 20 daqiqa). Thumbnail ham avtomatik yasaladi.
 
 **Kontent original bo'lishi uchun:**
@@ -73,6 +73,9 @@ FFmpeg yoki Chrome'ni alohida o'rnatish shart emas, Remotion ularni o'zi oladi.
 ```bash
 # 1 ta Short, mavzuni o'zi tanlaydi (tekshirish uchun yuklamaydi)
 npm run make -- --format short
+
+# 45 soniyalik Short
+npm run make -- --format short --seconds 45
 
 # O'zingiz bergan mavzuda 10 daqiqalik video
 npm run make -- --format long --minutes 10 --topic "Every Sprunki Character Explained"
