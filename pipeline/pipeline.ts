@@ -217,7 +217,7 @@ const crewMeta = (style: CrewStyle, props: CrewProps) => {
     "coree crew", "sprunki style", "incredibox style", "color swap", "normal vs horror", "pick one",
     "animation shorts", "funny animation", "music game", "cute characters", "satisfying", star, a, b, c,
   ];
-  return { title, description, tags };
+  return { title, description, tags: [...new Set(tags.map((t) => t.toLowerCase()))] };
 };
 
 export const makeCrew = async (opts: {
