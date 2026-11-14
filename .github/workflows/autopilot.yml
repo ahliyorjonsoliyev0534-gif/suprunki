@@ -1,0 +1,79 @@
+name: Sprunki Autopilot
+
+# Har kuni o'zi video yasab, YouTube'ga yuklaydi.
+# Qo'lda ishga tushirish: GitHub -> Actions -> Sprunki Autopilot -> Run workflow
+on:
+  schedule:
+    - cron: "23 14 * * *" # har kuni 14:23 UTC (Toshkent vaqti 19:23)
+  workflow_dispatch:
+    inputs:
+      shorts:
+        description: "Nechta Short"
+        default: "2"
+      long:
+        description: "Nechta uzun video"
+        default: "0"
+      minutes:
+        description: "Uzun video necha daqiqa"
+        default: "8"
+      privacy:
+        description: "private / unlisted / public"
+        default: "private"
+
+permissions:
+  contents: write # data/history.json ni saqlash uchun
+
+concurrency:
+  group: autopilot
+  cancel-in-progress: false
+
+jobs:
+  produce:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: FFmpeg o'rnatish
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+
+      - name: Kutubxonalar
+        run: pip install -r requirements.txt
+
+      - name: Video yasash va yuklash
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          YT_TOKEN_JSON: ${{ secrets.YT_TOKEN_JSON }}
+          TTS_VOICE: ${{ vars.TTS_VOICE }}
+          MADE_FOR_KIDS: ${{ vars.MADE_FOR_KIDS }}
+        run: >
+          python -m sprunki_studio auto
+          --shorts "${{ inputs.shorts || '2' }}"
+          --long "${{ inputs.long || '0' }}"
+          --minutes "${{ inputs.minutes || '8' }}"
+          --privacy "${{ inputs.privacy || vars.YT_PRIVACY || 'private' }}"
+
+      - name: Tayyor videolarni saqlash (3 kun)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: videos-${{ github.run_number }}
+          path: |
+            output/**/video.mp4
+            output/**/thumbnail.jpg
+            output/**/script.json
+          retention-days: 3
+          if-no-files-found: ignore
+
+      - name: Tarixni saqlash (mavzular takrorlanmasligi uchun)
+        if: always()
+        run: |
+          git config user.name "sprunki-autopilot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/
+          git diff --cached --quiet || (git commit -m "autopilot: update history" && git push)

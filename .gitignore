@@ -5,3 +5,6 @@ __pycache__/
 node_modules/
 output/
 *.mp4
+client_secret*.json
+token.json
+*.pyc
