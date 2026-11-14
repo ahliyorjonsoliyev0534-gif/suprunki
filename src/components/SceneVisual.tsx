@@ -11,6 +11,7 @@ import {
 import { TITLE_FONT } from "../fonts";
 import type { SceneProps } from "../types";
 import { Background } from "./Background";
+import { mascotFace, MascotSvg } from "./Mascot";
 
 const KenBurns: React.FC<{ src: string; index: number }> = ({ src, index }) => {
   const frame = useCurrentFrame();
@@ -103,7 +104,51 @@ const NameCard: React.FC<{ text: string; index: number }> = ({ text, index }) =>
   );
 };
 
-export const SceneVisual: React.FC<{ scene: SceneProps; index: number }> = ({ scene, index }) => {
+/** Rasm yo'q sahna: Coree markazda katta bo'lib gapiradi */
+const HostShot: React.FC<{ scene: SceneProps; index: number }> = ({ scene, index }) => {
+  const frame = useCurrentFrame();
+  const { fps, width, height } = useVideoConfig();
+  const vertical = height > width;
+  const { talking, mouthOpen, blink } = mascotFace(scene.words, frame, fps);
+  const enter = spring({ frame, fps, config: { damping: 11 } });
+  const size = vertical ? width * 0.62 : height * 0.6;
+  const bob = Math.sin(frame / 7) * (talking ? 14 : 7);
+  const side = index % 2 === 0 ? -1 : 1;
+
+  return (
+    <AbsoluteFill>
+      <Background seed={index} />
+      <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", paddingBottom: vertical ? height * 0.12 : height * 0.1 }}>
+        <div
+          style={{
+            width: size * 1.25,
+            height: size * 1.25,
+            borderRadius: "50%",
+            position: "absolute",
+            background: "radial-gradient(circle, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0) 65%)",
+          }}
+        />
+        <div
+          style={{
+            transform: `translateY(${(1 - enter) * height * 0.5 + bob}px) rotate(${side * (4 + Math.sin(frame / 12) * 3)}deg) scale(${0.85 + enter * 0.15})`,
+            filter: "drop-shadow(0 25px 35px rgba(0,0,0,0.45))",
+          }}
+        >
+          <MascotSvg mouthOpen={mouthOpen} blink={blink} size={size} look={Math.sin(frame / 30) * side} />
+        </div>
+      </AbsoluteFill>
+    </AbsoluteFill>
+  );
+};
+
+/** Rasm ham, personaj nomi ham bo'lmasa (va maskot yoqilgan bo'lsa) markazda Coree chiqadi */
+export const isHostShot = (scene: SceneProps, host: boolean): boolean =>
+  host && !scene.image && !scene.character.trim();
+
+export const SceneVisual: React.FC<{ scene: SceneProps; index: number; host: boolean }> = ({ scene, index, host }) => {
+  if (isHostShot(scene, host)) {
+    return <HostShot scene={scene} index={index} />;
+  }
   if (scene.image && scene.imageKind === "character") {
     return <CharacterStage src={scene.image} index={index} />;
   }

@@ -51,18 +51,21 @@ export const MascotSvg: React.FC<{ mouthOpen: number; blink: number; size: numbe
   );
 };
 
-export const Mascot: React.FC<{ words: Word[] }> = ({ words }) => {
+/** So'z aytilayotgan paytda og'iz ochiladi-yopiladi */
+export const mascotFace = (words: Word[], frame: number, fps: number) => {
+  const nowMs = (frame / fps) * 1000;
+  const talking = words.some((w) => nowMs >= w.startMs && nowMs < w.endMs + 40);
+  const mouthOpen = talking ? 0.35 + 0.65 * Math.abs(Math.sin(frame * 0.85)) : 0;
+  // Har ~3.3 soniyada pirpiratadi
+  const blink = interpolate(frame % 100, [0, 2, 4], [0, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  return { talking, mouthOpen, blink };
+};
+
+export const Mascot: React.FC<{ words: Word[]; hidden?: boolean }> = ({ words, hidden = false }) => {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   const vertical = height > width;
-  const nowMs = (frame / fps) * 1000;
-
-  const talking = words.some((w) => nowMs >= w.startMs && nowMs < w.endMs + 40);
-  const mouthOpen = talking ? 0.35 + 0.65 * Math.abs(Math.sin(frame * 0.85)) : 0;
-
-  // Har ~3.3 soniyada pirpiratadi
-  const blinkFrame = frame % 100;
-  const blink = interpolate(blinkFrame, [0, 2, 4], [0, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const { talking, mouthOpen, blink } = mascotFace(words, frame, fps);
 
   const enter = spring({ frame, fps, config: { damping: 10 } });
   const bob = Math.sin(frame / 7) * (talking ? 10 : 5);
@@ -78,6 +81,7 @@ export const Mascot: React.FC<{ words: Word[] }> = ({ words }) => {
         transform: `translateY(${(1 - enter) * size * 1.5 + bob}px) rotate(${tilt}deg)`,
         transformOrigin: "50% 100%",
         filter: "drop-shadow(0 12px 18px rgba(0,0,0,0.45))",
+        opacity: hidden ? 0 : 1,
       }}
     >
       <MascotSvg mouthOpen={mouthOpen} blink={blink} size={size} look={Math.sin(frame / 40)} />

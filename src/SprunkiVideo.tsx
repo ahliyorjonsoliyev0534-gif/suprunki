@@ -10,7 +10,7 @@ import {
 } from "remotion";
 import { Captions } from "./components/Captions";
 import { Mascot } from "./components/Mascot";
-import { SceneVisual } from "./components/SceneVisual";
+import { isHostShot, SceneVisual } from "./components/SceneVisual";
 import { FPS, type SceneProps, type VideoProps, type Word } from "./types";
 
 const Flash: React.FC = () => {
@@ -38,9 +38,9 @@ const ProgressBar: React.FC = () => {
   );
 };
 
-const Scene: React.FC<{ scene: SceneProps; index: number }> = ({ scene, index }) => (
+const Scene: React.FC<{ scene: SceneProps; index: number; host: boolean }> = ({ scene, index, host }) => (
   <AbsoluteFill>
-    <SceneVisual scene={scene} index={index} />
+    <SceneVisual scene={scene} index={index} host={host} />
     <Captions words={scene.words} />
     {index > 0 ? <Flash /> : null}
     {scene.audio ? <Audio src={staticFile(scene.audio)} /> : null}
@@ -49,6 +49,17 @@ const Scene: React.FC<{ scene: SceneProps; index: number }> = ({ scene, index })
 
 export const SprunkiVideo: React.FC<VideoProps> = ({ scenes, music, musicVolume, format, host }) => {
   const { durationInFrames, fps } = useVideoConfig();
+  const frame = useCurrentFrame();
+
+  // Hozirgi sahna "host shot" bo'lsa, burchakdagi kichik maskot yashiriladi
+  const hostShotNow = useMemo(() => {
+    let start = 0;
+    for (const scene of scenes) {
+      if (frame < start + scene.durationInFrames) return isHostShot(scene, host);
+      start += scene.durationInFrames;
+    }
+    return false;
+  }, [frame, scenes, host]);
 
   // Maskot butun video davomida turadi, shuning uchun so'zlar vaqtini umumiy vaqt chizig'iga o'tkazamiz
   const allWords = useMemo(() => {
@@ -65,11 +76,11 @@ export const SprunkiVideo: React.FC<VideoProps> = ({ scenes, music, musicVolume,
       <Series>
         {scenes.map((scene, i) => (
           <Series.Sequence key={i} durationInFrames={scene.durationInFrames}>
-            <Scene scene={scene} index={i} />
+            <Scene scene={scene} index={i} host={host} />
           </Series.Sequence>
         ))}
       </Series>
-      {host ? <Mascot words={allWords} /> : null}
+      {host ? <Mascot words={allWords} hidden={hostShotNow} /> : null}
       {format === "short" ? <ProgressBar /> : null}
       {music ? (
         <Audio
