@@ -1,4 +1,4 @@
-# Sprunki Core — avtomatik video zavodi (Remotion)
+# SprunkiCoreee — avtomatik video zavodi (Remotion)
 
 Bu tizim ingliz tilida Sprunki videolarini o'zi yasaydi va YouTube'ga o'zi yuklaydi. Loyiha `npx create-video` (**Remotion**) asosida qurilgan: videolar React komponentlari sifatida yoziladi va kadrma-kadr render qilinadi.
 
@@ -55,7 +55,7 @@ FFmpeg yoki Chrome'ni alohida o'rnatish shart emas, Remotion ularni o'zi oladi.
    ```bash
    npm run auth
    ```
-   Terminalda havola chiqadi. Uni brauzerda oching, **Sprunki Core** kanalini tanlab "Allow" ni bosing. `token.json` fayli saqlanadi.
+   Terminalda havola chiqadi. Uni brauzerda oching, **SprunkiCoreee** kanalini tanlab "Allow" ni bosing. `token.json` fayli saqlanadi.
 6. Hammasi joyidaligini tekshiring:
    ```bash
    npm run check

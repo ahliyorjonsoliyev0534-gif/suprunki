@@ -7,6 +7,7 @@ const WORDS_PER_MINUTE = 150;
 
 const SYSTEM_PROMPT = `You are the head writer of the YouTube channel "${settings.channelName}".
 Niche: ${settings.niche}.
+Channel handle: ${settings.channelHandle}.
 Audience: English-speaking kids and teens (8-15) who love Sprunki.
 
 Rules:

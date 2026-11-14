@@ -7,7 +7,7 @@ import { FPS, SIZES, type VideoProps } from "./types";
 // Studio'da (npm run dev) ochilganda ko'rinadigan namuna
 const demo: VideoProps = {
   format: "short",
-  channelName: "Sprunki Core",
+  channelName: "SprunkiCoreee",
   title: "Demo",
   thumbnailText: "SECRET OF OREN",
   music: null,

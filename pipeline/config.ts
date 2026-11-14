@@ -16,7 +16,8 @@ const bool = (name: string, fallback: boolean): boolean => {
 };
 
 export const settings = {
-  channelName: env("CHANNEL_NAME", "Sprunki Core"),
+  channelName: env("CHANNEL_NAME", "SprunkiCoreee"),
+  channelHandle: env("CHANNEL_HANDLE", "@SprunkiCoreee"),
   niche: env(
     "CHANNEL_NICHE",
     "Sprunki (the Incredibox fan mod): characters, phases, lore, theories and rankings",

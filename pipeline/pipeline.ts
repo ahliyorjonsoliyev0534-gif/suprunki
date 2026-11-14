@@ -149,7 +149,9 @@ export const make = async (opts: {
     const { upload } = await import("./youtube");
     log("YouTube'ga yuklanmoqda");
     const description =
-      `${script.description.trim()}\n\nSubscribe to ${settings.channelName} for more Sprunki videos!\n\n` +
+      `${script.description.trim()}\n\n` +
+      `Subscribe to ${settings.channelHandle} for more Sprunki videos!\n` +
+      `https://www.youtube.com/${settings.channelHandle}?sub_confirmation=1\n\n` +
       "This is a fan-made channel and is not affiliated with the official Sprunki or Incredibox creators.";
     record.videoId = await upload({
       video: result.video,

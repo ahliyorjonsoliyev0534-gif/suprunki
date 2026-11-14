@@ -41,7 +41,7 @@ export const authorize = async (): Promise<string> => {
   const client = new google.auth.OAuth2(client_id, client_secret, redirect);
 
   const url = client.generateAuthUrl({ access_type: "offline", prompt: "consent", scope: SCOPES });
-  console.log("\nShu havolani brauzerda oching va Sprunki Core kanalini tanlang:\n");
+  console.log("\nShu havolani brauzerda oching va SprunkiCoreee kanalini tanlang:\n");
   console.log(url + "\n");
 
   const code = await new Promise<string>((resolve, reject) => {
