@@ -3,6 +3,7 @@ import { CalculateMetadataFunction, Composition, Still } from "remotion";
 import { SprunkiVideo } from "./SprunkiVideo";
 import { Thumbnail } from "./Thumbnail";
 import { CrewShort, crewDemo, type CrewProps } from "./crew/CrewShort";
+import { HopThumbnail } from "./hop/HopThumbnail";
 import { NeonHop } from "./hop/NeonHop";
 import { HOP_COLORS, type HopProps } from "./hop/types";
 import { FPS, SIZES, type VideoProps } from "./types";
@@ -108,6 +109,7 @@ export const RemotionRoot: React.FC = () => (
       width={1920}
       height={1080}
     />
+    <Still id="HopThumbnail" component={HopThumbnail} defaultProps={hopDemo} width={1280} height={720} />
     <Still id="Thumbnail" component={Thumbnail} defaultProps={{ ...demo, format: "long" }} width={1280} height={720} />
   </>
 );

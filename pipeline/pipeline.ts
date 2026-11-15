@@ -316,15 +316,16 @@ export const makeHop = async (opts: {
 
   const names = lanes.map((l) => memberById(l.member).name);
   const emoji: Record<string, string> = { Purple: "🟣", Blue: "💙", Green: "🟢", Pink: "💗", Orange: "🧡", Cyan: "🩵" };
-  const title = `${lanes.map((l, i) => `${names[i]} ${emoji[l.colorName] ?? ""}`).join(" ")} | Neon Hop EDM`;
+  // "Kim yutadi?" sarlavhasi tomoshabinni oxirigacha ushlab turadi (g'olib videoning oxirida e'lon qilinadi)
+  const title = `Who Wins? ${names.join(" vs ")} ${lanes.map((l) => emoji[l.colorName] ?? "").join("")} | Neon Hop EDM Race`;
   const description =
-    `${names.join(", ")} hop on neon tiles to an original EDM beat! Which lane is your favorite: ` +
-    `${lanes.map((l) => l.colorName).join(", ")}? Tell us in the comments!\n\n` +
+    `${names.join(", ")} race on neon tiles to an original EDM beat and collect stars. ` +
+    `Who collects the most? Pick your lane (${lanes.map((l) => l.colorName).join(", ")}) and watch till the end to see the winner!\n\n` +
     `Every track on ${settings.hopChannelName} is original music made for this channel.\n\n` +
     `Subscribe to ${settings.hopChannelHandle} for a new Neon Hop every day!\n` +
     `https://www.youtube.com/${settings.hopChannelHandle}?sub_confirmation=1\n\n#neonhop #edm #rhythmgame #animation`;
   const tags = [
-    "neon hop", "edm", "edm music", "rhythm animation", "hop game", "tile hop style", "music animation",
+    "neon hop", "who wins", "edm race", "edm", "edm music", "rhythm animation", "hop game", "tile hop style", "music animation",
     "satisfying", "neon", "color lanes", ...names.map((n) => n.toLowerCase()), ...lanes.map((l) => l.colorName.toLowerCase()),
   ];
   await save(path.join(jobDir, "script.json"), { title, description, tags });
