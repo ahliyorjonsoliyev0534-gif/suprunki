@@ -7,6 +7,7 @@
 //   npm run make -- --format long --minutes 10 --topic "Every Sprunki Character Explained"
 //   npm run make -- --format short --upload --privacy public
 //   npm run make -- --format hop --minutes 3.5 --first uku,saxo,brie,barky   yo'laklar tartibi
+//   npm run make -- --format hopshort --first saxo,uku  Neon Hop Short: 2 yo'lakli vertikal duel (~45 s)
 //   npm run make -- --format hop --minutes 3.5        Neon Hop: 4 yo'lakli uzun EDM video (OpenAI kerak emas)
 //   npm run make -- --format crew --style party --featured zappi            bosh qahramonni tanlash
 //   npm run make -- --format crew --style pick --first saxo,uku,barky       pick variantlarini tanlash
@@ -48,7 +49,7 @@ const format = values.format as VideoFormat;
 const privacy = values.privacy as "private" | "unlisted" | "public" | undefined;
 
 const main = async (): Promise<void> => {
-  if (!["short", "long", "crew", "hop"].includes(format)) throw new Error("--format short, long, crew yoki hop bo'lishi kerak");
+  if (!["short", "long", "crew", "hop", "hopshort"].includes(format)) throw new Error("--format short, long, crew, hop yoki hopshort bo'lishi kerak");
   switch (command) {
     case "auth": {
       const { authorize, channelInfo } = await import("./youtube");
@@ -93,10 +94,11 @@ const main = async (): Promise<void> => {
     }
 
     case "make": {
-      if ((format as string) === "hop") {
+      if ((format as string) === "hop" || (format as string) === "hopshort") {
         const { makeHop } = await import("./pipeline");
         await makeHop({
           minutes: Number(values.minutes),
+          short: (format as string) === "hopshort",
           members: values.first ? values.first.split(",").map((x) => x.trim()) : undefined,
           upload: values.upload,
           privacy,

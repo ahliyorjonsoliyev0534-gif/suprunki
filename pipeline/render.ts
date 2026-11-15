@@ -12,7 +12,7 @@ import { log, ROOT, settings } from "./config";
 export const renderJob = async (
   jobDir: string,
   props: VideoProps | CrewProps | HopProps,
-  opts: { thumbnail: boolean; composition?: "SprunkiVideo" | "CrewShort" | "NeonHop" },
+  opts: { thumbnail: boolean; composition?: "SprunkiVideo" | "CrewShort" | "NeonHop" | "NeonHopShort" },
 ): Promise<{ video: string; thumbnail: string | null }> => {
   await fs.writeFile(path.join(jobDir, "props.json"), JSON.stringify(props, null, 2));
 

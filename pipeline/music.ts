@@ -172,12 +172,14 @@ export const generateLongTrack = async (
   seed: number,
   targetSeconds: number,
   bpmRange: [number, number] = [118, 128],
+  opts: { intro?: boolean } = {},
 ): Promise<{ bpm: number; seconds: number }> => {
   const rand = mulberry32(seed);
   const bpm = bpmRange[0] + Math.floor(rand() * (bpmRange[1] - bpmRange[0] + 1));
   const beat = 60 / bpm;
   const sectionSeconds = 8 * 4 * beat;
-  const plan: SectionKind[] = ["intro"];
+  // Shorts uchun intro'siz: birinchi soniyadan baraban bilan boshlanadi
+  const plan: SectionKind[] = [opts.intro === false ? "main" : "intro"];
   const cycle: SectionKind[] = ["main", "drop", "main", "break", "drop"];
   while ((plan.length + 1) * sectionSeconds < targetSeconds) plan.push(cycle[(plan.length - 1) % cycle.length]);
   plan.push("drop");

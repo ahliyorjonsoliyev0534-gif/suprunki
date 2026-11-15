@@ -297,21 +297,26 @@ export const makeCrew = async (opts: {
 // ------------------------------------------------------------------ Neon Hop (uzun, gorizontal, OpenAI kerak emas)
 export const makeHop = async (opts: {
   minutes: number;
+  /** Vertikal Short: 2 ta yo'lak, ~45 soniya, intro'siz musiqa */
+  short?: boolean;
   members?: string[];
   upload?: boolean;
   privacy?: "private" | "unlisted" | "public";
   publishAt?: string | null;
 }): Promise<HistoryItem> => {
   const seed = Math.floor(Math.random() * 1_000_000);
-  const members = opts.members?.length ? opts.members.slice(0, 4) : shuffle(BAND_IDS);
-  const colors = HOP_COLORS.slice(0, 4);
+  const laneCount = opts.short ? 2 : 4;
+  const members = opts.members?.length ? opts.members.slice(0, laneCount) : shuffle(BAND_IDS).slice(0, laneCount);
+  const colors = opts.short ? shuffle(HOP_COLORS).slice(0, laneCount) : HOP_COLORS.slice(0, 4);
   const lanes = members.map((member, i) => ({ member, ...colors[i] }));
 
   const stamp = new Date().toISOString().replace(/[-:]/g, "").replace("T", "-").slice(0, 15);
-  const jobDir = path.join(settings.outputDir, `${stamp}-hop`);
+  const jobDir = path.join(settings.outputDir, `${stamp}-hop${opts.short ? "short" : ""}`);
   await fs.mkdir(jobDir, { recursive: true });
 
-  const { bpm, seconds } = await generateLongTrack(path.join(jobDir, "music.wav"), seed, Math.max(30, opts.minutes * 60));
+  const { bpm, seconds } = opts.short
+    ? await generateLongTrack(path.join(jobDir, "music.wav"), seed, 40, [122, 130], { intro: false })
+    : await generateLongTrack(path.join(jobDir, "music.wav"), seed, Math.max(30, opts.minutes * 60));
   log(`Neon Hop: ${members.join(", ")} · ${bpm} BPM · ${(seconds / 60).toFixed(1)} daqiqa`);
 
   const props: HopProps = {
@@ -327,7 +332,9 @@ export const makeHop = async (opts: {
   const emoji: Record<string, string> = { Purple: "🟣", Blue: "💙", Green: "🟢", Pink: "💗", Orange: "🧡", Cyan: "🩵" };
   // "Kim yutadi?" sarlavhasi tomoshabinni oxirigacha ushlab turadi (g'olib videoning oxirida e'lon qilinadi)
   // Kanal tahlili: rang nomlari bilan boshlangan sarlavhalar "tavsiya etilgan" videolarga ko'proq chiqqan
-  const title = `${lanes.map((l) => `${emoji[l.colorName] ?? ""} ${l.colorName}`).join(" vs ")} | Who Wins? Neon Hop EDM Race`;
+  const title = opts.short
+    ? `${lanes.map((l) => `${emoji[l.colorName] ?? ""} ${l.colorName}`).join(" vs ")} | Who Wins? #shorts`
+    : `${lanes.map((l) => `${emoji[l.colorName] ?? ""} ${l.colorName}`).join(" vs ")} | Who Wins? Neon Hop EDM Race`;
   const description =
     `Pick your color and watch till the end to see who wins! 🏆\n\n` +
     lanes.map((l, i) => `${emoji[l.colorName] ?? ""} ${l.colorName}: ${names[i]}`).join("\n") +
@@ -336,14 +343,14 @@ export const makeHop = async (opts: {
     `🎵 Every track on ${settings.hopChannelName} is original music made for this channel.\n` +
     `🔔 Subscribe to ${settings.hopChannelHandle} for a new Neon Hop race every day!\n` +
     `https://www.youtube.com/${settings.hopChannelHandle}?sub_confirmation=1\n\n` +
-    `#neonhop #edm #colorrace #whowins #rhythmgame #satisfying #edmmusic #animation`;
+    (opts.short ? "#shorts " : "") + `#neonhop #edm #colorrace #whowins #rhythmgame #satisfying #edmmusic #animation`;
   const tags = [
     "neon hop", "who wins", "edm race", "edm", "edm music", "rhythm animation", "hop game", "tile hop style", "music animation",
     "satisfying", "neon", "color lanes", ...names.map((n) => n.toLowerCase()), ...lanes.map((l) => l.colorName.toLowerCase()),
   ];
   await save(path.join(jobDir, "script.json"), { title, description, tags });
 
-  const result = await renderJob(jobDir, props, { thumbnail: false, composition: "NeonHop" });
+  const result = await renderJob(jobDir, props, { thumbnail: false, composition: opts.short ? "NeonHopShort" : "NeonHop" });
   log(`Video tayyor: ${result.video}`);
 
   const record: HistoryItem = {

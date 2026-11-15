@@ -77,6 +77,13 @@ const hopMetadata: CalculateMetadataFunction<HopProps> = ({ props }) => ({
   height: 1080,
 });
 
+const hopShortMetadata: CalculateMetadataFunction<HopProps> = ({ props }) => ({
+  durationInFrames: props.durationInFrames,
+  fps: FPS,
+  width: 1080,
+  height: 1920,
+});
+
 export const RemotionRoot: React.FC = () => (
   <>
     <Composition
@@ -108,6 +115,16 @@ export const RemotionRoot: React.FC = () => (
       fps={FPS}
       width={1920}
       height={1080}
+    />
+    <Composition
+      id="NeonHopShort"
+      component={NeonHop}
+      defaultProps={{ ...hopDemo, lanes: hopDemo.lanes.slice(0, 2) }}
+      calculateMetadata={hopShortMetadata}
+      durationInFrames={hopDemo.durationInFrames}
+      fps={FPS}
+      width={1080}
+      height={1920}
     />
     <Still id="HopThumbnail" component={HopThumbnail} defaultProps={hopDemo} width={1280} height={720} />
     <Still id="Thumbnail" component={Thumbnail} defaultProps={{ ...demo, format: "long" }} width={1280} height={720} />

@@ -135,14 +135,18 @@ const Lane: React.FC<{
   const beatPos = frame / beatLen;
   const beat = Math.floor(beatPos);
   const phase = beatPos - beat;
-  const horizon = height * 0.3;
+  // Vertikal Short'da (ingichka baland yo'lak) kamera pastroq va yaqinroq
+  const vertical = height > width * 2.5;
+  const horizon = height * (vertical ? 0.36 : 0.3);
+  const focal = vertical ? 560 : FOCAL;
+  const camH = vertical ? (height * 0.86 - horizon) / (focal / PLAYER_Z) : CAM_H;
   const cx = width / 2;
   const level = Math.floor(beat / BEATS_PER_LEVEL);
   const levelStart = level > 0 && beat % BEATS_PER_LEVEL === 0;
 
   const project = (x: number, z: number) => {
-    const s = FOCAL / z;
-    return { x: cx + x * s, y: horizon + CAM_H * s, s };
+    const s = focal / z;
+    return { x: cx + x * s, y: horizon + camH * s, s };
   };
 
   // Ko'rinadigan plitkalar va ulardagi yulduzchalar
@@ -170,7 +174,7 @@ const Lane: React.FC<{
         points={`${a.x},${a.y} ${b.x},${b.y} ${c.x},${c.y} ${d.x},${d.y}`}
         fill={landed ? `rgba(255,255,255,${0.35 + flash * 0.6})` : `${lane.color}55`}
         stroke={landed ? "#FFFFFF" : lane.color}
-        strokeWidth={Math.max(1.5, (4 * (FOCAL / z)) / 150)}
+        strokeWidth={Math.max(1.5, (4 * (focal / z)) / 150)}
         opacity={fade}
         style={{ filter: `drop-shadow(0 0 ${6 + flash * 18}px ${lane.color})` }}
       />,
@@ -208,7 +212,8 @@ const Lane: React.FC<{
   const ground = project(worldX, PLAYER_Z);
   const jump = Math.sin(phase * Math.PI) * height * 0.13;
   const squash = phase < 0.08 ? 1 - (0.08 - phase) * 2.5 : 1;
-  const charSize = width * 0.34;
+  const charSize = width * (vertical ? 0.46 : 0.34);
+  const nameSize = vertical ? 84 : 54;
   const starCount = starsUpTo(seed, index, Math.max(0, beat));
   const gotStar = hasStar(seed, index, beat) && phase < 0.6;
   const levelPop = levelStart ? Math.exp(-phase * 2) : 0;
@@ -264,11 +269,11 @@ const Lane: React.FC<{
       <div
         style={{
           position: "absolute",
-          top: 22,
+          top: vertical ? 30 : 22,
           width: "100%",
           textAlign: "center",
           fontFamily: TITLE_FONT,
-          fontSize: 54,
+          fontSize: nameSize,
           color: lane.color,
           WebkitTextStroke: "5px black",
           paintOrder: "stroke fill",
@@ -277,7 +282,7 @@ const Lane: React.FC<{
       >
         {member.name.toUpperCase()}
       </div>
-      <div style={{ position: "absolute", top: 88, width: "100%", display: "flex", justifyContent: "center", alignItems: "center", gap: 8 }}>
+      <div style={{ position: "absolute", top: vertical ? 120 : 88, width: "100%", display: "flex", justifyContent: "center", alignItems: "center", gap: 8, transform: vertical ? "scale(1.5)" : "none" }}>
         <svg width={40} height={40}>
           <StarShape cx={20} cy={21} r={18} />
         </svg>
