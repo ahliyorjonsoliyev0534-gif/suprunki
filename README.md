@@ -31,6 +31,13 @@ npm run make -- --format crew                  # tasodifiy format
 npm run make -- --format crew --style party --upload --privacy public
 ```
 
+**Neon Hop (HopNova kanali uchun, uzun, gorizontal, OpenAI kerak emas):**
+4 ta neon yo'lak, har birida Band personaji (Saxo, Uku, Barky, Brie) uch o'lchamli plitkalar ustida original EDM beat ritmida sakraydi. Har bir yo'lakda hisob ko'rsatiladi, har 32 zarbda "LEVEL UP" chiqadi. Musiqa intro, asosiy qism, drop va break bo'limlaridan iborat to'liq trek bo'lib, bir xil loop emas.
+
+```bash
+npm run make -- --format hop --minutes 3.5
+```
+
 **Kontent original bo'lishi uchun:**
 - **Coree.** Kanalning o'z maskot-boshlovchisi, noldan chizilgan original personaj. Har videoda ekran burchagida turadi, gapirganda og'zi qimirlaydi, ko'zlarini pirpiratadi. Thumbnail'da ham chiqadi. Ssenariy Coree nomidan, birinchi shaxsda, o'z fikri va hazillari bilan yoziladi.
 - **Original musiqa.** Har video uchun yangi beat avtomatik yaratiladi: tempo, tonallik, akkordlar va melodiya har safar boshqacha. Tayyor trek ishlatilmaydi, shuning uchun Content ID muammosi bo'lmaydi.
@@ -147,6 +154,7 @@ src/                    Remotion (video dizayni, React)
     Captions.tsx        TikTok uslubidagi subtitr
     Mascot.tsx          Coree, kanal maskoti (SVG, gapirganda og'zi qimirlaydi)
   crew/                 Coree Crew: Band (asboblar) va 12 ta personaj, 3 ta Shorts formati
+  hop/                  Neon Hop: 4 yo'lakli ritm animatsiyasi
     Background.tsx      animatsion gradient fon
 pipeline/               Node (avtomatlashtirish)
   script-writer.ts      OpenAI: mavzular, ssenariy, sarlavha, tavsif, teglar

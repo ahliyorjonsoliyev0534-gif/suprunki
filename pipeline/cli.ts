@@ -6,6 +6,7 @@
 //   npm run make -- --format short --seconds 45      45 soniyalik Short
 //   npm run make -- --format long --minutes 10 --topic "Every Sprunki Character Explained"
 //   npm run make -- --format short --upload --privacy public
+//   npm run make -- --format hop --minutes 3.5        Neon Hop: 4 yo'lakli uzun EDM video (OpenAI kerak emas)
 //   npm run make -- --format crew --style party      Coree Crew Short (party | horror | pick | random), OpenAI kerak emas
 //   npm run auto -- --crew 2 --shorts 1 --long 0     avtopilot: yasab yuklaydi
 //   npm run preview -- output/<papka>                tayyor videoni Remotion Studio'da ochish
@@ -42,7 +43,7 @@ const format = values.format as VideoFormat;
 const privacy = values.privacy as "private" | "unlisted" | "public" | undefined;
 
 const main = async (): Promise<void> => {
-  if (!["short", "long", "crew"].includes(format)) throw new Error("--format short, long yoki crew bo'lishi kerak");
+  if (!["short", "long", "crew", "hop"].includes(format)) throw new Error("--format short, long, crew yoki hop bo'lishi kerak");
   switch (command) {
     case "auth": {
       const { authorize, channelInfo } = await import("./youtube");
@@ -87,6 +88,11 @@ const main = async (): Promise<void> => {
     }
 
     case "make": {
+      if ((format as string) === "hop") {
+        const { makeHop } = await import("./pipeline");
+        await makeHop({ minutes: Number(values.minutes), upload: values.upload, privacy, publishAt: values["publish-at"] });
+        return;
+      }
       if ((format as string) === "crew") {
         const { makeCrew } = await import("./pipeline");
         await makeCrew({

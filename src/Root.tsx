@@ -3,6 +3,8 @@ import { CalculateMetadataFunction, Composition, Still } from "remotion";
 import { SprunkiVideo } from "./SprunkiVideo";
 import { Thumbnail } from "./Thumbnail";
 import { CrewShort, crewDemo, type CrewProps } from "./crew/CrewShort";
+import { NeonHop } from "./hop/NeonHop";
+import { HOP_COLORS, type HopProps } from "./hop/types";
 import { FPS, SIZES, type VideoProps } from "./types";
 
 // Studio'da (npm run dev) ochilganda ko'rinadigan namuna
@@ -58,6 +60,22 @@ const crewMetadata: CalculateMetadataFunction<CrewProps> = ({ props }) => ({
   height: 1920,
 });
 
+const hopDemo: HopProps = {
+  lanes: ["saxo", "uku", "barky", "brie"].map((member, i) => ({ member, ...HOP_COLORS[i] })),
+  bpm: 124,
+  seed: 7,
+  music: null,
+  durationInFrames: 600,
+  channelName: "HopNova",
+};
+
+const hopMetadata: CalculateMetadataFunction<HopProps> = ({ props }) => ({
+  durationInFrames: props.durationInFrames,
+  fps: FPS,
+  width: 1920,
+  height: 1080,
+});
+
 export const RemotionRoot: React.FC = () => (
   <>
     <Composition
@@ -79,6 +97,16 @@ export const RemotionRoot: React.FC = () => (
       fps={FPS}
       width={1080}
       height={1920}
+    />
+    <Composition
+      id="NeonHop"
+      component={NeonHop}
+      defaultProps={hopDemo}
+      calculateMetadata={hopMetadata}
+      durationInFrames={hopDemo.durationInFrames}
+      fps={FPS}
+      width={1920}
+      height={1080}
     />
     <Still id="Thumbnail" component={Thumbnail} defaultProps={{ ...demo, format: "long" }} width={1280} height={720} />
   </>

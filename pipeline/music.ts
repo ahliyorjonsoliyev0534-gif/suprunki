@@ -158,3 +158,89 @@ export const generateMusic = async (out: string, seed: number): Promise<{ bpm: n
   await fs.writeFile(out, toWav(track));
   return { bpm, key };
 };
+
+// ------------------------------------------------------------------ uzun trek (Neon Hop va boshqa uzun videolar uchun)
+type SectionKind = "intro" | "main" | "drop" | "break";
+
+/**
+ * Bir necha daqiqalik original EDM trek: intro -> main -> drop -> break -> ... tartibida.
+ * Har bo'lim 8 takt; har 2 bo'limda melodiya va akkordlar almashadi, shuning uchun zerikarli loop bo'lmaydi.
+ * Qaytaradi: bpm va trekning aniq uzunligi (soniya).
+ */
+export const generateLongTrack = async (
+  out: string,
+  seed: number,
+  targetSeconds: number,
+  bpmRange: [number, number] = [118, 128],
+): Promise<{ bpm: number; seconds: number }> => {
+  const rand = mulberry32(seed);
+  const bpm = bpmRange[0] + Math.floor(rand() * (bpmRange[1] - bpmRange[0] + 1));
+  const beat = 60 / bpm;
+  const sectionSeconds = 8 * 4 * beat;
+  const plan: SectionKind[] = ["intro"];
+  const cycle: SectionKind[] = ["main", "drop", "main", "break", "drop"];
+  while ((plan.length + 1) * sectionSeconds < targetSeconds) plan.push(cycle[(plan.length - 1) % cycle.length]);
+  plan.push("drop");
+  const seconds = plan.length * sectionSeconds;
+  const track: Track = new Float32Array(Math.ceil(seconds * SAMPLE_RATE));
+  const key = 48 + Math.floor(rand() * 8);
+
+  const themes = [0, 1].map(() => ({
+    progression: PROGRESSIONS[Math.floor(rand() * PROGRESSIONS.length)],
+    motif: Array.from({ length: 8 }, () => (rand() < 0.2 ? -1 : Math.floor(rand() * 4))),
+    wave: (rand() < 0.5 ? "square" : "saw") as "square" | "saw",
+  }));
+
+  plan.forEach((kind, sectionIndex) => {
+    const theme = themes[Math.floor(sectionIndex / 2) % themes.length];
+    const sectionStart = sectionIndex * sectionSeconds;
+    const drums = kind !== "intro" && kind !== "break";
+    const big = kind === "drop";
+    for (let bar = 0; bar < 8; bar++) {
+      const barStart = sectionStart + bar * 4 * beat;
+      const chord = chordNotes(key, theme.progression[bar % theme.progression.length]);
+      const lastBar = bar === 7;
+
+      if (drums) {
+        for (let b = 0; b < 4; b++) {
+          const t = barStart + b * beat;
+          addKick(track, t, big ? 1 : 0.85); // "four on the floor"
+          if (b % 2 === 1) addNoise(track, t, 0.2, 20, big ? 0.4 : 0.3, rand, false);
+          addNoise(track, t + beat / 2, 0.06, 70, big ? 0.16 : 0.11, rand, true);
+          if (big) addNoise(track, t + beat / 4, 0.03, 120, 0.05, rand, true);
+        }
+      } else if (kind === "break" && lastBar) {
+        // keyingi drop oldidan snare "build-up"
+        for (let s = 0; s < 8; s++) addNoise(track, barStart + (s * beat) / 2, 0.1, 30, 0.12 + s * 0.03, rand, false);
+      }
+
+      // Bas
+      if (kind !== "intro") {
+        for (let s = 0; s < 8; s++) {
+          const note = chord[0] - 12 + (big && s % 2 === 1 ? 12 : 0);
+          addTone(track, barStart + (s * beat) / 2, beat * 0.42, midiToHz(note), big ? 0.18 : 0.14, big ? "saw" : "triangle");
+        }
+      }
+
+      // Akkord pad
+      for (const note of chord) addTone(track, barStart, beat * 3.9, midiToHz(note + 12), kind === "break" ? 0.05 : 0.03, "saw", 0.08, 0.3);
+
+      // Melodiya
+      if (kind !== "intro" || bar >= 4) {
+        const octave = big ? 24 : 12;
+        for (let s = 0; s < 8; s++) {
+          const step = theme.motif[(s + (bar % 2) * 3) % theme.motif.length];
+          if (step < 0) continue;
+          const note = step === 3 ? chord[0] + octave + 12 : chord[step] + octave;
+          addTone(track, barStart + (s * beat) / 2, beat * 0.32, midiToHz(note), big ? 0.075 : 0.06, theme.wave);
+        }
+      }
+    }
+  });
+
+  let peak = 0;
+  for (const v of track) peak = Math.max(peak, Math.abs(v));
+  if (peak > 0) for (let i = 0; i < track.length; i++) track[i] = (track[i] / peak) * 0.85;
+  await fs.writeFile(out, toWav(track));
+  return { bpm, seconds };
+};

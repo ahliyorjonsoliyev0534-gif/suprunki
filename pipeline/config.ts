@@ -18,6 +18,9 @@ const bool = (name: string, fallback: boolean): boolean => {
 export const settings = {
   channelName: env("CHANNEL_NAME", "SprunkiCoreee"),
   channelHandle: env("CHANNEL_HANDLE", "@SprunkiCoreee"),
+  /** Neon Hop videolari qaysi kanal uchun (videoda pastki burchakda yoziladi) */
+  hopChannelName: env("HOP_CHANNEL_NAME", "HopNova"),
+  hopChannelHandle: env("HOP_CHANNEL_HANDLE", "@hopnova9"),
   niche: env(
     "CHANNEL_NICHE",
     "Sprunki (the Incredibox fan mod): characters, phases, lore, theories and rankings",

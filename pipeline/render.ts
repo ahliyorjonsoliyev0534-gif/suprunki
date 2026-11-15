@@ -5,13 +5,14 @@ import path from "node:path";
 import { bundle } from "@remotion/bundler";
 import { renderMedia, renderStill, selectComposition } from "@remotion/renderer";
 import type { CrewProps } from "../src/crew/types";
+import type { HopProps } from "../src/hop/types";
 import type { VideoProps } from "../src/types";
 import { log, ROOT, settings } from "./config";
 
 export const renderJob = async (
   jobDir: string,
-  props: VideoProps | CrewProps,
-  opts: { thumbnail: boolean; composition?: "SprunkiVideo" | "CrewShort" },
+  props: VideoProps | CrewProps | HopProps,
+  opts: { thumbnail: boolean; composition?: "SprunkiVideo" | "CrewShort" | "NeonHop" },
 ): Promise<{ video: string; thumbnail: string | null }> => {
   await fs.writeFile(path.join(jobDir, "props.json"), JSON.stringify(props, null, 2));
 

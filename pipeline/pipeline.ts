@@ -5,10 +5,11 @@ import { existsSync } from "node:fs";
 import path from "node:path";
 import { BAND_IDS, CREW, memberById } from "../src/crew/characters";
 import { CREW_BEATS, type CrewProps, type CrewStyle } from "../src/crew/types";
+import { HOP_COLORS, type HopProps } from "../src/hop/types";
 import { FPS, SIZES, type SceneProps, type VideoFormat, type VideoProps } from "../src/types";
 import { log, settings } from "./config";
 import { characterLibrary, sceneImage } from "./images";
-import { generateMusic } from "./music";
+import { generateLongTrack, generateMusic } from "./music";
 import { renderJob } from "./render";
 import { ScriptWriter, wordCount, type VideoScript } from "./script-writer";
 import { audioDurationSeconds, synthesize } from "./tts";
@@ -19,7 +20,7 @@ const SCENE_PAD_SECONDS = 0.3;
 export const MAX_MINUTES: Record<VideoFormat, number> = { short: 0.95, long: 30 };
 
 type QueueItem = { topic: string; format: VideoFormat };
-type HistoryItem = { topic: string; format: VideoFormat | "crew"; title: string; folder: string; created: string; videoId: string | null };
+type HistoryItem = { topic: string; format: VideoFormat | "crew" | "hop"; title: string; folder: string; created: string; videoId: string | null };
 
 const load = async <T>(file: string): Promise<T[]> =>
   existsSync(file) ? (JSON.parse(await fs.readFile(file, "utf8")) as T[]) : [];
@@ -278,6 +279,70 @@ export const makeCrew = async (opts: {
       privacy: opts.privacy,
       publishAt: opts.publishAt,
     });
+    log(`Yuklandi: https://youtu.be/${record.videoId}`);
+  }
+  await save(HISTORY_FILE, [...(await load<HistoryItem>(HISTORY_FILE)), record]);
+  return record;
+};
+
+// ------------------------------------------------------------------ Neon Hop (uzun, gorizontal, OpenAI kerak emas)
+export const makeHop = async (opts: {
+  minutes: number;
+  members?: string[];
+  upload?: boolean;
+  privacy?: "private" | "unlisted" | "public";
+  publishAt?: string | null;
+}): Promise<HistoryItem> => {
+  const seed = Math.floor(Math.random() * 1_000_000);
+  const members = opts.members?.length ? opts.members.slice(0, 4) : shuffle(BAND_IDS);
+  const colors = HOP_COLORS.slice(0, 4);
+  const lanes = members.map((member, i) => ({ member, ...colors[i] }));
+
+  const stamp = new Date().toISOString().replace(/[-:]/g, "").replace("T", "-").slice(0, 15);
+  const jobDir = path.join(settings.outputDir, `${stamp}-hop`);
+  await fs.mkdir(jobDir, { recursive: true });
+
+  const { bpm, seconds } = await generateLongTrack(path.join(jobDir, "music.wav"), seed, Math.max(30, opts.minutes * 60));
+  log(`Neon Hop: ${members.join(", ")} · ${bpm} BPM · ${(seconds / 60).toFixed(1)} daqiqa`);
+
+  const props: HopProps = {
+    lanes,
+    bpm,
+    seed,
+    music: "music.wav",
+    durationInFrames: Math.ceil(seconds * FPS),
+    channelName: settings.hopChannelName,
+  };
+
+  const names = lanes.map((l) => memberById(l.member).name);
+  const emoji: Record<string, string> = { Purple: "🟣", Blue: "💙", Green: "🟢", Pink: "💗", Orange: "🧡", Cyan: "🩵" };
+  const title = `${lanes.map((l, i) => `${names[i]} ${emoji[l.colorName] ?? ""}`).join(" ")} | Neon Hop EDM`;
+  const description =
+    `${names.join(", ")} hop on neon tiles to an original EDM beat! Which lane is your favorite: ` +
+    `${lanes.map((l) => l.colorName).join(", ")}? Tell us in the comments!\n\n` +
+    `Every track on ${settings.hopChannelName} is original music made for this channel.\n\n` +
+    `Subscribe to ${settings.hopChannelHandle} for a new Neon Hop every day!\n` +
+    `https://www.youtube.com/${settings.hopChannelHandle}?sub_confirmation=1\n\n#neonhop #edm #rhythmgame #animation`;
+  const tags = [
+    "neon hop", "edm", "edm music", "rhythm animation", "hop game", "tile hop style", "music animation",
+    "satisfying", "neon", "color lanes", ...names.map((n) => n.toLowerCase()), ...lanes.map((l) => l.colorName.toLowerCase()),
+  ];
+  await save(path.join(jobDir, "script.json"), { title, description, tags });
+
+  const result = await renderJob(jobDir, props, { thumbnail: false, composition: "NeonHop" });
+  log(`Video tayyor: ${result.video}`);
+
+  const record: HistoryItem = {
+    topic: `hop:${members.join("-")}`,
+    format: "hop",
+    title,
+    folder: path.relative(settings.outputDir, jobDir),
+    created: new Date().toISOString(),
+    videoId: null,
+  };
+  if (opts.upload) {
+    const { upload } = await import("./youtube");
+    record.videoId = await upload({ video: result.video, title, description, tags, privacy: opts.privacy, publishAt: opts.publishAt });
     log(`Yuklandi: https://youtu.be/${record.videoId}`);
   }
   await save(HISTORY_FILE, [...(await load<HistoryItem>(HISTORY_FILE)), record]);
