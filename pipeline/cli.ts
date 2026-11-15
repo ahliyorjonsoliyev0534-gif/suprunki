@@ -6,6 +6,7 @@
 //   npm run make -- --format short --seconds 45      45 soniyalik Short
 //   npm run make -- --format long --minutes 10 --topic "Every Sprunki Character Explained"
 //   npm run make -- --format short --upload --privacy public
+//   npm run make -- --format hop --minutes 3.5 --first uku,saxo,brie,barky   yo'laklar tartibi
 //   npm run make -- --format hop --minutes 3.5        Neon Hop: 4 yo'lakli uzun EDM video (OpenAI kerak emas)
 //   npm run make -- --format crew --style party --featured zappi            bosh qahramonni tanlash
 //   npm run make -- --format crew --style pick --first saxo,uku,barky       pick variantlarini tanlash
@@ -94,7 +95,13 @@ const main = async (): Promise<void> => {
     case "make": {
       if ((format as string) === "hop") {
         const { makeHop } = await import("./pipeline");
-        await makeHop({ minutes: Number(values.minutes), upload: values.upload, privacy, publishAt: values["publish-at"] });
+        await makeHop({
+          minutes: Number(values.minutes),
+          members: values.first ? values.first.split(",").map((x) => x.trim()) : undefined,
+          upload: values.upload,
+          privacy,
+          publishAt: values["publish-at"],
+        });
         return;
       }
       if ((format as string) === "crew") {
