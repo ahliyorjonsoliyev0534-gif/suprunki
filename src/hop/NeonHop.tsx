@@ -10,8 +10,8 @@ const FOCAL = 450;
 const CAM_H = 3.9;
 const PLAYER_Z = 3;
 const TILE_SPACING = 2.4;
-const COLUMNS = [-1.35, 0, 1.35];
-const TILE_W = 1.05;
+const COLUMNS = [-0.85, 0, 0.85];
+const TILE_W = 0.74;
 const TILE_D = 1.1;
 
 const column = (seed: number, lane: number, n: number) => Math.floor(random(`col-${seed}-${lane}-${n}`) * 3);
