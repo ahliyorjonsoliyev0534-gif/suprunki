@@ -223,17 +223,26 @@ const crewMeta = (style: CrewStyle, props: CrewProps) => {
 
 export const makeCrew = async (opts: {
   style?: CrewStyle | "random";
+  /** Bosh qahramon (party formatida hamma shunga aylanadi). Bo'sh bo'lsa Band'dan tasodifiy */
+  featured?: string;
+  /** Birinchi o'rindagi qahramonlar (pick formatida variantlar shular bo'ladi) */
+  first?: string[];
   upload?: boolean;
   privacy?: "private" | "unlisted" | "public";
   publishAt?: string | null;
 }): Promise<HistoryItem> => {
   const style: CrewStyle = !opts.style || opts.style === "random" ? pick(CREW_STYLES) : opts.style;
   const seed = Math.floor(Math.random() * 1_000_000);
-  // Band (saksofon, ukulele, daraxt, pishloq) har doim birinchi o'rinda, qolgan Crew ulardan keyin
-  const band = shuffle(BAND_IDS);
-  const others = shuffle(CREW.map((m) => m.id).filter((id) => !BAND_IDS.includes(id)));
-  const members = [...band, ...others];
-  const featured = band[0];
+  const ids = CREW.map((m) => m.id);
+  for (const id of [opts.featured, ...(opts.first ?? [])].filter(Boolean) as string[]) {
+    if (!ids.includes(id)) throw new Error(`Noma'lum qahramon: ${id}. Mavjudlari: ${ids.join(", ")}`);
+  }
+  // Band (saksofon, ukulele, daraxt, pishloq) birinchi o'rinda, qolgan Crew ulardan keyin
+  const first = opts.first ?? [];
+  const band = shuffle(BAND_IDS.filter((id) => !first.includes(id)));
+  const others = shuffle(ids.filter((id) => !BAND_IDS.includes(id) && !first.includes(id)));
+  const members = [...first, ...band, ...others].filter((id) => id !== opts.featured);
+  const featured = opts.featured ?? members[0];
 
   const stamp = new Date().toISOString().replace(/[-:]/g, "").replace("T", "-").slice(0, 15);
   const jobDir = path.join(settings.outputDir, `${stamp}-crew-${style}`);

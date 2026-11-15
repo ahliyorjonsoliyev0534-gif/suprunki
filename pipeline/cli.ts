@@ -7,6 +7,8 @@
 //   npm run make -- --format long --minutes 10 --topic "Every Sprunki Character Explained"
 //   npm run make -- --format short --upload --privacy public
 //   npm run make -- --format hop --minutes 3.5        Neon Hop: 4 yo'lakli uzun EDM video (OpenAI kerak emas)
+//   npm run make -- --format crew --style party --featured zappi            bosh qahramonni tanlash
+//   npm run make -- --format crew --style pick --first saxo,uku,barky       pick variantlarini tanlash
 //   npm run make -- --format crew --style party      Coree Crew Short (party | horror | pick | random), OpenAI kerak emas
 //   npm run auto -- --crew 2 --shorts 1 --long 0     avtopilot: yasab yuklaydi
 //   npm run preview -- output/<papka>                tayyor videoni Remotion Studio'da ochish
@@ -36,6 +38,8 @@ const { values, positionals } = parseArgs({
     "spread-hours": { type: "string", default: "0" },
     style: { type: "string", default: "random" },
     crew: { type: "string", default: "0" },
+    featured: { type: "string" },
+    first: { type: "string" },
   },
 });
 
@@ -97,6 +101,8 @@ const main = async (): Promise<void> => {
         const { makeCrew } = await import("./pipeline");
         await makeCrew({
           style: values.style as "party" | "horror" | "pick" | "random",
+          featured: values.featured,
+          first: values.first ? values.first.split(",").map((x) => x.trim()) : undefined,
           upload: values.upload,
           privacy,
           publishAt: values["publish-at"],
