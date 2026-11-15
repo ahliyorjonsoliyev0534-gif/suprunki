@@ -106,6 +106,12 @@
         "barky",
         "saxo",
         "brie"
+      ],
+      [
+        "brie",
+        "saxo",
+        "barky",
+        "uku"
       ]
     ],
     "videos": [
@@ -131,6 +137,21 @@
         "id": "B6329QlVgUU",
         "title": "💙 Blue vs 🧡 Orange | Brie or Uku? Who Wins? #shorts",
         "publishAt": "2026-11-15T21:00:00Z"
+      },
+      {
+        "id": "v5G43Uj2OaQ",
+        "title": "🟢 Green vs 🧡 Orange | Uku or Saxo? Who Wins? #shorts",
+        "publishAt": "2026-11-16T13:00:00Z"
+      },
+      {
+        "id": "PALdKmbHI2o",
+        "title": "🟣 Purple vs 💙 Blue vs 🟢 Green vs 💗 Pink | Neon Hop Race #4 – Who Wins?",
+        "publishAt": "2026-11-16T17:00:00Z"
+      },
+      {
+        "id": "g4rF0-wButE",
+        "title": "💗 Pink vs 🟣 Purple | Barky or Brie? Who Wins? #shorts",
+        "publishAt": "2026-11-16T21:00:00Z"
       }
     ],
     "short_pairs": [
@@ -141,6 +162,14 @@
       [
         "brie",
         "uku"
+      ],
+      [
+        "uku",
+        "saxo"
+      ],
+      [
+        "barky",
+        "brie"
       ]
     ]
   }
