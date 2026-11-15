@@ -213,7 +213,7 @@ const crewMeta = (style: CrewStyle, props: CrewProps) => {
         : `${a}, ${b} or ${c}? Comment who you picked!`) +
     `\n\nSubscribe to ${settings.channelHandle} for new Coree Crew Shorts every day!\n` +
     `https://www.youtube.com/${settings.channelHandle}?sub_confirmation=1\n\n` +
-    "#shorts #coreecrew #animation #funny #musicgame";
+    "#shorts #coreecrew #animation #colorparty #satisfying #funny #cute #musicgame";
   const tags = [
     "coree crew", "sprunki style", "incredibox style", "color swap", "normal vs horror", "pick one",
     "animation shorts", "funny animation", "music game", "cute characters", "satisfying", star, a, b, c,
@@ -326,13 +326,17 @@ export const makeHop = async (opts: {
   const names = lanes.map((l) => memberById(l.member).name);
   const emoji: Record<string, string> = { Purple: "🟣", Blue: "💙", Green: "🟢", Pink: "💗", Orange: "🧡", Cyan: "🩵" };
   // "Kim yutadi?" sarlavhasi tomoshabinni oxirigacha ushlab turadi (g'olib videoning oxirida e'lon qilinadi)
-  const title = `Who Wins? ${names.join(" vs ")} ${lanes.map((l) => emoji[l.colorName] ?? "").join("")} | Neon Hop EDM Race`;
+  // Kanal tahlili: rang nomlari bilan boshlangan sarlavhalar "tavsiya etilgan" videolarga ko'proq chiqqan
+  const title = `${lanes.map((l) => `${emoji[l.colorName] ?? ""} ${l.colorName}`).join(" vs ")} | Who Wins? Neon Hop EDM Race`;
   const description =
-    `${names.join(", ")} race on neon tiles to an original EDM beat and collect stars. ` +
-    `Who collects the most? Pick your lane (${lanes.map((l) => l.colorName).join(", ")}) and watch till the end to see the winner!\n\n` +
-    `Every track on ${settings.hopChannelName} is original music made for this channel.\n\n` +
-    `Subscribe to ${settings.hopChannelHandle} for a new Neon Hop every day!\n` +
-    `https://www.youtube.com/${settings.hopChannelHandle}?sub_confirmation=1\n\n#neonhop #edm #rhythmgame #animation`;
+    `Pick your color and watch till the end to see who wins! 🏆\n\n` +
+    lanes.map((l, i) => `${emoji[l.colorName] ?? ""} ${l.colorName}: ${names[i]}`).join("\n") +
+    `\n\n${names.join(", ")} race on glowing neon tiles to an original EDM beat. Every tile with a star is +1 point. ` +
+    `New backgrounds every level, and only one lane wins. Which color did you pick? Tell us in the comments!\n\n` +
+    `🎵 Every track on ${settings.hopChannelName} is original music made for this channel.\n` +
+    `🔔 Subscribe to ${settings.hopChannelHandle} for a new Neon Hop race every day!\n` +
+    `https://www.youtube.com/${settings.hopChannelHandle}?sub_confirmation=1\n\n` +
+    `#neonhop #edm #colorrace #whowins #rhythmgame #satisfying #edmmusic #animation`;
   const tags = [
     "neon hop", "who wins", "edm race", "edm", "edm music", "rhythm animation", "hop game", "tile hop style", "music animation",
     "satisfying", "neon", "color lanes", ...names.map((n) => n.toLowerCase()), ...lanes.map((l) => l.colorName.toLowerCase()),
