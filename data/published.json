@@ -7,13 +7,12 @@
       "uku",
       "brie",
       "barky",
-      "coree"
-    ],
-    "party_pending": [
+      "coree",
       "zappi",
       "moxi",
       "leafy"
     ],
+    "party_pending": [],
     "pick_trios": [
       [
         "uku",
@@ -76,6 +75,18 @@
       {
         "id": "G5kS3K31EQI",
         "title": "Pick One: Saxo, Uku or Barky?"
+      },
+      {
+        "id": "QIpqV2IseDY",
+        "title": "Everyone Turns Into Zappi!"
+      },
+      {
+        "id": "cKqW4DqMkgs",
+        "title": "Everyone Turns Into Moxi!"
+      },
+      {
+        "id": "O2W8xCyTiXQ",
+        "title": "Everyone Turns Into Leafy!"
       }
     ],
     "pick_pending": [
@@ -84,6 +95,16 @@
         "leafy",
         "pluma"
       ]
+    ],
+    "daily_uploads": {
+      "2026-11-16": 3
+    },
+    "pending_posts": [
+      {
+        "postId": "eec6061c-383c-4f16-831b-b5698556fd02",
+        "title": "Pick One: Saxo, Leafy or Pluma?",
+        "note": "approved; failed uploadLimitExceeded; re-draft destination then publish"
+      }
     ]
   },
   "hopnova": {
