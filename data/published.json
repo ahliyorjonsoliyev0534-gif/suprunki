@@ -10,11 +10,10 @@
       "coree",
       "zappi",
       "moxi",
-      "leafy"
-    ],
-    "party_pending": [
+      "leafy",
       "bloop"
     ],
+    "party_pending": [],
     "pick_trios": [
       [
         "uku",
@@ -35,6 +34,16 @@
         "saxo",
         "uku",
         "barky"
+      ],
+      [
+        "saxo",
+        "leafy",
+        "pluma"
+      ],
+      [
+        "rexo",
+        "tiko",
+        "nova"
       ]
     ],
     "videos": [
@@ -89,40 +98,25 @@
       {
         "id": "O2W8xCyTiXQ",
         "title": "Everyone Turns Into Leafy!"
+      },
+      {
+        "id": "c0pRzG_sv9k",
+        "title": "Pick One: Saxo, Leafy or Pluma?"
+      },
+      {
+        "id": "Pkveu0gDnxo",
+        "title": "Everyone Turns Into Bloop!"
+      },
+      {
+        "id": "KJEKPhxRcCY",
+        "title": "Pick One: Rexo, Tiko or Nova?"
       }
     ],
-    "pick_pending": [
-      [
-        "saxo",
-        "leafy",
-        "pluma"
-      ],
-      [
-        "rexo",
-        "tiko",
-        "nova"
-      ]
-    ],
+    "pick_pending": [],
     "daily_uploads": {
-      "2026-11-16": 3
+      "2026-11-17": 3
     },
-    "pending_posts": [
-      {
-        "postId": "eec6061c-383c-4f16-831b-b5698556fd02",
-        "title": "Pick One: Saxo, Leafy or Pluma?",
-        "note": "approved; old destination failed; draft_update then publish"
-      },
-      {
-        "postId": "15245443-34fe-402c-be31-421fe5b60917",
-        "title": "Everyone Turns Into Bloop!",
-        "note": "approved 2026-11-16; publish 2026-11-17 morning"
-      },
-      {
-        "postId": "dfd927bf-4a65-408f-8faa-22afa4899d2f",
-        "title": "Pick One: Rexo, Tiko or Nova?",
-        "note": "approved 2026-11-16; publish 2026-11-17 morning"
-      }
-    ]
+    "pending_posts": []
   },
   "hopnova": {
     "channelId": "UCvmMDLhG63Qia9mKUs5-6XA",
@@ -162,6 +156,12 @@
         "brie",
         "nova",
         "barky"
+      ],
+      [
+        "uku",
+        "pluma",
+        "moxi",
+        "saxo"
       ]
     ],
     "videos": [
@@ -232,6 +232,21 @@
         "id": "fpUn8dC7j88",
         "title": "💙 Blue vs 🟢 Green | Moxi or Pluma? Who Wins? #shorts",
         "publishAt": "2026-11-18T21:00:00Z"
+      },
+      {
+        "id": "wpoiintzwFI",
+        "title": "🟣 Purple vs 💙 Blue | Leafy or Bongo? Who Wins? #shorts",
+        "publishAt": "2026-11-19T13:00:00Z"
+      },
+      {
+        "id": "ZK9aj7NJQ54",
+        "title": "🟣 Purple vs 💙 Blue vs 🟢 Green vs 💗 Pink | Neon Hop Race #7 – Who Wins?",
+        "publishAt": "2026-11-19T17:00:00Z"
+      },
+      {
+        "id": "biIsi0AHZW4",
+        "title": "💙 Blue vs 🟢 Green | Tiko or Saxo? Who Wins? #shorts",
+        "publishAt": "2026-11-19T21:00:00Z"
       }
     ],
     "short_pairs": [
@@ -266,6 +281,14 @@
       [
         "moxi",
         "pluma"
+      ],
+      [
+        "leafy",
+        "bongo"
+      ],
+      [
+        "tiko",
+        "saxo"
       ]
     ]
   }
