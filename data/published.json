@@ -12,7 +12,9 @@
       "moxi",
       "leafy"
     ],
-    "party_pending": [],
+    "party_pending": [
+      "bloop"
+    ],
     "pick_trios": [
       [
         "uku",
@@ -94,6 +96,11 @@
         "saxo",
         "leafy",
         "pluma"
+      ],
+      [
+        "rexo",
+        "tiko",
+        "nova"
       ]
     ],
     "daily_uploads": {
@@ -103,7 +110,17 @@
       {
         "postId": "eec6061c-383c-4f16-831b-b5698556fd02",
         "title": "Pick One: Saxo, Leafy or Pluma?",
-        "note": "approved; failed uploadLimitExceeded; re-draft destination then publish"
+        "note": "approved; old destination failed; draft_update then publish"
+      },
+      {
+        "postId": "15245443-34fe-402c-be31-421fe5b60917",
+        "title": "Everyone Turns Into Bloop!",
+        "note": "approved 2026-11-16; publish 2026-11-17 morning"
+      },
+      {
+        "postId": "dfd927bf-4a65-408f-8faa-22afa4899d2f",
+        "title": "Pick One: Rexo, Tiko or Nova?",
+        "note": "approved 2026-11-16; publish 2026-11-17 morning"
       }
     ]
   },
@@ -139,6 +156,12 @@
         "uku",
         "barky",
         "brie"
+      ],
+      [
+        "zappi",
+        "brie",
+        "nova",
+        "barky"
       ]
     ],
     "videos": [
@@ -194,6 +217,21 @@
         "id": "b-ouSm1tyUg",
         "title": "🟣 Purple vs 💗 Pink | Uku or Barky? Who Wins? #shorts",
         "publishAt": "2026-11-17T21:00:00Z"
+      },
+      {
+        "id": "bNK-xbH3YLU",
+        "title": "🩵 Cyan vs 💗 Pink | Coree or Zappi? Who Wins? #shorts",
+        "publishAt": "2026-11-18T13:00:00Z"
+      },
+      {
+        "id": "-8DqSThvtfo",
+        "title": "🟣 Purple vs 💙 Blue vs 🟢 Green vs 💗 Pink | Neon Hop Race #6 – Who Wins?",
+        "publishAt": "2026-11-18T17:00:00Z"
+      },
+      {
+        "id": "fpUn8dC7j88",
+        "title": "💙 Blue vs 🟢 Green | Moxi or Pluma? Who Wins? #shorts",
+        "publishAt": "2026-11-18T21:00:00Z"
       }
     ],
     "short_pairs": [
@@ -220,6 +258,14 @@
       [
         "uku",
         "barky"
+      ],
+      [
+        "coree",
+        "zappi"
+      ],
+      [
+        "moxi",
+        "pluma"
       ]
     ]
   }
