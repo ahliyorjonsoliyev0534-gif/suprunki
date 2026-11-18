@@ -11,7 +11,8 @@
       "zappi",
       "moxi",
       "leafy",
-      "bloop"
+      "bloop",
+      "mintz"
     ],
     "party_pending": [],
     "pick_trios": [
@@ -44,6 +45,11 @@
         "rexo",
         "tiko",
         "nova"
+      ],
+      [
+        "grimm",
+        "bongo",
+        "pluma"
       ]
     ],
     "videos": [
@@ -110,11 +116,19 @@
       {
         "id": "KJEKPhxRcCY",
         "title": "Pick One: Rexo, Tiko or Nova?"
+      },
+      {
+        "id": "YkjbgFOc1bw",
+        "title": "Everyone Turns Into Mintz!"
+      },
+      {
+        "id": "5Gl-ZTsiUeo",
+        "title": "Pick One: Grimm, Bongo or Pluma?"
       }
     ],
     "pick_pending": [],
     "daily_uploads": {
-      "2026-11-17": 3
+      "2026-11-18": 2
     },
     "pending_posts": []
   },
@@ -162,6 +176,12 @@
         "pluma",
         "moxi",
         "saxo"
+      ],
+      [
+        "barky",
+        "leafy",
+        "coree",
+        "tiko"
       ]
     ],
     "videos": [
@@ -247,6 +267,21 @@
         "id": "biIsi0AHZW4",
         "title": "💙 Blue vs 🟢 Green | Tiko or Saxo? Who Wins? #shorts",
         "publishAt": "2026-11-19T21:00:00Z"
+      },
+      {
+        "id": "6zCN332YPHU",
+        "title": "🟣 Purple vs 🧡 Orange | Nova or Rexo? Who Wins? #shorts",
+        "publishAt": "2026-11-20T13:00:00Z"
+      },
+      {
+        "id": "j3LchlmfEy8",
+        "title": "🟣 Purple vs 💙 Blue vs 🟢 Green vs 💗 Pink | Neon Hop Race #8 – Who Wins?",
+        "publishAt": "2026-11-20T17:00:00Z"
+      },
+      {
+        "id": "GhFtl-hFnsY",
+        "title": "💗 Pink vs 🟢 Green | Mintz or Uku? Who Wins? #shorts",
+        "publishAt": "2026-11-20T21:00:00Z"
       }
     ],
     "short_pairs": [
@@ -289,6 +324,14 @@
       [
         "tiko",
         "saxo"
+      ],
+      [
+        "nova",
+        "rexo"
+      ],
+      [
+        "mintz",
+        "uku"
       ]
     ]
   }
