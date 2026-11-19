@@ -12,7 +12,9 @@
       "moxi",
       "leafy",
       "bloop",
-      "mintz"
+      "mintz",
+      "rexo",
+      "nova"
     ],
     "party_pending": [],
     "pick_trios": [
@@ -50,6 +52,11 @@
         "grimm",
         "bongo",
         "pluma"
+      ],
+      [
+        "zappi",
+        "moxi",
+        "brie"
       ]
     ],
     "videos": [
@@ -124,11 +131,23 @@
       {
         "id": "5Gl-ZTsiUeo",
         "title": "Pick One: Grimm, Bongo or Pluma?"
+      },
+      {
+        "id": "SKJi5SlPkuY",
+        "title": "Everyone Turns Into Rexo!"
+      },
+      {
+        "id": "eJ_J_xLfOQQ",
+        "title": "Everyone Turns Into Nova!"
+      },
+      {
+        "id": "8CWIe_VsNeU",
+        "title": "Pick One: Zappi, Moxi or Brie?"
       }
     ],
     "pick_pending": [],
     "daily_uploads": {
-      "2026-11-18": 2
+      "2026-11-19": 3
     },
     "pending_posts": []
   },
