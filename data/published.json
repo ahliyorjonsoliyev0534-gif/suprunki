@@ -14,7 +14,9 @@
       "bloop",
       "mintz",
       "rexo",
-      "nova"
+      "nova",
+      "tiko",
+      "pluma"
     ],
     "party_pending": [],
     "pick_trios": [
@@ -57,6 +59,11 @@
         "zappi",
         "moxi",
         "brie"
+      ],
+      [
+        "coree",
+        "mintz",
+        "barky"
       ]
     ],
     "videos": [
@@ -143,11 +150,23 @@
       {
         "id": "8CWIe_VsNeU",
         "title": "Pick One: Zappi, Moxi or Brie?"
+      },
+      {
+        "id": "EKEVNLb-HEw",
+        "title": "Everyone Turns Into Tiko!"
+      },
+      {
+        "id": "-13bl76BEP4",
+        "title": "Everyone Turns Into Pluma!"
+      },
+      {
+        "id": "rYGS3xqGPRM",
+        "title": "Pick One: Coree, Mintz or Barky?"
       }
     ],
     "pick_pending": [],
     "daily_uploads": {
-      "2026-11-19": 3
+      "2026-11-20": 3
     },
     "pending_posts": []
   },
