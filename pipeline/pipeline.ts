@@ -190,7 +190,8 @@ export const make = async (opts: {
 };
 
 // ------------------------------------------------------------------ Coree Crew (ovozsiz, OpenAI kerak emas)
-export const CREW_STYLES: CrewStyle[] = ["party", "horror", "pick"];
+// "horror" faqat qo'lda (--style horror); tasodifiy tanlovda ishlatilmaydi
+export const CREW_STYLES: CrewStyle[] = ["party", "pick", "shadow", "odd"];
 
 const pick = <T>(items: T[]): T => items[Math.floor(Math.random() * items.length)];
 const shuffle = <T>(items: T[]): T[] => [...items].sort(() => Math.random() - 0.5);
@@ -202,6 +203,8 @@ const crewMeta = (style: CrewStyle, props: CrewProps) => {
     party: [`Everyone Turns Into ${star}! 🎨`, `${star} Color Party! Which Color Wins?`, `What If Everyone Became ${star}? 🎵`],
     horror: [`${a} Normal vs HORROR ⚡`, `Normal vs Horror: Who Is Scariest? 😱`, `${a}, ${b} & More: Horror Versions ⚡`],
     pick: [`Pick One: ${a}, ${b} or ${c}? 🤔`, `Who Would You Pick? ${a} vs ${b} vs ${c}`, `Only ONE Can Win! Pick Fast! ⏱️`],
+    shadow: [`Guess the Shadow! Who Is It? 🕵️`, `Can You Guess This Shadow? 🤔`, `Whose Shadow Is This? 3 Seconds! ⏱️`],
+    odd: [`Find the Odd ${star}! 👀`, `Only 1% Can Find the Odd ${star}! 🔍`, `Spot the Different ${star}! 👀`],
   };
   const title = `${pick(titles[style])} #shorts`;
   const description =
@@ -210,12 +213,16 @@ const crewMeta = (style: CrewStyle, props: CrewProps) => {
       ? `Watch everyone turn into ${star}. Which color is your favorite?`
       : style === "horror"
         ? "Normal or horror version, which one do you like more?"
-        : `${a}, ${b} or ${c}? Comment who you picked!`) +
+        : style === "shadow"
+          ? "Can you guess whose shadow it is before the reveal? Comment if you got it right!"
+          : style === "odd"
+            ? `One ${star} is a different color. Can you find it before the countdown ends? Comment your time!`
+            : `${a}, ${b} or ${c}? Comment who you picked!`) +
     `\n\nSubscribe to ${settings.channelHandle} for new Coree Crew Shorts every day!\n` +
     `https://www.youtube.com/${settings.channelHandle}?sub_confirmation=1\n\n` +
     "#shorts #coreecrew #animation #colorparty #satisfying #funny #cute #musicgame";
   const tags = [
-    "coree crew", "sprunki style", "incredibox style", "color swap", "normal vs horror", "pick one",
+    "coree crew", "color swap", "pick one", "guess the shadow", "find the odd one", "spot the difference",
     "animation shorts", "funny animation", "music game", "cute characters", "satisfying", star, a, b, c,
   ];
   return { title, description, tags: [...new Set(tags.map((t) => t.toLowerCase()))] };

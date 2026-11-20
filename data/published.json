@@ -168,7 +168,9 @@
     "daily_uploads": {
       "2026-11-20": 3
     },
-    "pending_posts": []
+    "pending_posts": [],
+    "shadow_answers": [],
+    "odd_featured": []
   },
   "hopnova": {
     "channelId": "UCvmMDLhG63Qia9mKUs5-6XA",

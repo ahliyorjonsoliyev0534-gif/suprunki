@@ -313,12 +313,241 @@ const Pick: React.FC<CrewProps> = ({ members, bpm, seed, pickIndex }) => {
   );
 };
 
+// ------------------------------------------------------------------ 4. GUESS THE SHADOW
+const BigCountdown: React.FC<{ value: number | null; bump: number }> = ({ value, bump }) => {
+  const { width } = useVideoConfig();
+  if (!value) return null;
+  return (
+    <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", pointerEvents: "none" }}>
+      <div
+        style={{
+          fontFamily: TITLE_FONT,
+          fontSize: width * 0.42,
+          color: "white",
+          WebkitTextStroke: `${width * 0.012}px black`,
+          paintOrder: "stroke fill",
+          transform: `scale(${0.6 + bump * 0.6})`,
+          opacity: 0.95,
+        }}
+      >
+        {value}
+      </div>
+    </AbsoluteFill>
+  );
+};
+
+const BottomText: React.FC<{ text: string; from: number }> = ({ text, from }) => {
+  const frame = useCurrentFrame();
+  const { width, height } = useVideoConfig();
+  return (
+    <div
+      style={{
+        position: "absolute",
+        bottom: height * 0.08,
+        width: "100%",
+        textAlign: "center",
+        fontFamily: TITLE_FONT,
+        fontSize: width * 0.062,
+        color: "white",
+        WebkitTextStroke: `${width * 0.006}px black`,
+        paintOrder: "stroke fill",
+        padding: "0 6%",
+        opacity: interpolate(frame, [from, from + 10], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }),
+      }}
+    >
+      {text}
+    </div>
+  );
+};
+
+const Shadow: React.FC<CrewProps> = ({ featured, members, bpm, seed, pickIndex }) => {
+  const { frame, beatLen, index, bump } = useBeat(bpm);
+  const { width, height, fps } = useVideoConfig();
+  const answer = memberById(featured);
+  const decoys = members.filter((id) => id !== featured).slice(0, 2).map(memberById);
+  const options = [...decoys];
+  options.splice(pickIndex % 3, 0, answer);
+  const revealBeat = 9;
+  const revealFrame = Math.round(revealBeat * beatLen);
+  const revealed = index >= revealBeat;
+  const hover = index < 6 ? index % 3 : -1;
+  const countdown = index >= 6 && index < revealBeat ? 3 - (index - 6) : null;
+  const pop = revealed ? spring({ frame: frame - revealFrame, fps, config: { damping: 8 } }) : 0;
+  const bigSize = width * 0.46;
+  const cardW = width * 0.28;
+
+  return (
+    <AbsoluteFill>
+      <Background seed={seed + 5} />
+      <Title text={revealed ? `IT'S ${answer.name.toUpperCase()}!` : "GUESS THE SHADOW!"} top={height * 0.04} size={width * 0.085} />
+      <div style={{ position: "absolute", top: height * 0.13, width: "100%", display: "flex", justifyContent: "center" }}>
+        <div
+          style={{
+            width: bigSize * 1.15,
+            height: bigSize * 1.35,
+            borderRadius: "50%",
+            background: "radial-gradient(circle, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.15) 70%)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            transform: `translateY(${-bump * 18}px) scale(${1 + pop * 0.08})`,
+          }}
+        >
+          <div style={{ filter: revealed ? "none" : "brightness(0)" }}>
+            <CrewSvg member={answer} size={bigSize} mouthOpen={revealed ? bump : 0} mood={revealed ? "smile" : "flat"} />
+          </div>
+        </div>
+      </div>
+      {!revealed ? (
+        <div
+          style={{
+            position: "absolute",
+            top: height * 0.13 + bigSize * 0.5,
+            width: "100%",
+            textAlign: "center",
+            fontFamily: TITLE_FONT,
+            fontSize: width * 0.22,
+            color: "#FFE600",
+            WebkitTextStroke: `${width * 0.01}px black`,
+            paintOrder: "stroke fill",
+            transform: `scale(${1 + bump * 0.12})`,
+          }}
+        >
+          ?
+        </div>
+      ) : null}
+      <div style={{ position: "absolute", top: height * 0.6, width: "100%", display: "flex", justifyContent: "space-evenly" }}>
+        {options.map((m, i) => {
+          const correct = i === pickIndex % 3;
+          const lost = revealed && !correct;
+          const active = hover === i || (revealed && correct);
+          return (
+            <div
+              key={m.id}
+              style={{
+                width: cardW,
+                height: cardW * 1.5,
+                borderRadius: 32,
+                background: active ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.6)",
+                border: `9px solid ${revealed && correct ? "#7CFF4F" : active ? "#FFE600" : "rgba(0,0,0,0.25)"}`,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                transform: `scale(${active ? 1.06 + (revealed && correct ? bump * 0.06 : 0) : 0.94})`,
+                position: "relative",
+              }}
+            >
+              <div style={{ filter: lost ? "grayscale(1) brightness(0.7)" : "none", display: "flex", flexDirection: "column", alignItems: "center" }}>
+                <CrewSvg member={m} size={cardW * 0.72} mouthOpen={active ? bump : 0} mood={lost ? "flat" : "smile"} />
+                <div style={{ fontFamily: TITLE_FONT, fontSize: width * 0.045, color: "#222", marginTop: 6 }}>{m.name}</div>
+              </div>
+              {lost ? (
+                <div style={{ position: "absolute", fontSize: cardW * 0.85, color: "#FF2E2E", fontFamily: TITLE_FONT, lineHeight: 1, WebkitTextStroke: "8px black", paintOrder: "stroke fill" }}>X</div>
+              ) : null}
+            </div>
+          );
+        })}
+      </div>
+      <BigCountdown value={countdown} bump={bump} />
+      <Confetti start={revealFrame} seed={seed} />
+      <BottomText text="DID YOU GUESS RIGHT? COMMENT!" from={revealFrame} />
+    </AbsoluteFill>
+  );
+};
+
+// ------------------------------------------------------------------ 5. FIND THE ODD ONE
+const Odd: React.FC<CrewProps> = ({ featured, bpm, seed }) => {
+  const { frame, beatLen, index, bump } = useBeat(bpm);
+  const { width, height, fps } = useVideoConfig();
+  const star = memberById(featured);
+  const cols = 4;
+  const rows = 4;
+  const total = cols * rows;
+  const oddCell = seed % total;
+  // Boshqacha qahramonning rangi asl rangdan sezilarli farq qilishi kerak
+  const hue = (hex: string) => {
+    const n = parseInt(hex.replace("#", "").slice(0, 6), 16);
+    const r = (n >> 16) / 255, g = ((n >> 8) & 255) / 255, b = (n & 255) / 255;
+    const max = Math.max(r, g, b), min = Math.min(r, g, b);
+    if (max === min) return 0;
+    const d = max - min;
+    const h = max === r ? ((g - b) / d) % 6 : max === g ? (b - r) / d + 2 : (r - g) / d + 4;
+    return (h * 60 + 360) % 360;
+  };
+  const far = PARTY_COLORS.filter((c) => {
+    const diff = Math.abs(hue(c) - hue(star.color));
+    return Math.min(diff, 360 - diff) > 60;
+  });
+  const pool = far.length ? far : PARTY_COLORS;
+  const oddColor = pool[seed % pool.length];
+  const revealBeat = 10;
+  const revealFrame = Math.round(revealBeat * beatLen);
+  const revealed = index >= revealBeat;
+  const countdown = index >= 7 && index < revealBeat ? 3 - (index - 7) : null;
+  const gridTop = height * 0.2;
+  const cell = width / cols;
+  const cellH = (height * 0.62) / rows;
+  const charSize = Math.min(cell, cellH) * 0.82;
+  const ring = revealed ? spring({ frame: frame - revealFrame, fps, config: { damping: 10 } }) : 0;
+
+  return (
+    <AbsoluteFill>
+      <Background seed={seed + 9} />
+      <Title text={revealed ? "FOUND IT!" : "FIND THE ODD ONE!"} top={height * 0.04} size={width * 0.09} />
+      {new Array(total).fill(0).map((_, i) => {
+        const col = i % cols;
+        const row = Math.floor(i / cols);
+        const isOdd = i === oddCell;
+        const dance = Math.sin((frame / beatLen) * Math.PI * 2 + i * 0.7) * 5;
+        const cx = col * cell + cell / 2;
+        const cy = gridTop + row * cellH + cellH / 2;
+        return (
+          <React.Fragment key={i}>
+            <div
+              style={{
+                position: "absolute",
+                left: cx - charSize / 2,
+                top: cy - charSize * 0.65,
+                transform: `translateY(${dance}px) scale(${revealed && isOdd ? 1 + ring * 0.25 : 1})`,
+                filter: revealed && !isOdd ? "grayscale(0.8) brightness(0.55)" : "none",
+              }}
+            >
+              <CrewSvg member={star} size={charSize} colorOverride={isOdd ? oddColor : undefined} mouthOpen={bump * 0.5} blink={(frame + i * 7) % 80 < 3 ? 1 : 0} />
+            </div>
+            {revealed && isOdd ? (
+              <div
+                style={{
+                  position: "absolute",
+                  left: cx - charSize * 0.75,
+                  top: cy - charSize * 0.8,
+                  width: charSize * 1.5,
+                  height: charSize * 1.6,
+                  borderRadius: "50%",
+                  border: `${width * 0.014}px solid #FF2E2E`,
+                  boxShadow: "0 0 30px #FF2E2E",
+                  transform: `scale(${ring})`,
+                }}
+              />
+            ) : null}
+          </React.Fragment>
+        );
+      })}
+      <BigCountdown value={countdown} bump={bump} />
+      <Confetti start={revealFrame} seed={seed} />
+      <BottomText text="DID YOU FIND IT? COMMENT YOUR TIME!" from={revealFrame} />
+    </AbsoluteFill>
+  );
+};
+
 // ------------------------------------------------------------------ root
 export const CrewShort: React.FC<CrewProps> = (props) => {
   const { durationInFrames, fps } = useVideoConfig();
   const content = useMemo(() => {
     if (props.style === "horror") return <Horror {...props} />;
     if (props.style === "pick") return <Pick {...props} />;
+    if (props.style === "shadow") return <Shadow {...props} />;
+    if (props.style === "odd") return <Odd {...props} />;
     return <Party {...props} />;
   }, [props]);
 
