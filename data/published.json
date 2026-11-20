@@ -1,0 +1,378 @@
+{
+  "note": "Kanallarga joylangan original videolar. Kundalik ish shu ro'yxatga qarab takrorlanmaydigan qahramon/kombinatsiya tanlaydi.",
+  "sprunki_core": {
+    "channelId": "UCc7Yjp8brh6cqDVoAmC2xbQ",
+    "party_featured": [
+      "saxo",
+      "uku",
+      "brie",
+      "barky",
+      "coree",
+      "zappi",
+      "moxi",
+      "leafy",
+      "bloop",
+      "mintz",
+      "rexo",
+      "nova",
+      "tiko",
+      "pluma"
+    ],
+    "party_pending": [],
+    "pick_trios": [
+      [
+        "uku",
+        "brie",
+        "saxo"
+      ],
+      [
+        "brie",
+        "barky",
+        "uku"
+      ],
+      [
+        "saxo",
+        "barky",
+        "brie"
+      ],
+      [
+        "saxo",
+        "uku",
+        "barky"
+      ],
+      [
+        "saxo",
+        "leafy",
+        "pluma"
+      ],
+      [
+        "rexo",
+        "tiko",
+        "nova"
+      ],
+      [
+        "grimm",
+        "bongo",
+        "pluma"
+      ],
+      [
+        "zappi",
+        "moxi",
+        "brie"
+      ],
+      [
+        "coree",
+        "mintz",
+        "barky"
+      ]
+    ],
+    "videos": [
+      {
+        "id": "KN7fQpmIY7w",
+        "title": "Everyone Turns Into Saxo!"
+      },
+      {
+        "id": "oGXDjqPaRWI",
+        "title": "Pick One: Uku, Brie or Saxo?"
+      },
+      {
+        "id": "-8R0G1vmZf0",
+        "title": "What If Everyone Became Uku?"
+      },
+      {
+        "id": "d_toX62KwWw",
+        "title": "Brie Color Party! Which Color Wins?"
+      },
+      {
+        "id": "CuzzJNR-SnE",
+        "title": "Pick One: Brie, Barky or Uku?"
+      },
+      {
+        "id": "71OPjDGVUoc",
+        "title": "Coree Crew Compilation: 18 Color Party & Pick One Rounds!"
+      },
+      {
+        "id": "5bmUKbArHq4",
+        "title": "Everyone Turns Into Barky!"
+      },
+      {
+        "id": "5Y2RdWXC4z0",
+        "title": "Pick One: Saxo, Barky or Brie?"
+      },
+      {
+        "id": "suFqATAN5Zg",
+        "title": "Everyone Turns Into Coree!"
+      },
+      {
+        "id": "G5kS3K31EQI",
+        "title": "Pick One: Saxo, Uku or Barky?"
+      },
+      {
+        "id": "QIpqV2IseDY",
+        "title": "Everyone Turns Into Zappi!"
+      },
+      {
+        "id": "cKqW4DqMkgs",
+        "title": "Everyone Turns Into Moxi!"
+      },
+      {
+        "id": "O2W8xCyTiXQ",
+        "title": "Everyone Turns Into Leafy!"
+      },
+      {
+        "id": "c0pRzG_sv9k",
+        "title": "Pick One: Saxo, Leafy or Pluma?"
+      },
+      {
+        "id": "Pkveu0gDnxo",
+        "title": "Everyone Turns Into Bloop!"
+      },
+      {
+        "id": "KJEKPhxRcCY",
+        "title": "Pick One: Rexo, Tiko or Nova?"
+      },
+      {
+        "id": "YkjbgFOc1bw",
+        "title": "Everyone Turns Into Mintz!"
+      },
+      {
+        "id": "5Gl-ZTsiUeo",
+        "title": "Pick One: Grimm, Bongo or Pluma?"
+      },
+      {
+        "id": "SKJi5SlPkuY",
+        "title": "Everyone Turns Into Rexo!"
+      },
+      {
+        "id": "eJ_J_xLfOQQ",
+        "title": "Everyone Turns Into Nova!"
+      },
+      {
+        "id": "8CWIe_VsNeU",
+        "title": "Pick One: Zappi, Moxi or Brie?"
+      },
+      {
+        "id": "EKEVNLb-HEw",
+        "title": "Everyone Turns Into Tiko!"
+      },
+      {
+        "id": "-13bl76BEP4",
+        "title": "Everyone Turns Into Pluma!"
+      },
+      {
+        "id": "rYGS3xqGPRM",
+        "title": "Pick One: Coree, Mintz or Barky?"
+      }
+    ],
+    "pick_pending": [],
+    "daily_uploads": {
+      "2026-11-20": 3
+    },
+    "pending_posts": [],
+    "shadow_answers": [],
+    "odd_featured": []
+  },
+  "hopnova": {
+    "channelId": "UCvmMDLhG63Qia9mKUs5-6XA",
+    "lane_orders": [
+      [
+        "barky",
+        "uku",
+        "brie",
+        "saxo"
+      ],
+      [
+        "saxo",
+        "brie",
+        "uku",
+        "barky"
+      ],
+      [
+        "uku",
+        "barky",
+        "saxo",
+        "brie"
+      ],
+      [
+        "brie",
+        "saxo",
+        "barky",
+        "uku"
+      ],
+      [
+        "saxo",
+        "uku",
+        "barky",
+        "brie"
+      ],
+      [
+        "zappi",
+        "brie",
+        "nova",
+        "barky"
+      ],
+      [
+        "uku",
+        "pluma",
+        "moxi",
+        "saxo"
+      ],
+      [
+        "barky",
+        "leafy",
+        "coree",
+        "tiko"
+      ]
+    ],
+    "videos": [
+      {
+        "id": "Amz81cDagrw",
+        "title": "Who Wins? Barky vs Uku vs Brie vs Saxo | Neon Hop EDM Race"
+      },
+      {
+        "id": "eSikL66Blf8",
+        "title": "Purple vs Blue vs Green vs Pink | Who Wins? Neon Hop EDM Race"
+      },
+      {
+        "id": "XyM6NvQ4f5U",
+        "title": "💗 Pink vs 💙 Blue | Saxo or Barky? Who Wins? #shorts",
+        "publishAt": "2026-11-15T13:00:00Z"
+      },
+      {
+        "id": "fcYMRClVA0U",
+        "title": "🟣 Purple vs 💙 Blue vs 🟢 Green vs 💗 Pink | Neon Hop Race #3 – Who Wins?",
+        "publishAt": "2026-11-15T17:00:00Z"
+      },
+      {
+        "id": "B6329QlVgUU",
+        "title": "💙 Blue vs 🧡 Orange | Brie or Uku? Who Wins? #shorts",
+        "publishAt": "2026-11-15T21:00:00Z"
+      },
+      {
+        "id": "v5G43Uj2OaQ",
+        "title": "🟢 Green vs 🧡 Orange | Uku or Saxo? Who Wins? #shorts",
+        "publishAt": "2026-11-16T13:00:00Z"
+      },
+      {
+        "id": "PALdKmbHI2o",
+        "title": "🟣 Purple vs 💙 Blue vs 🟢 Green vs 💗 Pink | Neon Hop Race #4 – Who Wins?",
+        "publishAt": "2026-11-16T17:00:00Z"
+      },
+      {
+        "id": "g4rF0-wButE",
+        "title": "💗 Pink vs 🟣 Purple | Barky or Brie? Who Wins? #shorts",
+        "publishAt": "2026-11-16T21:00:00Z"
+      },
+      {
+        "id": "lXKC66Su6iA",
+        "title": "🟢 Green vs 💗 Pink | Saxo or Brie? Who Wins? #shorts",
+        "publishAt": "2026-11-17T13:00:00Z"
+      },
+      {
+        "id": "PIpNu9IyPC4",
+        "title": "🟣 Purple vs 💙 Blue vs 🟢 Green vs 💗 Pink | Neon Hop Race #5 – Who Wins?",
+        "publishAt": "2026-11-17T17:00:00Z"
+      },
+      {
+        "id": "b-ouSm1tyUg",
+        "title": "🟣 Purple vs 💗 Pink | Uku or Barky? Who Wins? #shorts",
+        "publishAt": "2026-11-17T21:00:00Z"
+      },
+      {
+        "id": "bNK-xbH3YLU",
+        "title": "🩵 Cyan vs 💗 Pink | Coree or Zappi? Who Wins? #shorts",
+        "publishAt": "2026-11-18T13:00:00Z"
+      },
+      {
+        "id": "-8DqSThvtfo",
+        "title": "🟣 Purple vs 💙 Blue vs 🟢 Green vs 💗 Pink | Neon Hop Race #6 – Who Wins?",
+        "publishAt": "2026-11-18T17:00:00Z"
+      },
+      {
+        "id": "fpUn8dC7j88",
+        "title": "💙 Blue vs 🟢 Green | Moxi or Pluma? Who Wins? #shorts",
+        "publishAt": "2026-11-18T21:00:00Z"
+      },
+      {
+        "id": "wpoiintzwFI",
+        "title": "🟣 Purple vs 💙 Blue | Leafy or Bongo? Who Wins? #shorts",
+        "publishAt": "2026-11-19T13:00:00Z"
+      },
+      {
+        "id": "ZK9aj7NJQ54",
+        "title": "🟣 Purple vs 💙 Blue vs 🟢 Green vs 💗 Pink | Neon Hop Race #7 – Who Wins?",
+        "publishAt": "2026-11-19T17:00:00Z"
+      },
+      {
+        "id": "biIsi0AHZW4",
+        "title": "💙 Blue vs 🟢 Green | Tiko or Saxo? Who Wins? #shorts",
+        "publishAt": "2026-11-19T21:00:00Z"
+      },
+      {
+        "id": "6zCN332YPHU",
+        "title": "🟣 Purple vs 🧡 Orange | Nova or Rexo? Who Wins? #shorts",
+        "publishAt": "2026-11-20T13:00:00Z"
+      },
+      {
+        "id": "j3LchlmfEy8",
+        "title": "🟣 Purple vs 💙 Blue vs 🟢 Green vs 💗 Pink | Neon Hop Race #8 – Who Wins?",
+        "publishAt": "2026-11-20T17:00:00Z"
+      },
+      {
+        "id": "GhFtl-hFnsY",
+        "title": "💗 Pink vs 🟢 Green | Mintz or Uku? Who Wins? #shorts",
+        "publishAt": "2026-11-20T21:00:00Z"
+      }
+    ],
+    "short_pairs": [
+      [
+        "saxo",
+        "barky"
+      ],
+      [
+        "brie",
+        "uku"
+      ],
+      [
+        "uku",
+        "saxo"
+      ],
+      [
+        "barky",
+        "brie"
+      ],
+      [
+        "saxo",
+        "brie"
+      ],
+      [
+        "uku",
+        "barky"
+      ],
+      [
+        "coree",
+        "zappi"
+      ],
+      [
+        "moxi",
+        "pluma"
+      ],
+      [
+        "leafy",
+        "bongo"
+      ],
+      [
+        "tiko",
+        "saxo"
+      ],
+      [
+        "nova",
+        "rexo"
+      ],
+      [
+        "mintz",
+        "uku"
+      ]
+    ]
+  }
+}
