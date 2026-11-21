@@ -540,6 +540,112 @@ const Odd: React.FC<CrewProps> = ({ featured, bpm, seed }) => {
   );
 };
 
+// ------------------------------------------------------------------ 6. BUILD THE BAND
+export const BAND_SIZE = 6;
+/** Qahramon har 2 zarbda bittadan qo'shiladi: 1-zarbdan boshlab */
+const bandJoined = (index: number) => Math.max(0, Math.min(BAND_SIZE, Math.floor((index + 1) / 2)));
+
+const Band: React.FC<CrewProps> = ({ members, bpm, seed }) => {
+  const { frame, beatLen, index, bump } = useBeat(bpm);
+  const { width, height, fps } = useVideoConfig();
+  const band = members.slice(0, BAND_SIZE).map(memberById);
+  const joined = bandJoined(index);
+  const full = joined >= BAND_SIZE;
+  const fullFrame = Math.round((BAND_SIZE * 2 - 1) * beatLen);
+  const cols = 3;
+  const slotW = width / cols;
+  const charSize = slotW * 0.8;
+  const rowY = [height * 0.3, height * 0.56];
+
+  return (
+    <AbsoluteFill>
+      <AbsoluteFill style={{ background: "radial-gradient(ellipse at 50% 20%, #3B1D6E 0%, #12061F 70%)" }} />
+      {/* sahna chiroqlari */}
+      {new Array(5).fill(0).map((_, i) => {
+        const angle = Math.sin(frame / 20 + i * 1.3) * 18;
+        return (
+          <div
+            key={i}
+            style={{
+              position: "absolute",
+              top: -height * 0.05,
+              left: (i + 0.5) * (width / 5) - width * 0.08,
+              width: width * 0.16,
+              height: height * 0.95,
+              background: `linear-gradient(180deg, ${PARTY_COLORS[(i + joined) % PARTY_COLORS.length]}88 0%, transparent 85%)`,
+              transformOrigin: "50% 0%",
+              transform: `rotate(${angle}deg)`,
+              opacity: 0.25 + (full ? bump * 0.35 : 0.1) + joined * 0.04,
+              filter: "blur(6px)",
+            }}
+          />
+        );
+      })}
+      {/* sahna */}
+      <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, height: height * 0.18, background: "linear-gradient(180deg, #5B2C1A 0%, #2A1209 100%)", borderTop: "10px solid #FFB347" }} />
+      <Title text={full ? "FULL BAND!" : "BUILD THE BAND!"} top={height * 0.035} size={width * 0.095} />
+      <div
+        style={{
+          position: "absolute",
+          top: height * 0.135,
+          width: "100%",
+          textAlign: "center",
+          fontFamily: TITLE_FONT,
+          fontSize: width * 0.07,
+          color: "white",
+          WebkitTextStroke: `${width * 0.005}px black`,
+          paintOrder: "stroke fill",
+        }}
+      >
+        {joined}/{BAND_SIZE}
+      </div>
+      {band.map((m, i) => {
+        if (i >= joined) return null;
+        const joinFrame = Math.round((i * 2 + 1) * beatLen);
+        const drop = spring({ frame: frame - joinFrame, fps, config: { damping: 9 } });
+        const col = i % cols;
+        const row = Math.floor(i / cols);
+        const x = col * slotW + (slotW - charSize) / 2;
+        const y = rowY[row];
+        const groove = Math.sin((frame / beatLen) * Math.PI * (full ? 2 : 1) + i) * (full ? 14 : 6);
+        return (
+          <React.Fragment key={m.id}>
+            <div
+              style={{
+                position: "absolute",
+                left: x,
+                top: y,
+                transform: `translateY(${(1 - drop) * -height * 0.5 + groove - bump * 12}px) rotate(${full ? Math.sin(frame / 6 + i) * 6 : 0}deg)`,
+              }}
+            >
+              <CrewSvg member={m} size={charSize} mouthOpen={bump} blink={(frame + i * 11) % 90 < 3 ? 1 : 0} />
+            </div>
+            <div
+              style={{
+                position: "absolute",
+                left: x,
+                width: charSize,
+                top: y + charSize * 1.42,
+                textAlign: "center",
+                fontFamily: TITLE_FONT,
+                fontSize: width * 0.045,
+                color: PARTY_COLORS[i % PARTY_COLORS.length],
+                WebkitTextStroke: `${width * 0.004}px black`,
+                paintOrder: "stroke fill",
+                opacity: drop,
+              }}
+            >
+              {m.name}
+            </div>
+          </React.Fragment>
+        );
+      })}
+      {full ? <Confetti start={fullFrame} seed={seed} /> : null}
+      <BottomText text="WHO IS THE BEST MEMBER? COMMENT!" from={fullFrame} />
+    </AbsoluteFill>
+  );
+};
+
 // ------------------------------------------------------------------ root
 export const CrewShort: React.FC<CrewProps> = (props) => {
   const { durationInFrames, fps } = useVideoConfig();
@@ -548,6 +654,7 @@ export const CrewShort: React.FC<CrewProps> = (props) => {
     if (props.style === "pick") return <Pick {...props} />;
     if (props.style === "shadow") return <Shadow {...props} />;
     if (props.style === "odd") return <Odd {...props} />;
+    if (props.style === "band") return <Band {...props} />;
     return <Party {...props} />;
   }, [props]);
 
@@ -560,6 +667,8 @@ export const CrewShort: React.FC<CrewProps> = (props) => {
           loop
           volume={(f) =>
             props.musicVolume *
+            // band formatida musiqa har bir yangi a'zo bilan kuchayadi
+            (props.style === "band" ? 0.3 + (0.7 * bandJoined(Math.floor(f / ((fps * 60) / props.bpm)))) / BAND_SIZE : 1) *
             interpolate(f, [0, 3, durationInFrames - fps * 0.3, durationInFrames], [0, 1, 1, 0.6], {
               extrapolateLeft: "clamp",
               extrapolateRight: "clamp",

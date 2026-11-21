@@ -13,6 +13,7 @@
 //   npm run make -- --format crew --style pick --first saxo,uku,barky       pick variantlarini tanlash
 //   npm run make -- --format crew --style shadow --featured leafy  "Guess the Shadow": javob shu qahramon
 //   npm run make -- --format crew --style odd --featured moxi      "Find the Odd One": 16 ta qahramondan bittasi boshqa rangda
+//   npm run make -- --format crew --style band --first saxo,uku,barky,brie,coree,zappi  "Build the Band": 6 ta a'zo birin-ketin qo'shiladi
 //   npm run make -- --format crew --style party      Coree Crew Short (party | pick | shadow | odd | horror | random), OpenAI kerak emas
 //   npm run auto -- --crew 2 --shorts 1 --long 0     avtopilot: yasab yuklaydi
 //   npm run preview -- output/<papka>                tayyor videoni Remotion Studio'da ochish
@@ -111,7 +112,7 @@ const main = async (): Promise<void> => {
       if ((format as string) === "crew") {
         const { makeCrew } = await import("./pipeline");
         await makeCrew({
-          style: values.style as "party" | "horror" | "pick" | "shadow" | "odd" | "random",
+          style: values.style as "party" | "horror" | "pick" | "shadow" | "odd" | "band" | "random",
           featured: values.featured,
           first: values.first ? values.first.split(",").map((x) => x.trim()) : undefined,
           upload: values.upload,
