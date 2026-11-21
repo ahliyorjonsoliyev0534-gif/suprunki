@@ -16,7 +16,8 @@
       "rexo",
       "nova",
       "tiko",
-      "pluma"
+      "pluma",
+      "grimm"
     ],
     "party_pending": [],
     "pick_trios": [
@@ -162,15 +163,32 @@
       {
         "id": "rYGS3xqGPRM",
         "title": "Pick One: Coree, Mintz or Barky?"
+      },
+      {
+        "id": "qKyg3wfDml8",
+        "title": "Everyone Turns Into Grimm!"
+      },
+      {
+        "id": "8-_w-a4g6IA",
+        "title": "Guess the Shadow! Who Is It? 🕵️",
+        "answer": "saxo"
+      },
+      {
+        "id": "UtlW2_WoJwk",
+        "title": "Find the Odd Bloop! 👀"
       }
     ],
     "pick_pending": [],
     "daily_uploads": {
-      "2026-11-20": 3
+      "2026-11-21": 3
     },
     "pending_posts": [],
-    "shadow_answers": [],
-    "odd_featured": []
+    "shadow_answers": [
+      "saxo"
+    ],
+    "odd_featured": [
+      "bloop"
+    ]
   },
   "hopnova": {
     "channelId": "UCvmMDLhG63Qia9mKUs5-6XA",
