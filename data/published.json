@@ -176,13 +176,28 @@
       {
         "id": "UtlW2_WoJwk",
         "title": "Find the Odd Bloop! 👀"
+      },
+      {
+        "id": "6TqYqWpviHE",
+        "title": "Coree Crew Quiz: Guess the Shadow, Find the Odd One & Pick One (24 Rounds!)",
+        "type": "long"
       }
     ],
     "pick_pending": [],
     "daily_uploads": {
       "2026-11-21": 3
     },
-    "pending_posts": [],
+    "pending_posts": [
+      {
+        "postId": "ac75259f-b8c7-4684-92ae-68396c2568f6",
+        "title": "Build the Band! Who Joins Next? 🎸"
+      },
+      {
+        "postId": "5e89bcc3-2a3d-47af-b96d-a6fa520cdf6f",
+        "title": "Whose Shadow Is This? 3 Seconds! ⏱️",
+        "answer": "bongo"
+      }
+    ],
     "shadow_answers": [
       "saxo"
     ],
@@ -240,6 +255,12 @@
         "leafy",
         "coree",
         "tiko"
+      ],
+      [
+        "grimm",
+        "bongo",
+        "saxo",
+        "nova"
       ]
     ],
     "videos": [
@@ -340,6 +361,16 @@
         "id": "GhFtl-hFnsY",
         "title": "💗 Pink vs 🟢 Green | Mintz or Uku? Who Wins? #shorts",
         "publishAt": "2026-11-20T21:00:00Z"
+      },
+      {
+        "id": "QvXm9eVF3WU",
+        "title": "💗 Pink vs 🟢 Green | Brie or Zappi? Who Wins? #shorts",
+        "publishAt": "2026-11-22T21:00:00Z"
+      },
+      {
+        "id": "Gsi73X0a2G0",
+        "title": "🟣 Purple vs 💙 Blue vs 🟢 Green vs 💗 Pink | Neon Hop Race #9 – Who Wins?",
+        "publishAt": "2026-11-23T17:00:00Z"
       }
     ],
     "short_pairs": [
@@ -390,7 +421,12 @@
       [
         "mintz",
         "uku"
+      ],
+      [
+        "brie",
+        "zappi"
       ]
     ]
-  }
+  },
+  "vidiq_limit_note": "vidIQ bepul tarif: kuniga jami 3 ta YouTube yuklash (ikkala kanal uchun birga), 08:00Z da yangilanadi"
 }
