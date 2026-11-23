@@ -204,14 +204,31 @@
     "daily_uploads": {
       "2026-11-23": 3
     },
-    "pending_posts": [],
+    "pending_posts": [
+      {
+        "postId": "258ba53e-d836-44b1-972e-9e842503c444",
+        "title": "Find the Odd Zappi! 👀",
+        "publishAt": "2026-11-24T15:00:00Z"
+      },
+      {
+        "postId": "0ca47e4c-4123-4c9d-893e-cab88c6e5a36",
+        "title": "Pick One: Uku, Nova or Grimm?",
+        "publishAt": "2026-11-25T13:00:00Z"
+      },
+      {
+        "postId": "9b0dd021-aa31-4cbc-b9b4-8f9fdd6d832a",
+        "title": "Which Band Member Is Best? 🎤",
+        "publishAt": "2026-11-25T15:00:00Z"
+      }
+    ],
     "shadow_answers": [
       "saxo",
       "bongo"
     ],
     "odd_featured": [
       "bloop"
-    ]
+    ],
+    "schedule": "har kuni 2 ta Short: 13:00Z (Toshkent 18:00) va 15:00Z (20:00)"
   },
   "hopnova": {
     "channelId": "UCvmMDLhG63Qia9mKUs5-6XA",
