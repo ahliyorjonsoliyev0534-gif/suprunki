@@ -1,6 +1,6 @@
 // Pipeline (Node) va Remotion o'rtasida umumiy turlar. Bu faylga React yoki CSS import qilmang.
 
-export type CrewStyle = "party" | "horror" | "pick" | "shadow" | "odd" | "band";
+export type CrewStyle = "party" | "horror" | "pick" | "shadow" | "odd" | "band" | "mix";
 
 export type CrewProps = {
   style: CrewStyle;
@@ -17,4 +17,4 @@ export type CrewProps = {
 };
 
 /** Har bir format necha zarbdan (beat) iborat */
-export const CREW_BEATS: Record<CrewStyle, number> = { party: 17, horror: 16, pick: 14, shadow: 14, odd: 14, band: 16 };
+export const CREW_BEATS: Record<CrewStyle, number> = { party: 17, horror: 16, pick: 14, shadow: 14, odd: 14, band: 16, mix: 16 };

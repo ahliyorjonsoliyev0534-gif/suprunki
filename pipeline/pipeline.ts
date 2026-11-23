@@ -191,7 +191,7 @@ export const make = async (opts: {
 
 // ------------------------------------------------------------------ Coree Crew (ovozsiz, OpenAI kerak emas)
 // "horror" faqat qo'lda (--style horror); tasodifiy tanlovda ishlatilmaydi
-export const CREW_STYLES: CrewStyle[] = ["party", "pick", "shadow", "odd", "band"];
+export const CREW_STYLES: CrewStyle[] = ["party", "pick", "shadow", "odd", "band", "mix"];
 
 const pick = <T>(items: T[]): T => items[Math.floor(Math.random() * items.length)];
 const shuffle = <T>(items: T[]): T[] => [...items].sort(() => Math.random() - 0.5);
@@ -204,6 +204,7 @@ const crewMeta = (style: CrewStyle, props: CrewProps) => {
     horror: [`${a} Normal vs HORROR ⚡`, `Normal vs Horror: Who Is Scariest? 😱`, `${a}, ${b} & More: Horror Versions ⚡`],
     pick: [`Pick One: ${a}, ${b} or ${c}? 🤔`, `Who Would You Pick? ${a} vs ${b} vs ${c}`, `Only ONE Can Win! Pick Fast! ⏱️`],
     shadow: [`Guess the Shadow! Who Is It? 🕵️`, `Can You Guess This Shadow? 🤔`, `Whose Shadow Is This? 3 Seconds! ⏱️`],
+    mix: [`Mix the Beat! Which Sound Is Best? 🎶`, `Wake Up the Coree Crew Beat! 🎵`, `${a}, ${b} & ${c} Make a Beat! 🔥`],
     band: [`Build the Band! Who Joins Next? 🎸`, `${a}, ${b}, ${c} & Friends Form a Band! 🎵`, `Which Band Member Is Best? 🎤`],
     odd: [`Find the Odd ${star}! 👀`, `Only 1% Can Find the Odd ${star}! 🔍`, `Spot the Different ${star}! 👀`],
   };
@@ -216,7 +217,9 @@ const crewMeta = (style: CrewStyle, props: CrewProps) => {
         ? "Normal or horror version, which one do you like more?"
         : style === "shadow"
           ? "Can you guess whose shadow it is before the reveal? Comment if you got it right!"
-          : style === "band"
+          : style === "mix"
+            ? `${a}, ${b}, ${c} and friends wake up one by one and add their sound to the beat! Which sound is your favorite? Comment below!`
+            : style === "band"
             ? `${a}, ${b}, ${c} and friends join the stage one by one and the music gets bigger! Who is the best band member? Comment below!`
             : style === "odd"
             ? `One ${star} is a different color. Can you find it before the countdown ends? Comment your time!`

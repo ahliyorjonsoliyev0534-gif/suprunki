@@ -646,6 +646,102 @@ const Band: React.FC<CrewProps> = ({ members, bpm, seed }) => {
   );
 };
 
+// ------------------------------------------------------------------ 7. MIX THE BEAT
+export const MIX_SIZE = 5;
+/** Har 2 zarbda bitta qahramon uyg'onib, o'z ovozini qo'shadi */
+const mixAwake = (index: number) => Math.max(0, Math.min(MIX_SIZE, Math.floor((index + 1) / 2)));
+
+const MIX_COLORS = ["#FF4D6D", "#36E27B", "#4DA3FF", "#FFD23F", "#C86BFF"];
+
+const Mix: React.FC<CrewProps> = ({ members, bpm, seed }) => {
+  const { frame, beatLen, index, bump, phase } = useBeat(bpm);
+  const { width, height, fps } = useVideoConfig();
+  const crew = members.slice(0, MIX_SIZE).map(memberById);
+  const awake = mixAwake(index);
+  const full = awake >= MIX_SIZE;
+  const fullFrame = Math.round((MIX_SIZE * 2 - 1) * beatLen);
+  // 3 ta yuqori qatorda, 2 ta pastki qatorda
+  const charSize = width * 0.27;
+  const rows = [
+    { y: height * 0.27, items: [0, 1, 2] },
+    { y: height * 0.56, items: [3, 4] },
+  ];
+  const posOf = (i: number) => {
+    const row = rows.find((r) => r.items.includes(i))!;
+    const n = row.items.length;
+    const k = row.items.indexOf(i);
+    const gap = width / n;
+    return { x: k * gap + (gap - charSize) / 2, y: row.y };
+  };
+
+  return (
+    <AbsoluteFill>
+      <AbsoluteFill style={{ background: full ? "radial-gradient(circle at 50% 45%, #2B0F4D 0%, #07020F 75%)" : "radial-gradient(circle at 50% 45%, #1A1A2E 0%, #050509 75%)" }} />
+      {crew.map((_, i) => {
+        if (i >= awake) return null;
+        const { x, y } = posOf(i);
+        return (
+          <div
+            key={`glow-${i}`}
+            style={{
+              position: "absolute",
+              left: x + charSize / 2 - width * 0.3,
+              top: y + charSize * 0.55 - width * 0.3,
+              width: width * 0.6,
+              height: width * 0.6,
+              borderRadius: "50%",
+              background: `radial-gradient(circle, ${MIX_COLORS[i]}66 0%, transparent 65%)`,
+              transform: `scale(${0.8 + bump * 0.35})`,
+            }}
+          />
+        );
+      })}
+      <Title text={full ? "FULL MIX!" : "MIX THE BEAT!"} top={height * 0.04} size={width * 0.1} />
+      <div style={{ position: "absolute", top: height * 0.135, width: "100%", textAlign: "center", fontFamily: TITLE_FONT, fontSize: width * 0.06, color: "white", WebkitTextStroke: `${width * 0.005}px black`, paintOrder: "stroke fill" }}>
+        {awake}/{MIX_SIZE} SOUNDS
+      </div>
+      {crew.map((m, i) => {
+        const on = i < awake;
+        const wakeFrame = Math.round((i * 2 + 1) * beatLen);
+        const pop = on ? spring({ frame: frame - wakeFrame, fps, config: { damping: 8 } }) : 0;
+        const color = MIX_COLORS[i];
+        const { x, y } = posOf(i);
+        const sway = on ? Math.sin((frame / beatLen) * Math.PI + i) * (full ? 8 : 4) : 0;
+        const bars = new Array(4).fill(0).map((_, b) => (on ? (0.25 + 0.75 * Math.abs(Math.sin(frame / (4 + b) + i * 2 + b))) * (0.6 + bump * 0.4) : 0.08));
+        return (
+          <React.Fragment key={m.id}>
+            <div style={{ position: "absolute", left: x + charSize * 0.15, top: y - charSize * 0.42, width: charSize * 0.7, height: charSize * 0.34, display: "flex", alignItems: "flex-end", justifyContent: "space-between" }}>
+              {bars.map((h, b) => (
+                <div key={b} style={{ width: "20%", height: `${h * 100}%`, background: on ? color : "#33334A", borderRadius: 6, boxShadow: on ? `0 0 14px ${color}` : "none" }} />
+              ))}
+            </div>
+            <div
+              style={{
+                position: "absolute",
+                left: x,
+                top: y,
+                transform: `translateY(${on ? -bump * 22 - pop * 10 + 10 : 0}px) rotate(${sway}deg) scale(${on ? 0.92 + pop * 0.08 : 0.9})`,
+                transformOrigin: "50% 100%",
+                filter: on ? "none" : "grayscale(1) brightness(0.55)",
+              }}
+            >
+              <CrewSvg member={m} size={charSize} mouthOpen={on ? bump : 0} blink={on ? ((frame + i * 13) % 80 < 3 ? 1 : 0) : 1} mood={on ? "smile" : "flat"} />
+            </div>
+            {!on ? (
+              <div style={{ position: "absolute", left: x + charSize * 0.62, top: y - charSize * 0.05 - phase * 22, fontFamily: TITLE_FONT, fontSize: width * 0.06, color: "#9AA0C8", opacity: 0.85 }}>z</div>
+            ) : null}
+            <div style={{ position: "absolute", left: x, width: charSize, top: y + charSize * 1.34, textAlign: "center", fontFamily: TITLE_FONT, fontSize: width * 0.045, color: on ? color : "#55557A", WebkitTextStroke: `${width * 0.003}px black`, paintOrder: "stroke fill" }}>
+              {m.name}
+            </div>
+          </React.Fragment>
+        );
+      })}
+      {full ? <Confetti start={fullFrame} seed={seed} /> : null}
+      <BottomText text="WHICH SOUND IS YOUR FAVORITE? COMMENT!" from={fullFrame} />
+    </AbsoluteFill>
+  );
+};
+
 // ------------------------------------------------------------------ root
 export const CrewShort: React.FC<CrewProps> = (props) => {
   const { durationInFrames, fps } = useVideoConfig();
@@ -655,6 +751,7 @@ export const CrewShort: React.FC<CrewProps> = (props) => {
     if (props.style === "shadow") return <Shadow {...props} />;
     if (props.style === "odd") return <Odd {...props} />;
     if (props.style === "band") return <Band {...props} />;
+    if (props.style === "mix") return <Mix {...props} />;
     return <Party {...props} />;
   }, [props]);
 
@@ -668,7 +765,11 @@ export const CrewShort: React.FC<CrewProps> = (props) => {
           volume={(f) =>
             props.musicVolume *
             // band formatida musiqa har bir yangi a'zo bilan kuchayadi
-            (props.style === "band" ? 0.3 + (0.7 * bandJoined(Math.floor(f / ((fps * 60) / props.bpm)))) / BAND_SIZE : 1) *
+            (props.style === "band"
+              ? 0.3 + (0.7 * bandJoined(Math.floor(f / ((fps * 60) / props.bpm)))) / BAND_SIZE
+              : props.style === "mix"
+                ? 0.25 + (0.75 * mixAwake(Math.floor(f / ((fps * 60) / props.bpm)))) / MIX_SIZE
+                : 1) *
             interpolate(f, [0, 3, durationInFrames - fps * 0.3, durationInFrames], [0, 1, 1, 0.6], {
               extrapolateLeft: "clamp",
               extrapolateRight: "clamp",

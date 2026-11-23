@@ -182,3 +182,4 @@ data/                   topics.json (navbat), history.json (yuklanganlar)
 - `npm run make -- --format crew --style shadow --featured leafy`: **Guess the Shadow**. Qahramonning qora soyasi, 3 ta variant, 3-2-1 sanoq, keyin javob.
 - `npm run make -- --format crew --style odd --featured moxi`: **Find the Odd One**. 16 ta bir xil qahramondan bittasi boshqa rangda, sanoqdan keyin topib ko'rsatiladi.
 - `npm run make -- --format crew --style band --first saxo,uku,barky,brie,coree,zappi`: **Build the Band**. 6 ta a'zo sahnaga birin-ketin chiqadi, har biri bilan musiqa kuchayadi.
+- `npm run make -- --format crew --style mix --first coree,saxo,zappi,brie,moxi`: **Mix the Beat**. 5 ta qahramon kulrang, uxlab turadi; birin-ketin uyg'onib, rangga kiradi va o'z ovozini qo'shadi (musiqa kuchayadi).
