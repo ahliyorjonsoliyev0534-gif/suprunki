@@ -742,6 +742,110 @@ const Mix: React.FC<CrewProps> = ({ members, bpm, seed }) => {
   );
 };
 
+// ------------------------------------------------------------------ 8. NEW CHARACTER REVEAL (neon "thumbnail" uslubi)
+const Headline: React.FC<{ lines: { text: string; color: string }[]; top: number }> = ({ lines, top }) => {
+  const frame = useCurrentFrame();
+  const { width, fps } = useVideoConfig();
+  return (
+    <div style={{ position: "absolute", top, width: "100%", textAlign: "center", lineHeight: 0.95 }}>
+      {lines.map((l, i) => {
+        const pop = spring({ frame: frame - i * 4, fps, config: { damping: 9 } });
+        return (
+          <div
+            key={l.text + i}
+            style={{
+              fontFamily: TITLE_FONT,
+              fontSize: width * (i === 1 ? 0.15 : 0.12),
+              color: l.color,
+              WebkitTextStroke: `${width * 0.012}px black`,
+              paintOrder: "stroke fill",
+              textShadow: "0 12px 0 rgba(0,0,0,0.55)",
+              transform: `scale(${pop}) rotate(${(i % 2 ? 1 : -1) * 2}deg)`,
+            }}
+          >
+            {l.text}
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
+const Hero: React.FC<CrewProps> = ({ featured, members, bpm, seed }) => {
+  const { frame, beatLen, index, bump } = useBeat(bpm);
+  const { width, height, fps } = useVideoConfig();
+  const hero = memberById(featured);
+  const crowd = members.filter((id) => id !== featured).slice(0, 6).map(memberById);
+  const revealBeat = 7;
+  const revealFrame = Math.round(revealBeat * beatLen);
+  const revealed = index >= revealBeat;
+  const countdown = index >= 4 && index < revealBeat ? 3 - (index - 4) : null;
+  const pop = revealed ? spring({ frame: frame - revealFrame, fps, config: { damping: 7 } }) : 0;
+  const flash = revealed ? interpolate(frame - revealFrame, [0, 8], [0.9, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }) : 0;
+  const heroSize = width * 0.62;
+  const glow = hero.color;
+
+  return (
+    <AbsoluteFill>
+      <AbsoluteFill style={{ background: `radial-gradient(circle at 50% 55%, ${revealed ? glow + "55" : "#2A0F45"} 0%, #0A0612 55%, #000 100%)` }} />
+      {/* soyadagi olomon */}
+      {crowd.map((m, i) => {
+        const left = i < 3;
+        const k = left ? i : i - 3;
+        const x = left ? -width * 0.06 + k * width * 0.11 : width * 0.72 - k * width * 0.11;
+        const y = height * 0.5 + k * height * 0.045;
+        const size = width * (0.26 - k * 0.03);
+        const lit = revealed && (frame - revealFrame) > 6 + i * 3;
+        return (
+          <div
+            key={m.id}
+            style={{
+              position: "absolute",
+              left: x,
+              top: y,
+              opacity: 0.85,
+              transform: `translateY(${Math.sin(frame / 10 + i) * 6}px)`,
+              filter: lit ? `drop-shadow(0 0 14px ${m.color}) brightness(0.8)` : `brightness(0) drop-shadow(0 0 10px #7B2FF7)`,
+            }}
+          >
+            <CrewSvg member={m} size={size} mouthOpen={lit ? bump * 0.6 : 0} />
+          </div>
+        );
+      })}
+      {/* yorug'lik nuri */}
+      <div style={{ position: "absolute", left: width * 0.2, top: height * 0.22, width: width * 0.6, height: height * 0.7, background: `linear-gradient(180deg, ${revealed ? glow : "#7B2FF7"}44 0%, transparent 90%)`, clipPath: "polygon(40% 0, 60% 0, 100% 100%, 0 100%)", opacity: 0.8 + bump * 0.2 }} />
+      {/* bosh qahramon */}
+      <div style={{ position: "absolute", top: height * 0.36, width: "100%", display: "flex", justifyContent: "center" }}>
+        <div
+          style={{
+            transform: `translateY(${revealed ? -bump * 24 : Math.sin(frame / 8) * 6}px) scale(${revealed ? 0.85 + pop * 0.15 : 0.92})`,
+            filter: revealed ? `drop-shadow(0 0 30px ${glow})` : "brightness(0) drop-shadow(0 0 22px #FF3DB4)",
+          }}
+        >
+          <CrewSvg member={hero} size={heroSize} mouthOpen={revealed ? bump : 0} blink={revealed && frame % 70 < 3 ? 1 : 0} mood={revealed ? "smile" : "flat"} />
+        </div>
+      </div>
+      {!revealed && !countdown ? (
+        <div style={{ position: "absolute", top: height * 0.47, width: "100%", textAlign: "center", fontFamily: TITLE_FONT, fontSize: width * 0.3, color: "#FFE600", WebkitTextStroke: `${width * 0.012}px black`, paintOrder: "stroke fill", transform: `scale(${1 + bump * 0.12})` }}>
+          ?
+        </div>
+      ) : null}
+      <Headline
+        top={height * 0.04}
+        lines={
+          revealed
+            ? [{ text: "IT'S", color: "#FFFFFF" }, { text: hero.name.toUpperCase() + "!", color: "#FF3DB4" }]
+            : [{ text: "NEW", color: "#FFE600" }, { text: "CHARACTER!", color: "#FF3DB4" }]
+        }
+      />
+      <BigCountdown value={countdown} bump={bump} />
+      <AbsoluteFill style={{ background: "white", opacity: flash }} />
+      {revealed ? <Confetti start={revealFrame} seed={seed} /> : null}
+      <BottomText text={`DO YOU LIKE ${hero.name.toUpperCase()}? COMMENT!`} from={revealFrame + 10} />
+    </AbsoluteFill>
+  );
+};
+
 // ------------------------------------------------------------------ root
 export const CrewShort: React.FC<CrewProps> = (props) => {
   const { durationInFrames, fps } = useVideoConfig();
@@ -752,6 +856,7 @@ export const CrewShort: React.FC<CrewProps> = (props) => {
     if (props.style === "odd") return <Odd {...props} />;
     if (props.style === "band") return <Band {...props} />;
     if (props.style === "mix") return <Mix {...props} />;
+    if (props.style === "hero") return <Hero {...props} />;
     return <Party {...props} />;
   }, [props]);
 

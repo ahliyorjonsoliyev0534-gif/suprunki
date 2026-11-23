@@ -183,3 +183,4 @@ data/                   topics.json (navbat), history.json (yuklanganlar)
 - `npm run make -- --format crew --style odd --featured moxi`: **Find the Odd One**. 16 ta bir xil qahramondan bittasi boshqa rangda, sanoqdan keyin topib ko'rsatiladi.
 - `npm run make -- --format crew --style band --first saxo,uku,barky,brie,coree,zappi`: **Build the Band**. 6 ta a'zo sahnaga birin-ketin chiqadi, har biri bilan musiqa kuchayadi.
 - `npm run make -- --format crew --style mix --first coree,saxo,zappi,brie,moxi`: **Mix the Beat**. 5 ta qahramon kulrang, uxlab turadi; birin-ketin uyg'onib, rangga kiradi va o'z ovozini qo'shadi (musiqa kuchayadi).
+- `npm run make -- --format crew --style hero --featured pluma`: **New Character**. Qorong'i neon sahna, soyadagi qahramon, 3-2-1, keyin yorqin ochilish (kanal bannerlari uslubida).
