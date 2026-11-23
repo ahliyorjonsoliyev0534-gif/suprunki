@@ -17,7 +17,8 @@
       "nova",
       "tiko",
       "pluma",
-      "grimm"
+      "grimm",
+      "bongo"
     ],
     "party_pending": [],
     "pick_trios": [
@@ -181,25 +182,32 @@
         "id": "6TqYqWpviHE",
         "title": "Coree Crew Quiz: Guess the Shadow, Find the Odd One & Pick One (24 Rounds!)",
         "type": "long"
+      },
+      {
+        "id": "srdNV1a4p-k",
+        "title": "Build the Band! Who Joins Next? 🎸",
+        "publishAt": "2026-11-23T17:40:00Z"
+      },
+      {
+        "id": "sXXDahPFyaA",
+        "title": "Whose Shadow Is This? 3 Seconds! ⏱️",
+        "answer": "bongo",
+        "publishAt": "2026-11-23T18:00:00Z"
+      },
+      {
+        "id": "8n4Izuii9kw",
+        "title": "Everyone Turns Into Bongo!",
+        "publishAt": "2026-11-24T13:00:00Z"
       }
     ],
     "pick_pending": [],
     "daily_uploads": {
-      "2026-11-21": 3
+      "2026-11-23": 3
     },
-    "pending_posts": [
-      {
-        "postId": "ac75259f-b8c7-4684-92ae-68396c2568f6",
-        "title": "Build the Band! Who Joins Next? 🎸"
-      },
-      {
-        "postId": "5e89bcc3-2a3d-47af-b96d-a6fa520cdf6f",
-        "title": "Whose Shadow Is This? 3 Seconds! ⏱️",
-        "answer": "bongo"
-      }
-    ],
+    "pending_posts": [],
     "shadow_answers": [
-      "saxo"
+      "saxo",
+      "bongo"
     ],
     "odd_featured": [
       "bloop"
