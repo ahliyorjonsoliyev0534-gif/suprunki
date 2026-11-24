@@ -66,6 +66,11 @@
         "coree",
         "mintz",
         "barky"
+      ],
+      [
+        "uku",
+        "nova",
+        "grimm"
       ]
     ],
     "videos": [
@@ -198,28 +203,28 @@
         "id": "8n4Izuii9kw",
         "title": "Everyone Turns Into Bongo!",
         "publishAt": "2026-11-24T13:00:00Z"
-      }
-    ],
-    "pick_pending": [],
-    "daily_uploads": {
-      "2026-11-23": 3
-    },
-    "pending_posts": [
+      },
       {
-        "postId": "258ba53e-d836-44b1-972e-9e842503c444",
+        "id": "dckLi1DkVk0",
         "title": "Find the Odd Zappi! 👀",
         "publishAt": "2026-11-24T15:00:00Z"
       },
       {
-        "postId": "0ca47e4c-4123-4c9d-893e-cab88c6e5a36",
+        "id": "TFdK5vI9lDA",
         "title": "Pick One: Uku, Nova or Grimm?",
         "publishAt": "2026-11-25T13:00:00Z"
       },
       {
-        "postId": "9b0dd021-aa31-4cbc-b9b4-8f9fdd6d832a",
+        "id": "Z0-xzU_Qz5Y",
         "title": "Which Band Member Is Best? 🎤",
         "publishAt": "2026-11-25T15:00:00Z"
-      },
+      }
+    ],
+    "pick_pending": [],
+    "daily_uploads": {
+      "2026-11-24": 3
+    },
+    "pending_posts": [
       {
         "postId": "6a20902a-bc41-41ac-a68c-4835a44c63a2",
         "title": "3 in 1 Coree Crew Mega Short! 🔥",
@@ -232,7 +237,8 @@
       "bongo"
     ],
     "odd_featured": [
-      "bloop"
+      "bloop",
+      "zappi"
     ],
     "schedule": "har kuni 2 ta Short: 13:00Z (Toshkent 18:00) va 15:00Z (20:00)",
     "ready_videos": [
