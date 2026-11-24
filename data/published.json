@@ -230,6 +230,13 @@
         "title": "3 in 1 Coree Crew Mega Short! 🔥",
         "publishAt": "2026-11-25T17:00:00Z",
         "uploadOn": "2026-11-25"
+      },
+      {
+        "postId": "0eae1c25-da5e-4ae5-b204-bc637180cd2f",
+        "title": "Saxo Color Party! Which Color Wins? 🎨",
+        "publishAt": "2026-11-26T13:00:00Z",
+        "uploadOn": "2026-11-25",
+        "needsApproval": true
       }
     ],
     "shadow_answers": [
@@ -248,7 +255,9 @@
         "featured": "pluma",
         "title": "New Character: Pluma! 😱",
         "slot": "2026-11-26T15:00:00Z",
-        "approved": true
+        "approved": true,
+        "postId": "5f0bfc18-cc54-451a-8eee-15a0d643433b",
+        "uploadOn": "2026-11-25"
       },
       {
         "file": "/tmp/claude-0/-home-user-suprunki/70be69d5-6502-57cf-af12-5251fd7e5b92/scratchpad/ready/mix_coree_saxo_zappi_brie_moxi.mp4",
