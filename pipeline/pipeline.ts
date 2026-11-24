@@ -191,7 +191,7 @@ export const make = async (opts: {
 
 // ------------------------------------------------------------------ Coree Crew (ovozsiz, OpenAI kerak emas)
 // "horror" faqat qo'lda (--style horror); tasodifiy tanlovda ishlatilmaydi
-export const CREW_STYLES: CrewStyle[] = ["party", "pick", "shadow", "odd", "band", "mix", "hero", "levels"];
+export const CREW_STYLES: CrewStyle[] = ["party", "pick", "shadow", "odd", "band", "mix", "hero", "levels", "survive"];
 
 const pick = <T>(items: T[]): T => items[Math.floor(Math.random() * items.length)];
 const shuffle = <T>(items: T[]): T[] => [...items].sort(() => Math.random() - 0.5);
@@ -207,6 +207,7 @@ const crewMeta = (style: CrewStyle, props: CrewProps) => {
     hero: [`New Character: ${star}! 😱`, `Can You Guess This New Character? 👀`, `Meet ${star}, the Newest Coree Crew Member! 🔥`],
     mix: [`Mix the Beat! Which Sound Is Best? 🎶`, `Wake Up the Coree Crew Beat! 🎵`, `${a}, ${b} & ${c} Make a Beat! 🔥`],
     band: [`Build the Band! Who Joins Next? 🎸`, `${a}, ${b}, ${c} & Friends Form a Band! 🎵`, `Which Band Member Is Best? 🎤`],
+    survive: [`Only ONE Survives! Who Will It Be? 😱`, `Last One Standing! Pick Your Winner 👑`, `Who Survives Till the End? Pick Now! 😱`],
     levels: [`Find the Odd One Out: Level 1 to 3! 🧠`, `Only 1% Can Pass Level 3! Find the Odd One 👀`, `Find the Odd One Out! Easy, Medium, HARD 🔥`],
     odd: [`Find the Odd ${star}! 👀`, `Only 1% Can Find the Odd ${star}! 🔍`, `Spot the Different ${star}! 👀`],
   };
@@ -217,6 +218,8 @@ const crewMeta = (style: CrewStyle, props: CrewProps) => {
       ? `Watch everyone turn into ${star}. Which color is your favorite?`
       : style === "horror"
         ? "Normal or horror version, which one do you like more?"
+        : style === "survive"
+        ? `8 Coree Crew members, only ONE survives! Pick your favorite before the first trapdoor opens. Did your pick win? Comment below!`
         : style === "levels"
         ? "3 levels, each one harder! Can you find the odd one out before the countdown ends? Comment which level you passed!"
         : style === "shadow"
@@ -234,7 +237,7 @@ const crewMeta = (style: CrewStyle, props: CrewProps) => {
     `https://www.youtube.com/${settings.channelHandle}?sub_confirmation=1\n\n` +
     "#shorts #coreecrew #animation #colorparty #satisfying #funny #cute #musicgame";
   const tags = [
-    "coree crew", "color swap", "pick one", "guess the shadow", "find the odd one", "find the odd one out", "odd one out", "spot the difference", "brain test", "puzzle", "iq test",
+    "coree crew", "color swap", "pick one", "guess the shadow", "find the odd one", "find the odd one out", "odd one out", "spot the difference", "brain test", "who survives", "last one standing", "elimination", "puzzle", "iq test",
     "animation shorts", "funny animation", "music game", "cute characters", "satisfying", star, a, b, c,
   ];
   return { title, description, tags: [...new Set(tags.map((t) => t.toLowerCase()))] };

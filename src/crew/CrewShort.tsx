@@ -962,6 +962,179 @@ const Levels: React.FC<CrewProps> = ({ featured, members, bpm, seed }) => {
   );
 };
 
+// ------------------------------------------------------------------ 10. LAST ONE STANDING
+const SURVIVE_N = 8;
+const SURVIVE_INTRO = 3;
+const SURVIVE_ROUND = 3;
+
+const Crown: React.FC<{ size: number }> = ({ size }) => (
+  <svg width={size} height={size * 0.7} viewBox="0 0 100 70">
+    <path d="M5 65 L10 20 L32 42 L50 5 L68 42 L90 20 L95 65 Z" fill="#FFD23F" stroke="black" strokeWidth={5} strokeLinejoin="round" />
+    <circle cx={50} cy={48} r={7} fill="#FF4D6D" stroke="black" strokeWidth={3} />
+  </svg>
+);
+
+const Survive: React.FC<CrewProps> = ({ members, bpm, seed }) => {
+  const { frame, beatLen, index, phase, bump } = useBeat(bpm);
+  const { width, height, fps } = useVideoConfig();
+  const cast = members.slice(0, SURVIVE_N).map(memberById);
+  const order = useMemo(
+    () => cast.map((_, i) => i).sort((a, b) => random(`sv-${seed}-${a}`) - random(`sv-${seed}-${b}`)),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [seed, members.join(",")],
+  );
+  const rounds = SURVIVE_N - 1;
+  const winner = order[rounds];
+  const r = Math.floor((index - SURVIVE_INTRO) / SURVIVE_ROUND);
+  const round = index < SURVIVE_INTRO ? -1 : Math.min(rounds, r);
+  const inRound = index - SURVIVE_INTRO - round * SURVIVE_ROUND;
+  const finished = round >= rounds;
+  const finalFrame = Math.round((SURVIVE_INTRO + rounds * SURVIVE_ROUND) * beatLen);
+  const fallFrame = (k: number) => Math.round((SURVIVE_INTRO + k * SURVIVE_ROUND + 2) * beatLen);
+  const eliminatedAt = (i: number) => {
+    const k = order.indexOf(i);
+    return k < rounds ? fallFrame(k) : Infinity;
+  };
+  const alive = cast.map((_, i) => frame < eliminatedAt(i));
+  const aliveCount = alive.filter(Boolean).length;
+
+  // ruletka: tirik qolganlar bo'ylab yuguradi, sekinlashib qurbonga to'xtaydi
+  let highlight = -1;
+  if (!finished && round >= 0 && inRound < 2) {
+    const victim = order[round];
+    const pool = cast.map((_, i) => i).filter((i) => frame < eliminatedAt(i) || i === victim);
+    const t = Math.min(1, (inRound + phase) / 1.6);
+    const steps = 9 + (seed % 4);
+    const k = Math.floor(steps * (1 - Math.pow(1 - t, 2.2)));
+    const vp = pool.indexOf(victim);
+    highlight = pool[(((vp - (steps - k)) % pool.length) + pool.length) % pool.length];
+  } else if (!finished && round >= 0 && inRound === 2) highlight = order[round];
+
+  const cols = 4;
+  const cellW = width / cols;
+  const charSize = cellW * 0.92;
+  const rowY = [height * 0.35, height * 0.64];
+  const winPop = finished ? spring({ frame: frame - finalFrame, fps, config: { damping: 9 } }) : 0;
+  const shake = !finished && round >= 0 && inRound === 2 ? Math.sin(frame * 2.3) * 6 * bump : 0;
+  const victimName = round >= 0 && !finished ? cast[order[round]].name : "";
+
+  const topText =
+    round < 0 ? "PICK ONE NOW!" : finished ? `${cast[winner].name.toUpperCase()} WINS!` : inRound === 2 ? `BYE ${victimName.toUpperCase()}!` : "WHO FALLS NEXT?";
+
+  return (
+    <AbsoluteFill style={{ transform: `translateX(${shake}px)` }}>
+      <Background seed={seed + 21} />
+      <Title text={topText} top={height * 0.04} size={width * 0.095} color={finished ? "#FFD23F" : inRound === 2 ? "#FF4D6D" : "#FFE600"} />
+      <div
+        style={{
+          position: "absolute",
+          top: height * 0.13,
+          width: "100%",
+          textAlign: "center",
+          fontFamily: TITLE_FONT,
+          fontSize: width * 0.065,
+          color: "white",
+          WebkitTextStroke: `${width * 0.006}px black`,
+          paintOrder: "stroke fill",
+        }}
+      >
+        {finished ? "LAST ONE STANDING!" : `${aliveCount} LEFT`}
+      </div>
+      {cast.map((m, i) => {
+        const col = i % cols;
+        const row = Math.floor(i / cols);
+        const cx = col * cellW + cellW / 2;
+        const baseY = rowY[row];
+        const fellAt = eliminatedAt(i);
+        const t = frame - fellAt;
+        const fallen = t >= 0;
+        const lit = highlight === i;
+        const isWinner = finished && i === winner;
+        if (isWinner) return null;
+        const fallY = fallen ? 0.5 * 2.2 * t * t : 0;
+        const tileOpen = fallen ? Math.min(1, t / 5) : 0;
+        return (
+          <React.Fragment key={m.id}>
+            {/* pol plitasi */}
+            <div
+              style={{
+                position: "absolute",
+                left: cx - cellW * 0.42,
+                top: baseY + charSize * 0.42,
+                width: cellW * 0.84,
+                height: charSize * 0.3,
+                borderRadius: 18,
+                background: fallen ? "#05050c" : lit ? "#FF2E2E" : "#2b2f6b",
+                border: `6px solid ${lit ? "#FFD23F" : "black"}`,
+                boxShadow: lit ? "0 0 40px #FF2E2E" : "0 8px 0 rgba(0,0,0,0.4)",
+                transform: `scaleY(${1 - tileOpen * 0.5})`,
+              }}
+            />
+            {fallen && t > 40 ? null : (
+              <div
+                style={{
+                  position: "absolute",
+                  left: cx - charSize / 2,
+                  top: baseY - charSize * 0.62 + fallY,
+                  opacity: fallen ? Math.max(0, 1 - t / 30) : finished ? 0.35 : 1,
+                  transform: `rotate(${fallen ? t * 9 : 0}deg) scale(${fallen ? Math.max(0.3, 1 - t / 40) : lit ? 1.08 + bump * 0.06 : 1})`,
+                  filter: lit && !fallen ? "drop-shadow(0 0 25px #FF2E2E)" : "none",
+                }}
+              >
+                <CrewSvg
+                  member={m}
+                  size={charSize}
+                  mood={lit || fallen ? "shock" : "smile"}
+                  mouthOpen={lit ? 0.9 : bump * 0.4}
+                  blink={(frame + i * 11) % 90 < 3 ? 1 : 0}
+                />
+              </div>
+            )}
+            {!fallen ? (
+              <div
+                style={{
+                  position: "absolute",
+                  left: cx - cellW / 2,
+                  width: cellW,
+                  top: baseY + charSize * 0.68,
+                  textAlign: "center",
+                  fontFamily: TITLE_FONT,
+                  fontSize: width * 0.045,
+                  color: lit ? "#FFD23F" : "white",
+                  WebkitTextStroke: `${width * 0.004}px black`,
+                  paintOrder: "stroke fill",
+                  opacity: finished ? 0 : 1,
+                }}
+              >
+                {m.name}
+              </div>
+            ) : null}
+          </React.Fragment>
+        );
+      })}
+      {finished ? (
+        <div
+          style={{
+            position: "absolute",
+            left: width / 2 - width * 0.3,
+            top: height * 0.3,
+            transform: `scale(${winPop}) translateY(${Math.sin(frame / 5) * 10}px)`,
+            filter: "drop-shadow(0 0 40px #FFD23F)",
+          }}
+        >
+          <div style={{ position: "absolute", left: width * 0.15, top: -width * 0.2 }}>
+            <Crown size={width * 0.3} />
+          </div>
+          <CrewSvg member={cast[winner]} size={width * 0.6} mouthOpen={bump * 0.8} />
+        </div>
+      ) : null}
+      {round < 0 ? <BottomText text="WHO WILL SURVIVE? PICK ONE! 👇" from={0} /> : null}
+      {finished ? <Confetti start={finalFrame} seed={seed} /> : null}
+      {finished ? <BottomText text="DID YOU PICK RIGHT? COMMENT!" from={finalFrame + 8} /> : null}
+    </AbsoluteFill>
+  );
+};
+
 // ------------------------------------------------------------------ root
 export const CrewShort: React.FC<CrewProps> = (props) => {
   const { durationInFrames, fps } = useVideoConfig();
@@ -974,6 +1147,7 @@ export const CrewShort: React.FC<CrewProps> = (props) => {
     if (props.style === "mix") return <Mix {...props} />;
     if (props.style === "hero") return <Hero {...props} />;
     if (props.style === "levels") return <Levels {...props} />;
+    if (props.style === "survive") return <Survive {...props} />;
     return <Party {...props} />;
   }, [props]);
 
