@@ -186,3 +186,35 @@ data/                   topics.json (navbat), history.json (yuklanganlar)
 - `npm run make -- --format crew --style survive`: **Last One Standing**. 8 qahramon, ruletka chirog'i birini tanlaydi, poli ochilib tushib ketadi; oxirida bitta g'olib toj bilan qoladi.
 - `npm run make -- --format crew --style levels --featured bloop`: **Find the Odd One Out, 3 bosqich** (oson, o'rta, qiyin). Har bosqichda katak ko'payadi, rang farqi kamayadi; tomoshabin oxirigacha ko'radi.
 - `npm run make -- --format crew --style hero --featured pluma`: **New Character**. Qorong'i neon sahna, soyadagi qahramon, 3-2-1, keyin yorqin ochilish (kanal bannerlari uslubida).
+
+## Sprunki Core Studio (ish stoli dasturi)
+
+Mavzu yozasiz, davomiylikni tanlaysiz, qolganini studiya o'zi qiladi: ssenariy, qahramonlar ovozi, animatsiya, musiqa, effektlar, subtitr va FFmpeg eksport.
+
+**Ishga tushirish (Windows):** `start_studio.bat` faylini ikki marta bosing. Oldindan kerak: Node.js LTS, Python 3.10+, FFmpeg (`winget install ffmpeg`).
+macOS/Linux: `./start_studio.sh`.
+
+| Bo'lim | Nima qiladi |
+|---|---|
+| Dashboard | Statistika, so'nggi ishlar, tezkor tugmalar |
+| AI Story Generator | Mavzu + kategoriya (adventure, friendship, mystery, comedy, musical, emotional, twist, battle) → sahnalar, dialoglar, his-tuyg'ular, rasm/video promptlari, musiqa ko'rsatmalari (JSON, tahrirlanadi) |
+| Character Studio | 16 ta Coree Crew qahramoni: xarakter, gapirish uslubi, iborasi, harakati, ovozi (bir xil ovozga ruxsat bermaydi) |
+| Shorts Generator | 9:16, 15/30/45/60 s, hook bilan, bitta tugma |
+| Long Video Generator | 16:9, 3/10/20/30/60 daqiqa, 1080p yoki 4K |
+| AI Voice Studio | Ovoz manbasi: Edge (bepul), OpenAI (pullik, so'raladi), oflayn; har qahramon ovozini sinash |
+| Animation Studio | Loyihani Remotion Studio'da kadrma-kadr ko'rish |
+| Video Editor | Sahnalar tartibi, joy, kamera, kayfiyat, o'tish; gaplar, his-tuyg'u, harakat, SFX; qayta render |
+| Music & Sound Effects | Original sintez musiqa (dialogda pasayadi), 10 ta effekt, subtitr |
+| Export Studio | Ko'rish, papka, 4K eksport, YouTube sarlavha/tavsif/teglar, .srt |
+| Settings | Kanal nomi, OpenAI kaliti (faqat `.env` da), pullik API'dan oldin so'rash, tizim tekshiruvi |
+
+Buyruq qatoridan:
+```
+npm run make -- --format story --kind short --seconds 30 --topic "the golden microphone" --category battle
+npm run make -- --format story --kind long --minutes 10 --topic "a concert on the moon" --category musical --4k
+npm run make -- --format story --script output/<papka>/script.json     # tahrirlangan ssenariydan
+npx tsx pipeline/cli.ts voice-test --cast zappi --topic "Zap zap!" --voice edge
+```
+Har ish papkasida: `video.mp4`, `subtitles.srt`, `script.json`, `youtube.json`, `props.json`.
+
+Qahramonlar faqat kanalning o'z original Coree Crew personajlari: Incredibox yoki rasmiy Sprunki personajlari ishlatilmaydi (mualliflik huquqi). Horror uslubi avtomatik yoqilmaydi.

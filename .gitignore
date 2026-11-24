@@ -11,3 +11,4 @@ token.json
 *.mp4
 __pycache__/
 data/history.json
+data/studio_settings.json

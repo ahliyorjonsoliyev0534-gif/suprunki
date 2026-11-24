@@ -14,6 +14,9 @@
 //   npm run make -- --format crew --style shadow --featured leafy  "Guess the Shadow": javob shu qahramon
 //   npm run make -- --format crew --style odd --featured moxi      "Find the Odd One": 16 ta qahramondan bittasi boshqa rangda
 //   npm run make -- --format crew --style band --first saxo,uku,barky,brie,coree,zappi  "Build the Band": 6 ta a'zo birin-ketin qo'shiladi
+//   npm run make -- --format story --kind short --seconds 30 --topic "the lost golden beat" --category mystery   dialogli multfilm
+//   npm run make -- --format story --kind long --minutes 10 --topic "..." --4k     16:9 epizod (+4K)
+//   npm run make -- --format story --script output/<papka>/script.json             tahrirlangan ssenariydan render
 //   npm run make -- --format crew --style party      Coree Crew Short (party | pick | shadow | odd | horror | random), OpenAI kerak emas
 //   npm run auto -- --crew 2 --shorts 1 --long 0     avtopilot: yasab yuklaydi
 //   npm run preview -- output/<papka>                tayyor videoni Remotion Studio'da ochish
@@ -45,6 +48,16 @@ const { values, positionals } = parseArgs({
     crew: { type: "string", default: "0" },
     featured: { type: "string" },
     first: { type: "string" },
+    kind: { type: "string", default: "short" },
+    category: { type: "string", default: "adventure" },
+    script: { type: "string" },
+    voice: { type: "string" },
+    writer: { type: "string", default: "auto" },
+    cast: { type: "string" },
+    "4k": { type: "boolean", default: false },
+    "no-subtitles": { type: "boolean", default: false },
+    "script-only": { type: "boolean", default: false },
+    out: { type: "string" },
   },
 });
 
@@ -52,7 +65,7 @@ const format = values.format as VideoFormat;
 const privacy = values.privacy as "private" | "unlisted" | "public" | undefined;
 
 const main = async (): Promise<void> => {
-  if (!["short", "long", "crew", "hop", "hopshort"].includes(format)) throw new Error("--format short, long, crew, hop yoki hopshort bo'lishi kerak");
+  if (!["short", "long", "crew", "hop", "hopshort", "story"].includes(format)) throw new Error("--format short, long, crew, hop yoki hopshort bo'lishi kerak");
   switch (command) {
     case "auth": {
       const { authorize, channelInfo } = await import("./youtube");
@@ -109,6 +122,26 @@ const main = async (): Promise<void> => {
         });
         return;
       }
+      if ((format as string) === "story") {
+        // Sprunki Core Studio: mavzu -> dialogli multfilm (--kind short|long, --seconds 15|30|45|60, --minutes 3|10|20|30|60)
+        const { makeStory } = await import("./story");
+        const kind = values.kind === "long" ? "long" : "short";
+        await makeStory({
+          topic: values.topic,
+          category: values.category as never,
+          aspect: kind,
+          seconds: kind === "long" ? Number(values.minutes) * 60 : Number(values.seconds ?? 30),
+          scriptFile: values.script,
+          voice: values.voice as never,
+          writer: values.writer as never,
+          cast: values.cast ? values.cast.split(",").map((x) => x.trim()) : undefined,
+          uhd: values["4k"],
+          subtitles: !values["no-subtitles"],
+          scriptOnly: values["script-only"],
+          out: values.out,
+        });
+        return;
+      }
       if ((format as string) === "crew") {
         const { makeCrew } = await import("./pipeline");
         await makeCrew({
@@ -131,6 +164,22 @@ const main = async (): Promise<void> => {
         privacy,
         publishAt: values["publish-at"],
       });
+      return;
+    }
+
+    case "voice-test": {
+      // Studio "AI Voice Studio": bitta qahramon ovozini sinash
+      const { createVoices } = await import("./story-audio");
+      const { loadProfiles } = await import("./story-writer");
+      const id = values.cast ?? "coree";
+      const out = values.out ?? path.join(settings.outputDir, "voice-tests");
+      const [v] = await createVoices(
+        [{ speaker: id, text: values.topic ?? "Hi! I'm ready for a brand new adventure!", emotion: (values.category as never) ?? "happy" }],
+        await loadProfiles(),
+        path.join(out, `${id}-${Date.now()}`),
+        (values.voice as never) ?? "auto",
+      );
+      console.log(`Ovoz: ${v.audio} (${v.seconds.toFixed(1)} s)`);
       return;
     }
 
