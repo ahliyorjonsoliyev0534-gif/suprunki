@@ -236,7 +236,8 @@
         "title": "Saxo Color Party! Which Color Wins? 🎨",
         "publishAt": "2026-11-26T13:00:00Z",
         "uploadOn": "2026-11-25",
-        "needsApproval": true
+        "needsApproval": false,
+        "approved": "2026-11-24"
       }
     ],
     "shadow_answers": [
