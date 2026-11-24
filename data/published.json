@@ -273,10 +273,21 @@
         "title": "Mix the Beat! Which Sound Is Best? 🎶",
         "slot": "2026-11-27T15:00:00Z",
         "approved": true
+      },
+      {
+        "file": "ready/levels_bloop.mp4",
+        "style": "levels",
+        "featured": "bloop",
+        "title": "Only 1% Can Pass Level 3! Find the Odd One 👀 #shorts",
+        "approved": false,
+        "note": "foydalanuvchi ko'rib tasdiqlashi kerak; 28-noyabr 20:00 uchun"
       }
     ],
     "hero_featured": [
       "pluma"
+    ],
+    "levels_featured": [
+      "bloop"
     ]
   },
   "hopnova": {

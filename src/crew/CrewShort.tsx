@@ -846,6 +846,122 @@ const Hero: React.FC<CrewProps> = ({ featured, members, bpm, seed }) => {
   );
 };
 
+// ------------------------------------------------------------------ 9. ODD ONE: 3 LEVELS
+const LEVELS = [
+  { grid: 4, hue: 160, label: "LEVEL 1", tag: "EASY", color: "#36E27B" },
+  { grid: 5, hue: 70, label: "LEVEL 2", tag: "MEDIUM", color: "#FFD23F" },
+  { grid: 6, hue: 28, label: "LEVEL 3", tag: "HARD", color: "#FF4D6D" },
+];
+const LEVEL_BEATS = 6;
+
+const Levels: React.FC<CrewProps> = ({ featured, members, bpm, seed }) => {
+  const { frame, beatLen, index, bump } = useBeat(bpm);
+  const { width, height, fps } = useVideoConfig();
+  const lvl = Math.min(LEVELS.length - 1, Math.floor(index / LEVEL_BEATS));
+  const local = index - lvl * LEVEL_BEATS;
+  const L = LEVELS[lvl];
+  const others = members.filter((m) => m !== featured);
+  const ids = [featured, others[seed % Math.max(1, others.length)] ?? featured, others[(seed + 3) % Math.max(1, others.length)] ?? featured];
+  const star = memberById(ids[lvl]);
+  const cols = L.grid;
+  const total = cols * cols;
+  const oddCell = Math.floor(random(`odd-${seed}-${lvl}`) * total);
+  const revealLocal = 4;
+  const revealed = local >= revealLocal;
+  const revealFrame = Math.round((lvl * LEVEL_BEATS + revealLocal) * beatLen);
+  const levelStart = Math.round(lvl * LEVEL_BEATS * beatLen);
+  const countdown = local >= 1 && local < revealLocal ? revealLocal - local : null;
+  const gridTop = height * 0.24;
+  const gridH = height * 0.58;
+  const cell = Math.min(width / cols, gridH / cols);
+  const left0 = (width - cell * cols) / 2;
+  const charSize = cell * 0.84;
+  const ring = revealed ? spring({ frame: frame - revealFrame, fps, config: { damping: 10 } }) : 0;
+  const enter = spring({ frame: frame - levelStart, fps, config: { damping: 12 } });
+  const last = lvl === LEVELS.length - 1;
+
+  return (
+    <AbsoluteFill>
+      <Background seed={seed + 11 + lvl} />
+      <div
+        style={{
+          position: "absolute",
+          top: height * 0.035,
+          width: "100%",
+          textAlign: "center",
+          fontFamily: TITLE_FONT,
+          fontSize: width * 0.095,
+          color: L.color,
+          WebkitTextStroke: `${width * 0.009}px black`,
+          paintOrder: "stroke fill",
+          textShadow: "0 10px 0 rgba(0,0,0,0.45)",
+          transform: `scale(${enter})`,
+        }}
+      >
+        {L.label} · {L.tag}
+      </div>
+      <div
+        style={{
+          position: "absolute",
+          top: height * 0.125,
+          width: "100%",
+          textAlign: "center",
+          fontFamily: TITLE_FONT,
+          fontSize: width * 0.06,
+          color: "white",
+          WebkitTextStroke: `${width * 0.006}px black`,
+          paintOrder: "stroke fill",
+        }}
+      >
+        {revealed ? "FOUND IT!" : lvl === 0 ? "ONLY 1% PASS LEVEL 3!" : "FIND THE ODD ONE!"}
+      </div>
+      <div style={{ position: "absolute", inset: 0, transform: `scale(${0.6 + 0.4 * enter})` }}>
+        {new Array(total).fill(0).map((_, i) => {
+          const col = i % cols;
+          const row = Math.floor(i / cols);
+          const isOdd = i === oddCell;
+          const dance = Math.sin((frame / beatLen) * Math.PI * 2 + i * 0.7) * 4;
+          const cx = left0 + col * cell + cell / 2;
+          const cy = gridTop + row * cell + cell / 2;
+          return (
+            <React.Fragment key={i}>
+              <div
+                style={{
+                  position: "absolute",
+                  left: cx - charSize / 2,
+                  top: cy - charSize * 0.6,
+                  transform: `translateY(${dance}px) scale(${revealed && isOdd ? 1 + ring * 0.3 : 1})`,
+                  filter: [isOdd ? `hue-rotate(${L.hue}deg)` : "", revealed && !isOdd ? "grayscale(0.8) brightness(0.5)" : ""].join(" ").trim() || "none",
+                }}
+              >
+                <CrewSvg member={star} size={charSize} mouthOpen={bump * 0.5} blink={(frame + i * 7) % 80 < 3 ? 1 : 0} />
+              </div>
+              {revealed && isOdd ? (
+                <div
+                  style={{
+                    position: "absolute",
+                    left: cx - charSize * 0.75,
+                    top: cy - charSize * 0.8,
+                    width: charSize * 1.5,
+                    height: charSize * 1.6,
+                    borderRadius: "50%",
+                    border: `${width * 0.012}px solid #FF2E2E`,
+                    boxShadow: "0 0 30px #FF2E2E",
+                    transform: `scale(${ring})`,
+                  }}
+                />
+              ) : null}
+            </React.Fragment>
+          );
+        })}
+      </div>
+      <BigCountdown value={countdown} bump={bump} />
+      {last ? <Confetti start={revealFrame} seed={seed} /> : null}
+      {last ? <BottomText text="WHICH LEVEL DID YOU PASS? COMMENT!" from={revealFrame} /> : null}
+    </AbsoluteFill>
+  );
+};
+
 // ------------------------------------------------------------------ root
 export const CrewShort: React.FC<CrewProps> = (props) => {
   const { durationInFrames, fps } = useVideoConfig();
@@ -857,6 +973,7 @@ export const CrewShort: React.FC<CrewProps> = (props) => {
     if (props.style === "band") return <Band {...props} />;
     if (props.style === "mix") return <Mix {...props} />;
     if (props.style === "hero") return <Hero {...props} />;
+    if (props.style === "levels") return <Levels {...props} />;
     return <Party {...props} />;
   }, [props]);
 

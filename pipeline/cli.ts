@@ -112,7 +112,7 @@ const main = async (): Promise<void> => {
       if ((format as string) === "crew") {
         const { makeCrew } = await import("./pipeline");
         await makeCrew({
-          style: values.style as "party" | "horror" | "pick" | "shadow" | "odd" | "band" | "mix" | "hero" | "random",
+          style: values.style as "party" | "horror" | "pick" | "shadow" | "odd" | "band" | "mix" | "hero" | "levels" | "random",
           featured: values.featured,
           first: values.first ? values.first.split(",").map((x) => x.trim()) : undefined,
           upload: values.upload,
