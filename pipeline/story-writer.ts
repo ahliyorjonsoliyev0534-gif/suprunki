@@ -16,7 +16,7 @@ export const SHORT_SECONDS = [15, 30, 45, 60];
 export const LONG_MINUTES = [3, 10, 20, 30, 60];
 
 /** Dialog tezligi: so'z/soniya (pauzalar bilan) */
-const WORDS_PER_SECOND = 2.0;
+const WORDS_PER_SECOND = 2.6;
 
 export type Profile = {
   name: string;
@@ -327,7 +327,7 @@ const writeOffline = (opts: WriteOptions, profiles: Record<string, Profile>): St
   const cast = [...(opts.cast ?? []), ...ids.sort(() => r() - 0.5)].filter((v, i, a) => ids.includes(v) && a.indexOf(v) === i).slice(0, 6);
   const t = opts.topic;
   const cat = opts.category;
-  const target = opts.seconds * WORDS_PER_SECOND;
+  const target = opts.seconds * (opts.aspect === "short" ? 1.7 : WORDS_PER_SECOND);
   const first = opening(cast, t, r, profiles);
   first.lines.unshift(L(cast[0], HOOKS[cat](t), "shock", "shake", "gasp"));
   const scenes = [first];
@@ -347,7 +347,8 @@ const writeOffline = (opts: WriteOptions, profiles: Record<string, Profile>): St
     imagePrompt: `${STYLE_PROMPT} Scene: ${s.description} Location: ${s.location}, ${s.time}. Characters: ${s.cast.map((id) => profiles[id]?.name).join(", ")}.`,
     videoPrompt: `${STYLE_PROMPT} ${s.description} Camera: ${s.camera}. Characters bounce to the beat, expressive faces, smooth 2D animation.`,
   }));
-  const title = `${HOOKS[cat](t).replace(/\.\.\.|\.$/g, "").slice(0, 60)}`;
+  const full = HOOKS[cat](t).replace(/\.\.\.|\.$/g, "");
+  const title = full.length <= 62 ? full : full.slice(0, 62).replace(/\s+\S*$/, "");
   return {
     title: `${title}! | Coree Crew`,
     hook: (HOOKS[cat](t).split(/(?<=[.!?])\s/)[0].split(" ").length <= 8 ? HOOKS[cat](t).split(/(?<=[.!?])\s/)[0] : `${t}!`).toUpperCase(),

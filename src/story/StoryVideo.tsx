@@ -102,7 +102,7 @@ const Subtitle: React.FC<{ line: TimedLine; color: string; name: string; vertica
   const { fps, width, height } = useVideoConfig();
   const ms = ((f - line.from) / fps) * 1000;
   const narrator = line.speaker === "narrator";
-  const fs = vertical ? width * 0.058 : height * 0.052;
+  const fs = vertical ? width * 0.058 : height * 0.046;
   const pop = spring({ frame: f - line.from, fps, config: { damping: 14 } });
   return (
     <div
@@ -110,7 +110,7 @@ const Subtitle: React.FC<{ line: TimedLine; color: string; name: string; vertica
         position: "absolute",
         left: "6%",
         right: "6%",
-        ...(vertical ? { top: height * 0.3 } : { bottom: height * 0.06 }),
+        ...(vertical ? { top: height * 0.3 } : { bottom: height * 0.035 }),
         textAlign: "center",
         transform: `scale(${0.9 + 0.1 * pop})`,
         opacity: pop,
@@ -119,7 +119,7 @@ const Subtitle: React.FC<{ line: TimedLine; color: string; name: string; vertica
       {narrator ? null : (
         <div
           style={{
-            display: "inline-block",
+            display: vertical ? "inline-block" : "none",
             padding: `${fs * 0.1}px ${fs * 0.45}px`,
             marginBottom: fs * 0.2,
             borderRadius: fs,
@@ -144,6 +144,7 @@ const Subtitle: React.FC<{ line: TimedLine; color: string; name: string; vertica
           fontStyle: narrator ? "italic" : "normal",
         }}
       >
+        {!vertical && !narrator ? <span style={{ color }}>{name}: </span> : null}
         {line.words.map((w, i) => (
           <span key={i} style={{ color: ms >= w.startMs - 40 && ms <= w.endMs + 60 ? "#FFE14D" : narrator ? "#D9D2FF" : "white" }}>
             {w.text}{" "}
@@ -161,7 +162,7 @@ const Scene: React.FC<{ scene: TimedScene; props: StoryProps; first: boolean }> 
   const vertical = props.aspect === "short";
   const floor = height * FLOOR_Y;
   const n = Math.max(1, scene.cast.length);
-  const size = vertical ? Math.min(width * 0.52, (width * 1.25) / n) : Math.min(height * 0.42, (width * 0.8) / n);
+  const size = vertical ? Math.min(width * 0.52, (width * 1.25) / n) : Math.min(height * 0.36, (width * 0.8) / n);
   const span = vertical ? Math.min(width * 0.7, size * (n - 1) * 0.95) : Math.min(width * 0.7, size * (n - 1) * 1.25);
   const xs = scene.cast.map((_, i) => (n === 1 ? width / 2 : width / 2 - span / 2 + (span / (n - 1)) * i));
   const line = activeLine(scene, f);
@@ -183,7 +184,6 @@ const Scene: React.FC<{ scene: TimedScene; props: StoryProps; first: boolean }> 
     const maxShift = (width * (scale - 1)) / 2;
     const want = (width / 2 - speakerX) * scale;
     tx = Math.max(-maxShift, Math.min(maxShift, want)) * (line ? ease : 1);
-    ty = (height * 0.5 - (floor - size * 0.5)) * 0.4;
   }
   if (scene.camera === "shake" && line) tx += Math.sin(f * 1.7) * 8 * Math.max(0, 1 - (f - line.from) / 12);
   if (vertical && scene.camera !== "closeup") scale *= 1.08;
@@ -202,7 +202,7 @@ const Scene: React.FC<{ scene: TimedScene; props: StoryProps; first: boolean }> 
   return (
     <AbsoluteFill style={{ background: "black" }}>
       <AbsoluteFill style={{ clipPath: clip }}>
-        <AbsoluteFill style={{ transform: `translate(${tx}px, ${ty}px) scale(${scale})`, transformOrigin: "50% 50%" }}>
+        <AbsoluteFill style={{ transform: `translate(${tx}px, ${ty}px) scale(${scale})`, transformOrigin: `50% ${FLOOR_Y * 100}%` }}>
           <SceneBackground location={scene.location} time={scene.time} />
           {scene.cast.map((id, i) => (
             <Actor key={id} id={id} x={xs[i]} floor={floor} size={size} scene={scene} index={i} speakerX={speakerX} />
