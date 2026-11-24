@@ -123,6 +123,12 @@ export const makeStory = async (opts: StoryOptions): Promise<{ folder: string; v
   }
   await fs.writeFile(path.join(jobDir, "subtitles.srt"), srt.join("\n"));
 
+  // ovoz balandligini YouTube standartiga keltirish (-14 LUFS), video qayta kodlanmaydi
+  const norm = path.join(jobDir, "video_norm.mp4");
+  const ln = spawnSync("ffmpeg", ["-y", "-loglevel", "error", "-i", video, "-af", "loudnorm=I=-14:TP=-1.5:LRA=11", "-ar", "48000", "-c:v", "copy", "-c:a", "aac", "-b:a", "192k", norm]);
+  if (ln.status === 0) await fs.rename(norm, video);
+  else log("Ovoz normalizatsiyasi o'tkazib yuborildi (FFmpeg)");
+
   let final = video;
   if (opts.uhd) {
     // 4K: FFmpeg lanczos bilan kattalashtirish (vektor grafika bo'lgani uchun sifat yaxshi saqlanadi)

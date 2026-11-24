@@ -2,6 +2,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { MsEdgeTTS, OUTPUT_FORMAT } from "msedge-tts";
+import { HttpsProxyAgent } from "https-proxy-agent";
 import OpenAI from "openai";
 import type { Emotion, ScriptLine, Sfx, TimedWord } from "../src/story/types";
 import { log, settings } from "./config";
@@ -9,6 +10,12 @@ import type { Profile } from "./story-writer";
 import { audioDurationSeconds, estimateWords } from "./tts";
 
 const SR = 44_100;
+
+/** Proksi orqali ishlaydigan tarmoqlarda (HTTPS_PROXY) Edge ovoz serveriga ulanish */
+export const edgeOptions = () => {
+  const proxy = process.env.HTTPS_PROXY || process.env.https_proxy;
+  return proxy ? { agent: new HttpsProxyAgent(proxy) } : undefined;
+};
 export type VoiceProvider = "auto" | "edge" | "openai" | "babble";
 
 const wav = (samples: Float32Array): Buffer => {
@@ -32,7 +39,7 @@ const xml = (t: string) => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replac
 // ------------------------------------------------------------------ Edge (bepul)
 const edgeLine = async (line: ScriptLine, p: Profile, out: string): Promise<TimedWord[]> => {
   const e = EMO[line.emotion] ?? EMO.happy;
-  const tts = new MsEdgeTTS();
+  const tts = new MsEdgeTTS(edgeOptions());
   try {
     await tts.setMetadata(p.voice.edge, OUTPUT_FORMAT.AUDIO_24KHZ_96KBITRATE_MONO_MP3, { wordBoundaryEnabled: true });
     const dir = path.dirname(out);
@@ -129,7 +136,19 @@ export const createVoices = async (
     const file = path.join(dir, `${String(i).padStart(4, "0")}.mp3`);
     let words: TimedWord[];
     try {
-      if (mode === "edge") words = await edgeLine(line, p, file);
+      if (mode === "edge") {
+        // Edge ba'zan ulanishni uzadi: 3 marta qayta urinamiz
+        let tries = 0;
+        for (;;) {
+          try {
+            words = await edgeLine(line, p, file);
+            break;
+          } catch (e) {
+            if (++tries >= 3) throw e;
+            await new Promise((r) => setTimeout(r, 1500 * tries));
+          }
+        }
+      }
       else if (mode === "openai") words = await openaiLine(line, p, file);
       else words = await babbleLine(line, p, file, i + 7);
     } catch (error) {

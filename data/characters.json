@@ -109,7 +109,7 @@
     "speakingStyle": "smooth, cool, jazzy",
     "catchphrase": "Smooth as a sax solo.",
     "behavior": "sways like playing jazz",
-    "voice": { "edge": "en-US-DavisNeural", "rate": "-4%", "pitch": "+0Hz", "openai": "ash", "instructions": "Smooth, charming jazz voice.", "babble": 200 }
+    "voice": { "edge": "en-US-BrianNeural", "rate": "-4%", "pitch": "+0Hz", "openai": "ash", "instructions": "Smooth, charming jazz voice.", "babble": 200 }
   },
   "uku": {
     "name": "Uku",

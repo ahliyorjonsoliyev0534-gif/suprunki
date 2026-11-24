@@ -40,9 +40,9 @@ MOODS = ["happy", "tense", "sad", "epic", "funny", "mystery"]
 TRANSITIONS = ["fade", "wipe", "iris", "flash"]
 EDGE_VOICES = [
     "en-US-AnaNeural", "en-US-JennyNeural", "en-US-AriaNeural", "en-US-GuyNeural", "en-US-ChristopherNeural",
-    "en-US-EricNeural", "en-US-RogerNeural", "en-US-DavisNeural", "en-US-AndrewMultilingualNeural",
+    "en-US-EricNeural", "en-US-RogerNeural", "en-US-BrianNeural", "en-US-SteffanNeural", "en-US-AndrewMultilingualNeural",
     "en-GB-RyanNeural", "en-GB-SoniaNeural", "en-GB-MaisieNeural", "en-GB-ThomasNeural", "en-AU-NatashaNeural",
-    "en-AU-WilliamNeural", "en-NZ-MitchellNeural", "en-IN-PrabhatNeural",
+    "en-AU-WilliamNeural", "en-NZ-MitchellNeural", "en-IN-PrabhatNeural", "en-IE-ConnorNeural", "en-CA-LiamNeural",
 ]
 OPENAI_VOICES = ["alloy", "ash", "ballad", "coral", "echo", "fable", "nova", "onyx", "sage", "shimmer", "verse"]
 

@@ -342,7 +342,28 @@ const writeOffline = (opts: WriteOptions, profiles: Record<string, Profile>): St
     const mixed = [...cast].sort(() => r() - 0.5);
     scenes.push(attempt(mixed, t, r, profiles));
   }
-  const all = [...scenes, ...tail].map((s) => ({
+  // Shorts: real ovoz tezligi ~2.3 so'z/s; ortiqcha gaplarni muhimligi past joydan qisqartiramiz
+  const story = [...scenes, ...tail];
+  if (opts.aspect === "short") {
+    const limit = opts.seconds * 2.3;
+    const order: [number, number][] = [];
+    // olib tashlash tartibi: muammo sahnasi, boshlanish (hookdan keyin), kulminatsiya o'rtasi, yakunning birinchi gapi
+    const prob = scenes.length > 1 ? 1 : -1;
+    if (prob > 0) for (let i = story[prob].lines.length - 1; i >= 1; i--) order.push([prob, i]);
+    for (let i = story[0].lines.length - 1; i >= 1; i--) order.push([0, i]);
+    const ci = story.length - 2;
+    for (let i = story[ci].lines.length - 2; i >= 1; i--) order.push([ci, i]);
+    order.push([story.length - 1, 0]);
+    const drop = new Set<string>();
+    let count = words(story);
+    for (const [sc, li] of order) {
+      if (count <= limit) break;
+      drop.add(`${sc}:${li}`);
+      count -= story[sc].lines[li].text.split(/\s+/).length;
+    }
+    story.forEach((sc, si) => (sc.lines = sc.lines.filter((_, li) => !drop.has(`${si}:${li}`))));
+  }
+  const all = story.filter((s) => s.lines.length).map((s) => ({
     ...s,
     imagePrompt: `${STYLE_PROMPT} Scene: ${s.description} Location: ${s.location}, ${s.time}. Characters: ${s.cast.map((id) => profiles[id]?.name).join(", ")}.`,
     videoPrompt: `${STYLE_PROMPT} ${s.description} Camera: ${s.camera}. Characters bounce to the beat, expressive faces, smooth 2D animation.`,

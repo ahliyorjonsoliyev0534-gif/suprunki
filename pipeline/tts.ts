@@ -6,6 +6,7 @@ import { nodeReader } from "@remotion/media-parser/node";
 import { MsEdgeTTS, OUTPUT_FORMAT } from "msedge-tts";
 import type { Word } from "../src/types";
 import { settings } from "./config";
+import { edgeOptions } from "./story-audio";
 
 const TICKS_PER_MS = 10_000; // Edge vaqtni 100 nanosekundlarda beradi
 
@@ -26,7 +27,7 @@ export const synthesize = async (text: string, dir: string, retries = 4): Promis
   await fs.mkdir(dir, { recursive: true });
   let lastError: unknown;
   for (let attempt = 0; attempt < retries; attempt++) {
-    const tts = new MsEdgeTTS();
+    const tts = new MsEdgeTTS(edgeOptions());
     try {
       await tts.setMetadata(settings.voice, OUTPUT_FORMAT.AUDIO_24KHZ_96KBITRATE_MONO_MP3, {
         wordBoundaryEnabled: true,
@@ -63,7 +64,7 @@ export const synthesize = async (text: string, dir: string, retries = 4): Promis
 };
 
 const synthesizeWithoutTimings = async (text: string, dir: string): Promise<{ audio: string; words: Word[] }> => {
-  const tts = new MsEdgeTTS();
+  const tts = new MsEdgeTTS(edgeOptions());
   try {
     await tts.setMetadata(settings.voice, OUTPUT_FORMAT.AUDIO_24KHZ_96KBITRATE_MONO_MP3);
     const { audioFilePath } = await tts.toFile(dir, escapeXml(text), { rate: settings.voiceRate, pitch: settings.voicePitch });
