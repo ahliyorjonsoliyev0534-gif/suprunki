@@ -218,28 +218,33 @@
         "id": "Z0-xzU_Qz5Y",
         "title": "Which Band Member Is Best? 🎤",
         "publishAt": "2026-11-25T15:00:00Z"
+      },
+      {
+        "id": "vNIScslQ8LY",
+        "publishAt": "2026-11-25T17:00:00Z",
+        "title": "3 in 1 Coree Crew Mega Short! 🔥",
+        "style": "mega"
+      },
+      {
+        "id": "HpnzHtWBAFI",
+        "publishAt": "2026-11-26T13:00:00Z",
+        "title": "Saxo Color Party! Which Color Wins? 🎨",
+        "style": "party",
+        "featured": "saxo"
+      },
+      {
+        "id": "vHIHaxZmIBw",
+        "publishAt": "2026-11-26T15:00:00Z",
+        "title": "New Character: Pluma! 😱",
+        "style": "hero",
+        "featured": "pluma"
       }
     ],
     "pick_pending": [],
     "daily_uploads": {
-      "2026-11-24": 3
+      "2026-11-25": 3
     },
-    "pending_posts": [
-      {
-        "postId": "6a20902a-bc41-41ac-a68c-4835a44c63a2",
-        "title": "3 in 1 Coree Crew Mega Short! 🔥",
-        "publishAt": "2026-11-25T17:00:00Z",
-        "uploadOn": "2026-11-25"
-      },
-      {
-        "postId": "0eae1c25-da5e-4ae5-b204-bc637180cd2f",
-        "title": "Saxo Color Party! Which Color Wins? 🎨",
-        "publishAt": "2026-11-26T13:00:00Z",
-        "uploadOn": "2026-11-25",
-        "needsApproval": false,
-        "approved": "2026-11-24"
-      }
-    ],
+    "pending_posts": [],
     "shadow_answers": [
       "saxo",
       "bongo"
@@ -250,16 +255,6 @@
     ],
     "schedule": "har kuni 2 ta Short: 13:00Z (Toshkent 18:00) va 15:00Z (20:00)",
     "ready_videos": [
-      {
-        "file": "/tmp/claude-0/-home-user-suprunki/70be69d5-6502-57cf-af12-5251fd7e5b92/scratchpad/ready/hero_pluma.mp4",
-        "style": "hero",
-        "featured": "pluma",
-        "title": "New Character: Pluma! 😱",
-        "slot": "2026-11-26T15:00:00Z",
-        "approved": true,
-        "postId": "5f0bfc18-cc54-451a-8eee-15a0d643433b",
-        "uploadOn": "2026-11-25"
-      },
       {
         "file": "/tmp/claude-0/-home-user-suprunki/70be69d5-6502-57cf-af12-5251fd7e5b92/scratchpad/ready/mix_coree_saxo_zappi_brie_moxi.mp4",
         "style": "mix",
@@ -273,6 +268,15 @@
         "title": "Mix the Beat! Which Sound Is Best? 🎶",
         "slot": "2026-11-27T15:00:00Z",
         "approved": true
+      },
+      {
+        "file": "/tmp/claude-0/-home-user-suprunki/70be69d5-6502-57cf-af12-5251fd7e5b92/scratchpad/ready/party_uku.mp4",
+        "style": "party",
+        "featured": "uku",
+        "title": "Everyone Turns Into Uku!",
+        "slot": "2026-11-27T13:00:00Z",
+        "approved": false,
+        "uploadOn": "2026-11-26"
       }
     ],
     "hero_featured": [
