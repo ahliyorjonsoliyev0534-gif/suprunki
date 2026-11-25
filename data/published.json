@@ -273,30 +273,12 @@
         "title": "Mix the Beat! Which Sound Is Best? 🎶",
         "slot": "2026-11-27T15:00:00Z",
         "approved": true
-      },
-      {
-        "file": "ready/levels_bloop.mp4",
-        "style": "levels",
-        "featured": "bloop",
-        "title": "Only 1% Can Pass Level 3! Find the Odd One 👀 #shorts",
-        "approved": false,
-        "note": "foydalanuvchi ko'rib tasdiqlashi kerak; 28-noyabr 20:00 uchun"
-      },
-      {
-        "file": "ready/survive_1.mp4",
-        "style": "survive",
-        "winner": "uku",
-        "title": "Only ONE Survives! Who Will It Be? 😱 #shorts",
-        "approved": false,
-        "note": "foydalanuvchi ko'rib tasdiqlashi kerak"
       }
     ],
     "hero_featured": [
       "pluma"
     ],
-    "levels_featured": [
-      "bloop"
-    ]
+    "schedule_note": "2026-11-25: foydalanuvchi faqat belgilangan jadvalni xohlaydi (levels/survive/story formatlari jadvalga qo'shilmaydi)."
   },
   "hopnova": {
     "channelId": "UCvmMDLhG63Qia9mKUs5-6XA",
