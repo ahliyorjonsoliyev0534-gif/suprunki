@@ -275,8 +275,9 @@
         "featured": "uku",
         "title": "Everyone Turns Into Uku!",
         "slot": "2026-11-27T13:00:00Z",
-        "approved": false,
-        "uploadOn": "2026-11-26"
+        "approved": true,
+        "uploadOn": "2026-11-26",
+        "approvedOn": "2026-11-25"
       }
     ],
     "hero_featured": [
