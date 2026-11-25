@@ -10,7 +10,7 @@ import { FPS, SIZES, type SceneProps, type VideoFormat, type VideoProps } from "
 import { log, settings } from "./config";
 import { characterLibrary, sceneImage } from "./images";
 import { generateLongTrack, generateMusic } from "./music";
-import { renderJob } from "./render";
+import { loudnorm, renderJob } from "./render";
 import { ScriptWriter, wordCount, type VideoScript } from "./script-writer";
 import { audioDurationSeconds, synthesize } from "./tts";
 
@@ -284,11 +284,17 @@ export const makeCrew = async (opts: {
     channelName: settings.channelName,
     durationInFrames: Math.ceil(((CREW_BEATS[style] * 60) / bpm) * FPS),
     pickIndex: seed % 3,
+    sfx: process.env.CREW_SFX !== "0",
   };
+  if (props.sfx) {
+    const { writeSfxLibrary } = await import("./sfx");
+    await writeSfxLibrary(path.join(jobDir, "sfx"));
+  }
   const meta = crewMeta(style, props);
   await save(path.join(jobDir, "script.json"), { ...meta, style });
 
   const result = await renderJob(jobDir, props, { thumbnail: false, composition: "CrewShort" });
+  await loudnorm(result.video);
   log(`Video tayyor: ${result.video} (${(props.durationInFrames / FPS).toFixed(1)} s)`);
 
   const record: HistoryItem = {

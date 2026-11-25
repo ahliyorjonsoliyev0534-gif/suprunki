@@ -4,7 +4,7 @@ import path from "node:path";
 import { MsEdgeTTS, OUTPUT_FORMAT } from "msedge-tts";
 import { HttpsProxyAgent } from "https-proxy-agent";
 import OpenAI from "openai";
-import type { Emotion, ScriptLine, Sfx, TimedWord } from "../src/story/types";
+import type { Emotion, ScriptLine, TimedWord } from "../src/story/types";
 import { log, settings } from "./config";
 import type { Profile } from "./story-writer";
 import { audioDurationSeconds, estimateWords } from "./tts";
@@ -166,32 +166,8 @@ export const createVoices = async (
   return out;
 };
 
-// ------------------------------------------------------------------ ovoz effektlari (sintez, mualliflik huquqisiz)
+// ------------------------------------------------------------------ ovoz effektlari (pipeline/sfx.ts kutubxonasi)
 export const createSfx = async (dir: string): Promise<void> => {
-  await fs.mkdir(dir, { recursive: true });
-  let seed = 3;
-  const rnd = () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296) * 2 - 1;
-  const make = (sec: number, fn: (t: number, i: number) => number) => {
-    const b = new Float32Array(Math.floor(sec * SR));
-    for (let i = 0; i < b.length; i++) b[i] = fn(i / SR, i);
-    return b;
-  };
-  const tone = (f: (t: number) => number, sec: number, decay: number, vol = 0.6) => {
-    let ph = 0;
-    return make(sec, (t) => { ph += (2 * Math.PI * f(t)) / SR; return Math.sin(ph) * Math.exp(-t * decay) * vol; });
-  };
-  let lp = 0;
-  const fx: Record<Sfx, Float32Array> = {
-    whoosh: make(0.6, (t) => { lp += 0.08 * (rnd() - lp); return lp * Math.sin((Math.PI * t) / 0.6) * 3; }),
-    pop: tone((t) => 900 - t * 4000, 0.12, 30),
-    boing: tone((t) => 180 + 120 * Math.sin(t * 40) * Math.exp(-t * 4), 0.7, 4),
-    ding: make(1.2, (t) => (Math.sin(2 * Math.PI * 1320 * t) + 0.5 * Math.sin(2 * Math.PI * 2640 * t)) * Math.exp(-t * 4) * 0.35),
-    drum: tone((t) => 120 * Math.exp(-t * 12) + 45, 0.5, 7, 0.9),
-    thunder: make(1.6, (t) => { lp += 0.02 * (rnd() - lp); return lp * Math.exp(-t * 1.8) * 9; }),
-    magic: make(1.0, (t) => [0, 4, 7, 12].reduce((a, n, k) => a + (t > k * 0.08 ? Math.sin(2 * Math.PI * 880 * 2 ** (n / 12) * t) * Math.exp(-(t - k * 0.08) * 5) : 0), 0) * 0.18),
-    crash: make(0.9, (t) => rnd() * Math.exp(-t * 6) * 0.6),
-    cheer: make(1.6, (t) => { lp += 0.15 * (rnd() - lp); return lp * Math.sin((Math.PI * t) / 1.6) * 1.6 * (1 + 0.3 * Math.sin(t * 30)); }),
-    gasp: make(0.35, (t) => { lp += 0.3 * (rnd() - lp); return lp * Math.sin((Math.PI * t) / 0.35) * 0.9; }),
-  };
-  await Promise.all(Object.entries(fx).map(([name, data]) => fs.writeFile(path.join(dir, `${name}.wav`), wav(data))));
+  const { writeSfxLibrary } = await import("./sfx");
+  await writeSfxLibrary(dir, ["whoosh", "pop", "boing", "ding", "drum", "thunder", "magic", "crash", "cheer", "gasp"]);
 };

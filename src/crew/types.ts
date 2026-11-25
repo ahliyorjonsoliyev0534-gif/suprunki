@@ -14,6 +14,8 @@ export type CrewProps = {
   durationInFrames: number;
   /** pick/shadow formati: qaysi variant to'g'ri (0..2); odd formatida boshqacha qahramon katakchasi (0..14) */
   pickIndex: number;
+  /** Ovoz effektlari (sfx/*.wav ish papkasida bo'lsa) */
+  sfx?: boolean;
 };
 
 /** Har bir format necha zarbdan (beat) iborat */

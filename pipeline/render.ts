@@ -1,4 +1,5 @@
 // Remotion bilan render: props.json + ish papkasidagi fayllar -> video.mp4 (+ thumbnail.jpg)
+import { spawnSync } from "node:child_process";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -66,4 +67,12 @@ export const renderJob = async (
 
   await fs.rm(serveUrl, { recursive: true, force: true });
   return { video, thumbnail };
+};
+
+/** Ovoz balandligini YouTube standartiga (-14 LUFS) keltiradi; video qayta kodlanmaydi */
+export const loudnorm = async (video: string): Promise<void> => {
+  const tmp = video.replace(/\.mp4$/, ".norm.mp4");
+  const r = spawnSync("ffmpeg", ["-y", "-loglevel", "error", "-i", video, "-af", "loudnorm=I=-14:TP=-1.5:LRA=11", "-ar", "48000", "-c:v", "copy", "-c:a", "aac", "-b:a", "192k", tmp]);
+  if (r.status === 0) await fs.rename(tmp, video);
+  else log("Ovoz normalizatsiyasi o'tkazib yuborildi (FFmpeg)");
 };

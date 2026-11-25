@@ -4,6 +4,7 @@ import {
   Audio,
   interpolate,
   random,
+  Sequence,
   spring,
   staticFile,
   useCurrentFrame,
@@ -1135,6 +1136,77 @@ const Survive: React.FC<CrewProps> = ({ members, bpm, seed }) => {
   );
 };
 
+// ------------------------------------------------------------------ ovoz effektlari: qaysi zarbda qaysi tovush
+type SfxEvent = { name: string; beat: number; volume: number };
+const sfxEvents = (style: CrewProps["style"]): SfxEvent[] => {
+  const ev: SfxEvent[] = [];
+  const add = (name: string, beat: number, volume = 0.6) => ev.push({ name, beat, volume });
+  const countdown = (from: number, reveal: number) => {
+    for (let b = from; b < reveal; b++) add(b === reveal - 1 ? "tick_hi" : "tick", b, 0.55);
+    add("riser", reveal - 1.6, 0.35);
+    add("impact", reveal, 0.6);
+    add("ding", reveal, 0.5);
+    add("cheer", reveal + 0.3, 0.45);
+  };
+  switch (style) {
+    case "party":
+      add("whoosh", 0, 0.35);
+      // 15 ta qahramon birin-ketin rang almashtiradi: ohangi ko'tariluvchi "pop"lar
+      for (let i = 1; i <= 15; i++) add(`pop${(i - 1) % 11}`, i, 0.75);
+      add("magic", 15.5, 0.4);
+      add("cheer", 16, 0.45);
+      break;
+    case "pick":
+      for (let b = 0; b < 6; b++) add("pop2", b, 0.3);
+      countdown(6, 9);
+      break;
+    case "shadow":
+      add("whoosh", 0, 0.35);
+      countdown(6, 9);
+      break;
+    case "odd":
+      add("whoosh", 0, 0.35);
+      countdown(7, 10);
+      break;
+    case "hero":
+      add("thunder", 0, 0.35);
+      countdown(4, 7);
+      break;
+    case "band":
+      for (let k = 0; k < BAND_SIZE; k++) { add("drum", 2 * k + 1, 0.45); add(`pop${k * 2}`, 2 * k + 1, 0.65); }
+      add("cheer", 2 * BAND_SIZE, 0.5);
+      break;
+    case "mix":
+      for (let k = 0; k < MIX_SIZE; k++) add(`pop${k * 2}`, 2 * k + 1, 0.7);
+      add("magic", 2 * MIX_SIZE - 1, 0.35);
+      add("cheer", 2 * MIX_SIZE, 0.45);
+      break;
+    case "levels":
+      for (let l = 0; l < LEVELS.length; l++) {
+        const b0 = l * LEVEL_BEATS;
+        add("whoosh", b0, 0.4);
+        for (let b = 1; b < 4; b++) add(b === 3 ? "tick_hi" : "tick", b0 + b, 0.55);
+        add("ding", b0 + 4, 0.5);
+      }
+      add("cheer", 2 * LEVEL_BEATS + 4.2, 0.45);
+      break;
+    case "survive":
+      add("drum", 0, 0.4);
+      for (let k = 0; k < SURVIVE_N - 1; k++) {
+        const b0 = SURVIVE_INTRO + k * SURVIVE_ROUND;
+        for (let t = 0; t < 6; t++) add("tick", b0 + t * 0.3, 0.35);
+        add("whoosh", b0 + 2, 0.5);
+        add("boing", b0 + 2.1, 0.35);
+      }
+      add("impact", SURVIVE_INTRO + (SURVIVE_N - 1) * SURVIVE_ROUND, 0.6);
+      add("cheer", SURVIVE_INTRO + (SURVIVE_N - 1) * SURVIVE_ROUND + 0.2, 0.5);
+      break;
+    default:
+      break;
+  }
+  return ev;
+};
+
 // ------------------------------------------------------------------ root
 export const CrewShort: React.FC<CrewProps> = (props) => {
   const { durationInFrames, fps } = useVideoConfig();
@@ -1154,6 +1226,16 @@ export const CrewShort: React.FC<CrewProps> = (props) => {
   return (
     <AbsoluteFill style={{ backgroundColor: "black" }}>
       {content}
+      {props.sfx
+        ? sfxEvents(props.style).map((e, i) => {
+            const from = Math.max(0, Math.round(e.beat * ((fps * 60) / props.bpm)));
+            return from < durationInFrames ? (
+              <Sequence key={`sfx${i}`} from={from} layout="none">
+                <Audio src={staticFile(`sfx/${e.name}.wav`)} volume={e.volume} />
+              </Sequence>
+            ) : null;
+          })
+        : null}
       {props.music ? (
         <Audio
           src={staticFile(props.music)}
