@@ -1136,6 +1136,127 @@ const Survive: React.FC<CrewProps> = ({ members, bpm, seed }) => {
   );
 };
 
+// ------------------------------------------------------------------ 11. MUSIC GAME (mix o'yini uslubi: sudrab qo'yish)
+export const GAME_SIZE = 7;
+const gameDrop = (k: number) => 2 + 2 * k; // k-qahramon shu zarbda joyiga tushadi
+const gameJoined = (index: number) => Math.max(0, Math.min(GAME_SIZE, Math.floor((index - 2) / 2) + 1));
+
+const Cursor: React.FC<{ size: number }> = ({ size }) => (
+  <svg width={size} height={size} viewBox="0 0 40 40">
+    <path d="M6 3 L6 33 L14 25 L20 37 L25 35 L19 23 L30 23 Z" fill="white" stroke="black" strokeWidth={3} strokeLinejoin="round" />
+  </svg>
+);
+
+const Game: React.FC<CrewProps> = ({ members, bpm, seed }) => {
+  const { frame, beatLen, index, bump } = useBeat(bpm);
+  const { width, height, fps } = useVideoConfig();
+  const capsules = members.map(memberById).filter((m) => !m.shape || m.shape === "capsule");
+  const crew = [...capsules, ...members.map(memberById)].filter((m, i, a) => a.findIndex((x) => x.id === m.id) === i).slice(0, GAME_SIZE);
+  const joined = gameJoined(index);
+  const full = joined >= GAME_SIZE;
+  const fullFrame = Math.round(gameDrop(GAME_SIZE - 1) * beatLen);
+  const charSize = width * 0.25;
+  const rows = [
+    { y: height * 0.19, items: [0, 1, 2, 3] },
+    { y: height * 0.44, items: [4, 5, 6] },
+  ];
+  const slot = (i: number) => {
+    const row = rows.find((r) => r.items.includes(i))!;
+    const n = row.items.length;
+    const k = row.items.indexOf(i);
+    const gap = width / n;
+    return { x: k * gap + gap / 2, y: row.y };
+  };
+  // pastdagi belgilar paneli
+  const barY = height * 0.8;
+  const iconSize = width * 0.115;
+  const iconX = (i: number) => width * 0.07 + i * ((width * 0.86) / (GAME_SIZE - 1));
+  const blank = (m: (typeof crew)[number]) => ({ ...m, shape: undefined, color: "#C7CAD3", accent: "#8E929E", accessory: "none" as const, eyes: "sleepy" as const });
+
+  // hozir sudralayotgan belgi
+  const dragK = crew.findIndex((_, k) => frame >= (gameDrop(k) - 1) * beatLen && frame < gameDrop(k) * beatLen);
+  let drag: React.ReactNode = null;
+  if (dragK >= 0) {
+    const t = (frame - (gameDrop(dragK) - 1) * beatLen) / beatLen;
+    const e = t < 0.15 ? 0 : Math.min(1, (t - 0.15) / 0.8);
+    const ease = 1 - (1 - e) ** 3;
+    const from = { x: iconX(dragK), y: barY };
+    const to = slot(dragK);
+    const toY = to.y + charSize * 0.55;
+    const x = from.x + (to.x - from.x) * ease;
+    const y = from.y + (toY - from.y) * ease - Math.sin(Math.PI * ease) * height * 0.06;
+    drag = (
+      <>
+        <div style={{ position: "absolute", left: x - iconSize * 0.6, top: y - iconSize * 0.6, width: iconSize * 1.2, height: iconSize * 1.2, borderRadius: "50%", background: crew[dragK].color, border: "6px solid black", boxShadow: "0 10px 20px rgba(0,0,0,0.35)", display: "flex", alignItems: "center", justifyContent: "center", transform: `scale(${1 + 0.15 * Math.sin(t * Math.PI)})` }}>
+          <CrewSvg member={crew[dragK]} size={iconSize * 0.85} />
+        </div>
+        <div style={{ position: "absolute", left: x + iconSize * 0.1, top: y + iconSize * 0.05 }}>
+          <Cursor size={width * 0.09} />
+        </div>
+      </>
+    );
+  }
+
+  return (
+    <AbsoluteFill>
+      <AbsoluteFill style={{ background: full ? "linear-gradient(180deg, #E8E2FF 0%, #B9A8F0 70%, #8C78D6 100%)" : "linear-gradient(180deg, #ECEEF2 0%, #C9CDD6 68%, #9EA3AF 100%)" }} />
+      {/* sahna poli */}
+      <div style={{ position: "absolute", left: 0, right: 0, top: height * 0.665, height: height * 0.06, background: full ? "#7A66C8" : "#8B909C", borderTop: "6px solid #222" }} />
+      <Title text={full ? "FULL MIX!" : "MAKE THE BEAT!"} top={height * 0.03} size={width * 0.1} color={full ? "#FFE14D" : "#FFFFFF"} />
+      <div style={{ position: "absolute", top: height * 0.115, width: "100%", textAlign: "center", fontFamily: TITLE_FONT, fontSize: width * 0.055, color: "#333", opacity: 0.85 }}>
+        {joined}/{GAME_SIZE} SOUNDS
+      </div>
+      {crew.map((m, i) => {
+        const on = i < joined;
+        const dropFrame = Math.round(gameDrop(i) * beatLen);
+        const pop = on ? spring({ frame: frame - dropFrame, fps, config: { damping: 8 } }) : 0;
+        const { x, y } = slot(i);
+        const sway = on ? Math.sin((frame / beatLen) * Math.PI + i) * (full ? 7 : 4) : 0;
+        const puff = frame - dropFrame;
+        const bars = new Array(3).fill(0).map((_, b) => (0.3 + 0.7 * Math.abs(Math.sin(frame / (4 + b) + i * 2 + b))) * (0.6 + bump * 0.4));
+        return (
+          <React.Fragment key={m.id}>
+            {on ? (
+              <div style={{ position: "absolute", left: x - charSize * 0.25, top: y - charSize * 0.38, width: charSize * 0.5, height: charSize * 0.28, display: "flex", alignItems: "flex-end", justifyContent: "space-between" }}>
+                {bars.map((h, b) => (
+                  <div key={b} style={{ width: "26%", height: `${h * 100}%`, background: m.color, border: "3px solid #222", borderRadius: 5 }} />
+                ))}
+              </div>
+            ) : null}
+            <div
+              style={{
+                position: "absolute",
+                left: x - charSize / 2,
+                top: y,
+                transform: `translateY(${on ? -bump * 18 : 0}px) rotate(${sway}deg) scale(${on ? 0.9 + pop * 0.1 : 0.9})`,
+                transformOrigin: "50% 100%",
+              }}
+            >
+              <CrewSvg member={on ? m : blank(m)} size={charSize} mouthOpen={on ? bump * 0.9 : 0} blink={on ? ((frame + i * 13) % 80 < 3 ? 1 : 0) : 0} mood={on ? "smile" : "flat"} />
+            </div>
+            {puff >= 0 && puff < 14 ? (
+              <div style={{ position: "absolute", left: x - charSize * 0.7, top: y + charSize * 0.1, width: charSize * 1.4, height: charSize * 1.4, borderRadius: "50%", border: `${10 * (1 - puff / 14)}px solid white`, transform: `scale(${0.4 + puff / 10})`, opacity: 1 - puff / 14 }} />
+            ) : null}
+          </React.Fragment>
+        );
+      })}
+      {/* belgilar paneli */}
+      <div style={{ position: "absolute", left: width * 0.02, right: width * 0.02, top: barY - iconSize * 0.75, height: iconSize * 1.5, borderRadius: iconSize, background: "rgba(30,30,40,0.88)", border: "5px solid #111" }} />
+      {crew.map((m, i) => {
+        const used = i < joined || i === dragK;
+        return (
+          <div key={`icon-${m.id}`} style={{ position: "absolute", left: iconX(i) - iconSize / 2, top: barY - iconSize / 2, width: iconSize, height: iconSize, borderRadius: "50%", background: used ? "#444" : m.color, border: "4px solid black", display: "flex", alignItems: "center", justifyContent: "center", opacity: used ? 0.35 : 1 }}>
+            <CrewSvg member={m} size={iconSize * 0.75} />
+          </div>
+        );
+      })}
+      {drag}
+      {full ? <Confetti start={fullFrame} seed={seed} /> : null}
+      {full ? <BottomText text="WHICH SOUND IS YOUR FAVORITE?" from={fullFrame + 8} /> : null}
+    </AbsoluteFill>
+  );
+};
+
 // ------------------------------------------------------------------ ovoz effektlari: qaysi zarbda qaysi tovush
 type SfxEvent = { name: string; beat: number; volume: number };
 const sfxEvents = (style: CrewProps["style"]): SfxEvent[] => {
@@ -1201,6 +1322,11 @@ const sfxEvents = (style: CrewProps["style"]): SfxEvent[] => {
       add("impact", SURVIVE_INTRO + (SURVIVE_N - 1) * SURVIVE_ROUND, 0.6);
       add("cheer", SURVIVE_INTRO + (SURVIVE_N - 1) * SURVIVE_ROUND + 0.2, 0.5);
       break;
+    case "game":
+      for (let k = 0; k < GAME_SIZE; k++) { add("whoosh", gameDrop(k) - 0.6, 0.25); add(`pop${k + 1}`, gameDrop(k), 0.75); add("drum", gameDrop(k), 0.35); }
+      add("magic", gameDrop(GAME_SIZE - 1) + 0.3, 0.4);
+      add("cheer", gameDrop(GAME_SIZE - 1) + 0.5, 0.5);
+      break;
     default:
       break;
   }
@@ -1220,6 +1346,7 @@ export const CrewShort: React.FC<CrewProps> = (props) => {
     if (props.style === "hero") return <Hero {...props} />;
     if (props.style === "levels") return <Levels {...props} />;
     if (props.style === "survive") return <Survive {...props} />;
+    if (props.style === "game") return <Game {...props} />;
     return <Party {...props} />;
   }, [props]);
 
@@ -1245,6 +1372,8 @@ export const CrewShort: React.FC<CrewProps> = (props) => {
             // band formatida musiqa har bir yangi a'zo bilan kuchayadi
             (props.style === "band"
               ? 0.3 + (0.7 * bandJoined(Math.floor(f / ((fps * 60) / props.bpm)))) / BAND_SIZE
+              : props.style === "game"
+                ? 0.2 + (0.8 * gameJoined(Math.floor(f / ((fps * 60) / props.bpm)))) / GAME_SIZE
               : props.style === "mix"
                 ? 0.25 + (0.75 * mixAwake(Math.floor(f / ((fps * 60) / props.bpm)))) / MIX_SIZE
                 : 1) *

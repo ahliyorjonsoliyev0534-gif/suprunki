@@ -208,6 +208,7 @@ const crewMeta = (style: CrewStyle, props: CrewProps) => {
     mix: [`Mix the Beat! Which Sound Is Best? 🎶`, `Wake Up the Coree Crew Beat! 🎵`, `${a}, ${b} & ${c} Make a Beat! 🔥`],
     band: [`Build the Band! Who Joins Next? 🎸`, `${a}, ${b}, ${c} & Friends Form a Band! 🎵`, `Which Band Member Is Best? 🎤`],
     survive: [`Only ONE Survives! Who Will It Be? 😱`, `Last One Standing! Pick Your Winner 👑`, `Who Survives Till the End? Pick Now! 😱`],
+    game: [`Make the Beat! Coree Crew Mix 🎶`, `7 Sounds, 1 Beat! Which Is Best? 🎵`, `Drag & Drop Music Mix! 🔥`],
     levels: [`Find the Odd One Out: Level 1 to 3! 🧠`, `Only 1% Can Pass Level 3! Find the Odd One 👀`, `Find the Odd One Out! Easy, Medium, HARD 🔥`],
     odd: [`Find the Odd ${star}! 👀`, `Only 1% Can Find the Odd ${star}! 🔍`, `Spot the Different ${star}! 👀`],
   };
@@ -218,6 +219,8 @@ const crewMeta = (style: CrewStyle, props: CrewProps) => {
       ? `Watch everyone turn into ${star}. Which color is your favorite?`
       : style === "horror"
         ? "Normal or horror version, which one do you like more?"
+        : style === "game"
+        ? `Drag each Coree Crew member onto the stage and listen to the beat grow, one sound at a time! Which sound is your favorite? Comment below!`
         : style === "survive"
         ? `8 Coree Crew members, only ONE survives! Pick your favorite before the first trapdoor opens. Did your pick win? Comment below!`
         : style === "levels"
