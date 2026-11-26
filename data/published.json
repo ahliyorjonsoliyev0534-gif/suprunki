@@ -238,11 +238,31 @@
         "title": "New Character: Pluma! 😱",
         "style": "hero",
         "featured": "pluma"
+      },
+      {
+        "id": "6NzJO0c65DI",
+        "publishAt": "2026-11-27T13:00:00Z",
+        "title": "Everyone Turns Into Uku! 🎨",
+        "style": "party",
+        "featured": "uku"
+      },
+      {
+        "id": "SD9oox9H--0",
+        "publishAt": "2026-11-27T15:00:00Z",
+        "title": "Mix the Beat! Which Sound Is Best? 🎶",
+        "style": "mix",
+        "members": [
+          "coree",
+          "saxo",
+          "zappi",
+          "brie",
+          "moxi"
+        ]
       }
     ],
     "pick_pending": [],
     "daily_uploads": {
-      "2026-11-25": 3
+      "2026-11-26": 2
     },
     "pending_posts": [],
     "shadow_answers": [
@@ -256,28 +276,22 @@
     "schedule": "har kuni 2 ta Short: 13:00Z (Toshkent 18:00) va 15:00Z (20:00)",
     "ready_videos": [
       {
-        "file": "/tmp/claude-0/-home-user-suprunki/70be69d5-6502-57cf-af12-5251fd7e5b92/scratchpad/ready/mix_coree_saxo_zappi_brie_moxi.mp4",
-        "style": "mix",
-        "members": [
-          "coree",
-          "saxo",
-          "zappi",
-          "brie",
-          "moxi"
-        ],
-        "title": "Mix the Beat! Which Sound Is Best? 🎶",
-        "slot": "2026-11-27T15:00:00Z",
-        "approved": true
+        "file": "/tmp/claude-0/-home-user-suprunki/70be69d5-6502-57cf-af12-5251fd7e5b92/scratchpad/ready/party_brie.mp4",
+        "style": "party",
+        "featured": "brie",
+        "title": "Everyone Turns Into Brie! 🎨",
+        "slot": "2026-11-28T13:00:00Z",
+        "approved": false,
+        "uploadOn": "2026-11-27"
       },
       {
-        "file": "/tmp/claude-0/-home-user-suprunki/70be69d5-6502-57cf-af12-5251fd7e5b92/scratchpad/ready/party_uku.mp4",
+        "file": "/tmp/claude-0/-home-user-suprunki/70be69d5-6502-57cf-af12-5251fd7e5b92/scratchpad/ready/party_barky.mp4",
         "style": "party",
-        "featured": "uku",
-        "title": "Everyone Turns Into Uku!",
-        "slot": "2026-11-27T13:00:00Z",
-        "approved": true,
-        "uploadOn": "2026-11-26",
-        "approvedOn": "2026-11-25"
+        "featured": "barky",
+        "title": "What If Everyone Became Barky? 🎵",
+        "slot": "2026-11-28T15:00:00Z",
+        "approved": false,
+        "uploadOn": "2026-11-27"
       }
     ],
     "hero_featured": [
@@ -506,6 +520,19 @@
         "brie",
         "zappi"
       ]
+    ],
+    "ready_videos": [
+      {
+        "file": "/tmp/claude-0/-home-user-suprunki/70be69d5-6502-57cf-af12-5251fd7e5b92/scratchpad/ready/hop_grimm_bloop.mp4",
+        "pair": [
+          "grimm",
+          "bloop"
+        ],
+        "title": "🟣 Purple vs 🧡 Orange | Grimm or Bloop? Who Wins? #shorts",
+        "slot": "2026-11-27T16:00:00Z",
+        "approved": false,
+        "uploadOn": "2026-11-26 yoki 2026-11-27 (16:00Z dan oldin)"
+      }
     ]
   },
   "vidiq_limit_note": "vidIQ bepul tarif: kuniga jami 3 ta YouTube yuklash (ikkala kanal uchun birga), 08:00Z da yangilanadi"
