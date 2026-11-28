@@ -526,7 +526,31 @@
         "bloop"
       ]
     ],
-    "ready_videos": []
+    "ready_videos": [],
+    "thumbnails_set": [
+      "PALdKmbHI2o"
+    ]
   },
-  "vidiq_limit_note": "vidIQ bepul tarif: kuniga jami 3 ta YouTube yuklash (ikkala kanal uchun birga), 08:00Z da yangilanadi"
+  "vidiq_limit_note": "vidIQ bepul tarif: kuniga jami 3 ta YouTube yuklash (ikkala kanal uchun birga), 08:00Z da yangilanadi",
+  "hidden_reuploads": [
+    "yp-mQAT_nOg",
+    "hB9k44BTDLc",
+    "l4ur2tI6uk8",
+    "6zDy5TYU8uQ",
+    "F02uz-q6_IE",
+    "JU_yb53UnsA",
+    "Yp1YhyGPSIk",
+    "1p8RpVoy314",
+    "KqQIbms8PyY",
+    "p8DdO1kNm0w",
+    "MZQXn7RNQGU",
+    "BEmt5WVIsVc",
+    "s_LIOTFBzsA",
+    "OxyeWDpMjZo",
+    "Yx3RKbSZ5iI",
+    "fRBZpC9utg4",
+    "0lrQx6QHs-0",
+    "qmbeDkxfZW4"
+  ],
+  "hidden_note": "2026-11-28: 18 ta qayta yuklangan video private qilindi (qaytarish mumkin: Studio > Visibility > Public)."
 }
