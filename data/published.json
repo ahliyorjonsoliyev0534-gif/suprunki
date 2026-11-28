@@ -288,7 +288,24 @@
       "zappi"
     ],
     "schedule": "har kuni 2 ta Short: 13:00Z (Toshkent 18:00) va 15:00Z (20:00)",
-    "ready_videos": [],
+    "ready_videos": [
+      {
+        "file": "/tmp/claude-0/-home-user-suprunki/70be69d5-6502-57cf-af12-5251fd7e5b92/scratchpad/ready/party_coree.mp4",
+        "style": "party",
+        "featured": "coree",
+        "title": "15 Friends Turn Into Coree! 🎨",
+        "slot": "2026-11-29T13:00:00Z",
+        "approved": false
+      },
+      {
+        "file": "/tmp/claude-0/-home-user-suprunki/70be69d5-6502-57cf-af12-5251fd7e5b92/scratchpad/ready/hero_nova.mp4",
+        "style": "hero",
+        "featured": "nova",
+        "title": "New Character: Nova! Guess in 3 Seconds 😱",
+        "slot": "2026-11-29T15:00:00Z",
+        "approved": false
+      }
+    ],
     "hero_featured": [
       "pluma"
     ],
@@ -526,7 +543,18 @@
         "bloop"
       ]
     ],
-    "ready_videos": [],
+    "ready_videos": [
+      {
+        "file": "/tmp/claude-0/-home-user-suprunki/70be69d5-6502-57cf-af12-5251fd7e5b92/scratchpad/ready/hop_pluma_mintz.mp4",
+        "pair": [
+          "pluma",
+          "mintz"
+        ],
+        "title": "🟣 Purple vs 💙 Blue | Pluma or Mintz? Who Wins? #shorts",
+        "slot": "2026-11-28T16:00:00Z",
+        "approved": false
+      }
+    ],
     "thumbnails_set": [
       "PALdKmbHI2o"
     ]
