@@ -258,11 +258,25 @@
           "brie",
           "moxi"
         ]
+      },
+      {
+        "id": "wDxEFLV5Oik",
+        "publishAt": "2026-11-28T13:00:00Z",
+        "title": "15 Friends Turn Into Brie! 🎨",
+        "style": "party",
+        "featured": "brie"
+      },
+      {
+        "id": "syouUQ06e8s",
+        "publishAt": "2026-11-28T15:00:00Z",
+        "title": "What If 15 Friends Became Barky? 🎵",
+        "style": "party",
+        "featured": "barky"
       }
     ],
     "pick_pending": [],
     "daily_uploads": {
-      "2026-11-26": 3
+      "2026-11-27(PT)": 2
     },
     "pending_posts": [],
     "shadow_answers": [
@@ -274,28 +288,7 @@
       "zappi"
     ],
     "schedule": "har kuni 2 ta Short: 13:00Z (Toshkent 18:00) va 15:00Z (20:00)",
-    "ready_videos": [
-      {
-        "file": "/tmp/claude-0/-home-user-suprunki/70be69d5-6502-57cf-af12-5251fd7e5b92/scratchpad/ready/party_brie.mp4",
-        "style": "party",
-        "featured": "brie",
-        "title": "15 Friends Turn Into Brie! 🎨",
-        "slot": "2026-11-28T13:00:00Z",
-        "approved": true,
-        "uploadOn": "2026-11-27",
-        "approvedOn": "2026-11-26"
-      },
-      {
-        "file": "/tmp/claude-0/-home-user-suprunki/70be69d5-6502-57cf-af12-5251fd7e5b92/scratchpad/ready/party_barky.mp4",
-        "style": "party",
-        "featured": "barky",
-        "title": "What If 15 Friends Became Barky? 🎵",
-        "slot": "2026-11-28T15:00:00Z",
-        "approved": true,
-        "uploadOn": "2026-11-27",
-        "approvedOn": "2026-11-26"
-      }
-    ],
+    "ready_videos": [],
     "hero_featured": [
       "pluma"
     ],
