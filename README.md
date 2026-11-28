@@ -1,43 +1,74 @@
-# Sprunki Core — avtomatik video zavodi
+# SprunkiCoreee — avtomatik video zavodi (Remotion)
 
-Ingliz tilidagi Sprunki videolarini o'zi yasab, YouTube'ga o'zi yuklaydigan tizim.
+Bu tizim ingliz tilida Sprunki videolarini o'zi yasaydi va YouTube'ga o'zi yuklaydi. Loyiha `npx create-video` (**Remotion**) asosida qurilgan: videolar React komponentlari sifatida yoziladi va kadrma-kadr render qilinadi.
 
 ```
-Mavzu → Ssenariy (OpenAI) → Ovoz (Edge-TTS) → Rasmlar (sizniki yoki AI) → Montaj (FFmpeg)
-      → Subtitr (so'zma-so'z yonadi) → Musiqa → Thumbnail → YouTube (rasmiy API)
+Mavzu → Ssenariy (OpenAI) → Ovoz (Edge-TTS) → Rasmlar (sizniki yoki AI)
+      → Remotion: animatsiya, sakrovchi subtitrlar, musiqa → video.mp4 + thumbnail → YouTube
 ```
 
 | Narsa | Vosita | Narxi |
 |---|---|---|
 | Ssenariy, sarlavha, teglar | OpenAI `gpt-4o-mini` | Bir video taxminan $0.01–0.05 |
-| Ovoz | Edge-TTS | Bepul |
+| Ovoz | Edge-TTS (`msedge-tts`) | Bepul |
 | Rasmlar | `assets/characters` dagi rasmlaringiz va Pollinations.ai | Bepul |
-| Montaj va subtitr | FFmpeg | Bepul |
+| Montaj, animatsiya, subtitr, thumbnail | Remotion | Bepul (3 kishigacha bo'lgan jamoa uchun) |
 | Yuklash | YouTube Data API v3 | Bepul (kuniga taxminan 6 ta yuklash) |
 | Har kuni avtomatik ishlash | GitHub Actions | Bepul |
 
 **Formatlar:**
-- `short`: vertikal 1080×1920, taxminan 50 soniya
-- `long`: gorizontal 1920×1080, uzunligini o'zingiz berasiz (3, 10, 20 daqiqa)
+- `short`: vertikal 1080×1920, standart uzunligi 20 soniya (`SHORT_SECONDS` yoki `--seconds` bilan o'zgartiriladi). 30 soniyadan qisqa Shorts'ning oxiri boshiga ulanib ketadi (loop), shuning uchun qayta-qayta ko'riladi. Pastda TikTok uslubidagi subtitr, tepada progress chizig'i.
+- `long`: gorizontal 1920×1080, uzunligini o'zingiz berasiz (3, 10, 20 daqiqa). Thumbnail ham avtomatik yasaladi.
+
+**Coree Crew Shorts (ovozsiz, OpenAI kerak emas, butunlay bepul):**
+Kanalingizda eng ko'p ko'rilgan Shorts turlari bo'yicha, lekin **original** personajlar bilan yasaladi. Bosh rolda doim **Band** chiqadi: jonli musiqa asboblari 🎷 Saxo, 🎸 Uku, 🌳 Barky va 🧀 Brie. Ularga 12 ta Crew personaji qo'shiladi: Coree, Zappi, Moxi, Leafy, Bloop, Rexo, Tiko, Pluma, Nova, Grimm, Mintz, Bongo. Har bir video 7–10 soniya davom etadi, original beat bilan va loop qilib ko'rishga mos.
+- `party`: "Color Party", hamma birma-bir bitta personajga aylanadi, har biri o'z rangida.
+- `horror`: "Normal vs Horror", ekran chaqmoq bilan ikkiga bo'lingan, neon ranglar. Qon yo'q, bolalar uchun xavfsiz.
+- `pick`: "Pick One", 3 ta personaj, 3-2-1 sanash, g'olib tanlanadi va konfetti tushadi.
+
+```bash
+npm run make -- --format crew                  # tasodifiy format
+npm run make -- --format crew --style party --upload --privacy public
+```
+
+**Neon Hop (HopNova kanali uchun, uzun, gorizontal, OpenAI kerak emas):**
+4 ta neon yo'lak, har birida Band personaji (Saxo, Uku, Barky, Brie) uch o'lchamli plitkalar ustida original EDM beat ritmida sakraydi. Har bir yo'lakda hisob ko'rsatiladi, har 32 zarbda "LEVEL UP" chiqadi. Musiqa intro, asosiy qism, drop va break bo'limlaridan iborat to'liq trek bo'lib, bir xil loop emas.
+
+```bash
+npm run make -- --format hop --minutes 3.5
+```
+
+**Kontent original bo'lishi uchun:**
+- **Coree.** Kanalning o'z maskot-boshlovchisi, noldan chizilgan original personaj. Har videoda ekran burchagida turadi, gapirganda og'zi qimirlaydi, ko'zlarini pirpiratadi. Thumbnail'da ham chiqadi. Ssenariy Coree nomidan, birinchi shaxsda, o'z fikri va hazillari bilan yoziladi.
+- **Original musiqa.** Har video uchun yangi beat avtomatik yaratiladi: tempo, tonallik, akkordlar va melodiya har safar boshqacha. Tayyor trek ishlatilmaydi, shuning uchun Content ID muammosi bo'lmaydi.
+- **8 xil format.** Top-ro'yxat, fan nazariya, "what if" hikoya, viktorina, "mif yoki fakt", versus jang, personaj haqida batafsil, "oldin va keyin". Har video uchun tasodifiy biri tanlanadi, shuning uchun kanal bir xil shablonda ko'rinmaydi.
+
+**Videoda nimalar bor:**
+- Personaj sakrab chiqadi va musiqa ritmida tebranadi.
+- AI rasmlarda zoom va pan harakati bo'ladi.
+- Sahnalar oq chaqnash bilan almashadi.
+- Aytilayotgan so'z sariq bo'lib sakraydi.
+- Fon musiqasi boshida asta kuchayadi va oxirida pasayadi.
 
 ---
 
 ## 1. Kompyuterga o'rnatish
 
-1. **Python 3.11+** va **FFmpeg** ni o'rnating.
-   - Windows: `winget install Python.Python.3.12` va `winget install Gyan.FFmpeg`
+1. **Node.js 22** ni o'rnating: https://nodejs.org
 2. Loyihani yuklab oling va kutubxonalarni o'rnating:
    ```bash
    git clone https://github.com/ahliyorjonsoliyev0534-gif/suprunki.git
    cd suprunki
-   pip install -r requirements.txt
+   npm install
    ```
 3. `.env.example` faylini `.env` deb nusxalang va `OPENAI_API_KEY` ni yozing.
+
+FFmpeg yoki Chrome'ni alohida o'rnatish shart emas, Remotion ularni o'zi oladi.
 
 ## 2. YouTube'ga ulash (bir marta, parol kerak emas)
 
 1. https://console.cloud.google.com saytiga kiring va yangi loyiha yarating.
-2. **APIs & Services → Library** bo'limida **YouTube Data API v3** ni yoqing (Enable).
+2. **APIs & Services → Library** bo'limida **YouTube Data API v3** ni yoqing.
 3. **OAuth consent screen** ni sozlang:
    - User type: External.
    - Ilova nomi va emailingizni yozing.
@@ -45,42 +76,49 @@ Mavzu → Ssenariy (OpenAI) → Ovoz (Edge-TTS) → Rasmlar (sizniki yoki AI) �
 4. **Credentials → Create credentials → OAuth client ID → Desktop app** ni tanlang. Yaratilgan JSON faylni yuklab oling va loyiha papkasiga `client_secret.json` nomi bilan qo'ying.
 5. Ulanish buyrug'ini ishga tushiring:
    ```bash
-   python -m sprunki_studio auth
+   npm run auth
    ```
-   Brauzer ochiladi. **Sprunki Core** kanalini tanlab, "Allow" ni bosing. `token.json` fayli saqlanadi.
+   Terminalda havola chiqadi. Uni brauzerda oching, **SprunkiCoreee** kanalini tanlab "Allow" ni bosing. `token.json` fayli saqlanadi.
 6. Hammasi joyidaligini tekshiring:
    ```bash
-   python -m sprunki_studio check
+   npm run check
    ```
 
-> ⚠️ **Token 7 kundan keyin o'chib qolmasligi uchun:** OAuth consent screen sahifasida **"Publish app"** tugmasini bosing (In production holatiga o'tadi). Ilova faqat sizniki bo'lgani uchun Google tekshiruvi shart emas, faqat kirishda "unverified" ogohlantirishi chiqadi. Uni **Advanced → Continue** orqali o'tib ketasiz.
+> ⚠️ **Token 7 kundan keyin o'chib qolmasligi uchun** OAuth consent screen sahifasida **"Publish app"** tugmasini bosing. Ilova faqat sizniki bo'lgani uchun Google tekshiruvi shart emas. Kirishda "unverified" ogohlantirishi chiqsa, **Advanced → Continue** orqali o'tasiz.
 
 ## 3. Video yasash
 
 ```bash
 # 1 ta Short, mavzuni o'zi tanlaydi (tekshirish uchun yuklamaydi)
-python -m sprunki_studio make --format short
+npm run make -- --format short
+
+# 45 soniyalik Short
+npm run make -- --format short --seconds 45
 
 # O'zingiz bergan mavzuda 10 daqiqalik video
-python -m sprunki_studio make --format long --minutes 10 --topic "Every Sprunki Character Explained"
+npm run make -- --format long --minutes 10 --topic "Every Sprunki Character Explained"
 
 # Yasab, darhol YouTube'ga yuklash
-python -m sprunki_studio make --format short --upload --privacy public
+npm run make -- --format short --upload --privacy public
 
-# Oldindan 20 ta mavzu tayyorlab qo'yish (data/topics.json ga yoziladi, xohlasangiz tahrirlang)
-python -m sprunki_studio ideas --format short -n 20
-python -m sprunki_studio ideas --format long -n 10
+# Oldindan mavzular tayyorlab qo'yish (data/topics.json ga yoziladi, xohlasangiz tahrirlang)
+npm run ideas -- --format short -n 20
 
-# Avtopilot: 3 ta Short va 1 ta uzun video, har biri 4 soat oralig'ida ochiladi
-python -m sprunki_studio auto --shorts 3 --long 1 --minutes 8 --spread-hours 4
+# Avtopilot: 2 ta Crew Short, 1 ta ovozli Short va 1 ta uzun video, har biri 4 soat oralig'ida ochiladi
+npm run auto -- --crew 2 --shorts 1 --long 1 --minutes 8 --spread-hours 4
+
+# Tayyor videoni Remotion Studio'da ko'rish va dizaynini sozlash
+npm run preview -- output/<video-papkasi>
+
+# Dizaynni namunaviy ma'lumot bilan tahrirlash (http://localhost:3000)
+npm run dev
 ```
 
-Natija `output/<sana>-<mavzu>/` papkasiga tushadi. Ichida `video.mp4`, `thumbnail.jpg` va `script.json` bo'ladi.
+Natija `output/<sana>-<mavzu>/` papkasiga tushadi. Ichida `video.mp4`, `thumbnail.jpg`, `script.json` va `props.json` bo'ladi.
 
 **Sifatni oshirish uchun:**
 - `assets/characters/` papkasiga personaj rasmlarini qo'ying (masalan `oren.png`, `raddy.png`). Shunda videolar haqiqiy Sprunki ko'rinishida chiqadi.
-- `assets/music/` papkasiga mualliflik huquqidan xoli musiqa qo'ying.
-- `assets/fonts/` papkasiga qalin shrift qo'ying (masalan Luckiest Guy).
+- O'z musiqangizni ishlatmoqchi bo'lsangiz, `assets/music/` papkasiga qo'ying. Bo'sh qolsa, original beat yaratiladi.
 
 ## 4. To'liq avtomatik rejim: GitHub Actions (bepul, kompyuter yoqiq turishi shart emas)
 
@@ -88,7 +126,7 @@ Natija `output/<sana>-<mavzu>/` papkasiga tushadi. Ichida `video.mp4`, `thumbnai
    - `OPENAI_API_KEY`: OpenAI kalitingiz.
    - `YT_TOKEN_JSON`: `token.json` faylining **butun ichidagi matni**.
 2. Ixtiyoriy: **Variables** bo'limida `YT_PRIVACY` (`public`), `TTS_VOICE`, `MADE_FOR_KIDS` ni sozlashingiz mumkin.
-3. Bu kod `main` branchiga qo'shilgach, tizim har kuni 19:23 da (Toshkent vaqti) 2 ta Short yasab yuklaydi. Qo'lda ishga tushirish: **Actions → Sprunki Autopilot → Run workflow**.
+3. Bu kod `main` branchiga qo'shilgach, tizim har kuni 19:23 da (Toshkent vaqti) 2 ta Coree Crew Short va 1 ta ovozli Short yasab yuklaydi. `OPENAI_API_KEY` qo'shilmagan bo'lsa ham Crew Shorts ishlayveradi, buning uchun faqat `YT_TOKEN_JSON` kifoya. Qo'lda ishga tushirish: **Actions → Sprunki Autopilot → Run workflow**.
 4. Tayyor videolarni Actions sahifasidan 3 kun davomida yuklab olib ko'rishingiz mumkin.
 
 ---
@@ -96,33 +134,87 @@ Natija `output/<sana>-<mavzu>/` papkasiga tushadi. Ichida `video.mp4`, `thumbnai
 ## Muhim qoidalar
 
 - **Videolar avval "Private" bo'lib yuklanadi.** Google yangi API loyihalardan yuklangan videolarni loyiha **audit**dan o'tmaguncha private qilib qo'yadi. Ikkita yo'l bor:
-  - Videoni YouTube Studio'da ko'rib chiqib, qo'lda Public qilasiz. Bu qo'shimcha xavfsizlik ham beradi.
+  - Videoni YouTube Studio'da ko'rib chiqib, qo'lda Public qilasiz.
   - Yoki bepul audit uchun ariza berasiz: https://support.google.com/youtube/contact/yt_api_form
-- **Made for Kids:** standart holatda `true`, chunki Sprunki auditoriyasi bolalar. YouTube qoidasi shuni talab qiladi.
-- **Mualliflik huquqi:** Incredibox yoki Sprunki'ning asl treklarini ishlatmang. Tizim o'z ovozi va bepul musiqani ishlatadi.
-- **Sifat > miqdor.** YouTube bir xil shablonda ommaviy yasalgan kontentni monetizatsiya qilmaydi. Kuniga 1–3 ta yaxshi video 10 ta o'rtachasidan ko'ra foydaliroq.
+- **Made for Kids:** standart holatda `true`, chunki Sprunki auditoriyasi bolalar.
+- **Mualliflik huquqi:** Incredibox yoki Sprunki'ning asl treklarini ishlatmang.
+- **Sifat > miqdor.** YouTube bir xil shablonda ommaviy yasalgan kontentni monetizatsiya qilmaydi.
 - **Parolingizni hech qayerga yozmang.** Tizimga faqat `token.json` kerak. Uni bekor qilish: https://myaccount.google.com/permissions
+- **Remotion litsenziyasi:** shaxslar va 3 kishigacha bo'lgan jamoalar uchun bepul. Kattaroq kompaniyaga aylansangiz, https://remotion.dev/license sahifasini o'qing.
 
 ## Loyiha tuzilmasi
 
 ```
-sprunki_studio/
-  script_writer.py  OpenAI: mavzular, ssenariy, sarlavha, tavsif, teglar
-  tts.py            Edge-TTS ovoz + so'zlar vaqti
-  visuals.py        personaj rasmlari / Pollinations AI / zaxira fon
-  subtitles.py      so'zma-so'z yonadigan subtitrlar (ASS)
-  video.py          FFmpeg: zoom/pan harakat, birlashtirish, musiqa
-  thumbnail.py      1280x720 thumbnail
-  youtube.py        OAuth va yuklash
-  pipeline.py       hammasini bog'laydi
-assets/             characters/, music/, fonts/
-data/               topics.json (navbat), history.json (yuklanganlar)
+src/                    Remotion (video dizayni, React)
+  Root.tsx              kompozitsiyalar: SprunkiVideo, Thumbnail
+  SprunkiVideo.tsx      sahnalar ketma-ketligi, musiqa, progress chizig'i
+  Thumbnail.tsx         1280x720 thumbnail
+  components/
+    SceneVisual.tsx     personaj sahnasi / AI rasm (Ken Burns) / nom kartasi
+    Captions.tsx        TikTok uslubidagi subtitr
+    Mascot.tsx          Coree, kanal maskoti (SVG, gapirganda og'zi qimirlaydi)
+  crew/                 Coree Crew: Band (asboblar) va 12 ta personaj, 3 ta Shorts formati
+  hop/                  Neon Hop: 4 yo'lakli ritm animatsiyasi
+    Background.tsx      animatsion gradient fon
+pipeline/               Node (avtomatlashtirish)
+  script-writer.ts      OpenAI: mavzular, ssenariy, sarlavha, tavsif, teglar
+  tts.ts                Edge-TTS ovoz va so'zlar vaqti
+  images.ts             personaj rasmlari va Pollinations AI
+  music.ts              original fon musiqasi generatori
+  render.ts             Remotion render (video + thumbnail)
+  youtube.ts            OAuth va yuklash
+  pipeline.ts           hammasini bog'laydi
+  cli.ts                npm run buyruqlari
+assets/                 characters/, music/
+data/                   topics.json (navbat), history.json (yuklanganlar)
 ```
 
 ## Keyinchalik pullik versiyaga o'tish
 
 | Modul | Hozir (bepul) | Pullik variant |
 |---|---|---|
-| `tts.py` | Edge-TTS | ElevenLabs |
-| `visuals.py` | Pollinations | DALL·E / Flux / Midjourney, AI video (Kling, Runway) |
-| Server | GitHub Actions | VPS: ko'proq va uzunroq videolar |
+| `pipeline/tts.ts` | Edge-TTS | ElevenLabs |
+| `pipeline/images.ts` | Pollinations | DALL·E / Flux, AI video (Kling, Runway) |
+| Render | GitHub Actions | Remotion Lambda (bir necha daqiqada 20 daqiqalik video) |
+
+### Yangi Coree Crew formatlari
+
+- `npm run make -- --format crew --style shadow --featured leafy`: **Guess the Shadow**. Qahramonning qora soyasi, 3 ta variant, 3-2-1 sanoq, keyin javob.
+- `npm run make -- --format crew --style odd --featured moxi`: **Find the Odd One**. 16 ta bir xil qahramondan bittasi boshqa rangda, sanoqdan keyin topib ko'rsatiladi.
+- `npm run make -- --format crew --style band --first saxo,uku,barky,brie,coree,zappi`: **Build the Band**. 6 ta a'zo sahnaga birin-ketin chiqadi, har biri bilan musiqa kuchayadi.
+- `npm run make -- --format crew --style mix --first coree,saxo,zappi,brie,moxi`: **Mix the Beat**. 5 ta qahramon kulrang, uxlab turadi; birin-ketin uyg'onib, rangga kiradi va o'z ovozini qo'shadi (musiqa kuchayadi).
+- `npm run make -- --format crew --style survive`: **Last One Standing**. 8 qahramon, ruletka chirog'i birini tanlaydi, poli ochilib tushib ketadi; oxirida bitta g'olib toj bilan qoladi.
+- `npm run make -- --format crew --style levels --featured bloop`: **Find the Odd One Out, 3 bosqich** (oson, o'rta, qiyin). Har bosqichda katak ko'payadi, rang farqi kamayadi; tomoshabin oxirigacha ko'radi.
+- `npm run make -- --format crew --style hero --featured pluma`: **New Character**. Qorong'i neon sahna, soyadagi qahramon, 3-2-1, keyin yorqin ochilish (kanal bannerlari uslubida).
+
+## Sprunki Core Studio (ish stoli dasturi)
+
+Mavzu yozasiz, davomiylikni tanlaysiz, qolganini studiya o'zi qiladi: ssenariy, qahramonlar ovozi, animatsiya, musiqa, effektlar, subtitr va FFmpeg eksport.
+
+**Ishga tushirish (Windows):** `start_studio.bat` faylini ikki marta bosing. Oldindan kerak: Node.js LTS, Python 3.10+, FFmpeg (`winget install ffmpeg`).
+macOS/Linux: `./start_studio.sh`.
+
+| Bo'lim | Nima qiladi |
+|---|---|
+| Dashboard | Statistika, so'nggi ishlar, tezkor tugmalar |
+| AI Story Generator | Mavzu + kategoriya (adventure, friendship, mystery, comedy, musical, emotional, twist, battle) → sahnalar, dialoglar, his-tuyg'ular, rasm/video promptlari, musiqa ko'rsatmalari (JSON, tahrirlanadi) |
+| Character Studio | 16 ta Coree Crew qahramoni: xarakter, gapirish uslubi, iborasi, harakati, ovozi (bir xil ovozga ruxsat bermaydi) |
+| Shorts Generator | 9:16, 15/30/45/60 s, hook bilan, bitta tugma |
+| Long Video Generator | 16:9, 3/10/20/30/60 daqiqa, 1080p yoki 4K |
+| AI Voice Studio | Ovoz manbasi: Edge (bepul), OpenAI (pullik, so'raladi), oflayn; har qahramon ovozini sinash |
+| Animation Studio | Loyihani Remotion Studio'da kadrma-kadr ko'rish |
+| Video Editor | Sahnalar tartibi, joy, kamera, kayfiyat, o'tish; gaplar, his-tuyg'u, harakat, SFX; qayta render |
+| Music & Sound Effects | Original sintez musiqa (dialogda pasayadi), 10 ta effekt, subtitr |
+| Export Studio | Ko'rish, papka, 4K eksport, YouTube sarlavha/tavsif/teglar, .srt |
+| Settings | Kanal nomi, OpenAI kaliti (faqat `.env` da), pullik API'dan oldin so'rash, tizim tekshiruvi |
+
+Buyruq qatoridan:
+```
+npm run make -- --format story --kind short --seconds 30 --topic "the golden microphone" --category battle
+npm run make -- --format story --kind long --minutes 10 --topic "a concert on the moon" --category musical --4k
+npm run make -- --format story --script output/<papka>/script.json     # tahrirlangan ssenariydan
+npx tsx pipeline/cli.ts voice-test --cast zappi --topic "Zap zap!" --voice edge
+```
+Har ish papkasida: `video.mp4`, `subtitles.srt`, `script.json`, `youtube.json`, `props.json`.
+
+Qahramonlar faqat kanalning o'z original Coree Crew personajlari: Incredibox yoki rasmiy Sprunki personajlari ishlatilmaydi (mualliflik huquqi). Horror uslubi avtomatik yoqilmaydi.

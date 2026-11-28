@@ -1,0 +1,51 @@
+{
+  "name": "sprunki-core-studio",
+  "version": "1.0.0",
+  "description": "Sprunki Core uchun avtomatik YouTube video zavodi (Remotion)",
+  "repository": {},
+  "license": "UNLICENSED",
+  "engines": {
+    "node": "^20.19.0 || ^22.13.0 || >=24"
+  },
+  "private": true,
+  "dependencies": {
+    "@fontsource/luckiest-guy": "^5.3.0",
+    "@remotion/bundler": "4.0.543",
+    "@remotion/captions": "4.0.543",
+    "@remotion/cli": "4.0.543",
+    "@remotion/media-parser": "4.0.543",
+    "@remotion/renderer": "4.0.543",
+    "dotenv": "^18.0.10",
+    "googleapis": "^190.0.0",
+    "https-proxy-agent": "^9.1.0",
+    "msedge-tts": "^2.1.1",
+    "openai": "^7.57.0",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "remotion": "4.0.543"
+  },
+  "devDependencies": {
+    "@remotion/eslint-config-flat": "4.0.543",
+    "@types/node": "^26.6.6",
+    "@types/react": "19.3.0",
+    "@types/web": "0.0.166",
+    "eslint": "10.12.0",
+    "prettier": "3.8.1",
+    "tsx": "^4.23.15",
+    "typescript": "5.9.3"
+  },
+  "scripts": {
+    "dev": "remotion studio",
+    "auth": "tsx pipeline/cli.ts auth",
+    "check": "tsx pipeline/cli.ts check",
+    "ideas": "tsx pipeline/cli.ts ideas",
+    "make": "tsx pipeline/cli.ts make",
+    "auto": "tsx pipeline/cli.ts auto",
+    "preview": "tsx pipeline/cli.ts preview",
+    "lint": "eslint src && tsc"
+  },
+  "allowScripts": {
+    "esbuild": false
+  },
+  "type": "module"
+}

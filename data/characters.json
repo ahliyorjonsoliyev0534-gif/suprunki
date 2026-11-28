@@ -1,0 +1,138 @@
+{
+  "_note": "Coree Crew character profiles for Sprunki Core Studio. Appearance lives in src/crew/characters.ts. edge = free Microsoft Edge voice, openai = paid OpenAI TTS voice (asked before use), babble = offline fallback pitch in Hz.",
+  "narrator": {
+    "name": "Narrator",
+    "personality": "Warm storyteller who sets the scene in one or two short sentences.",
+    "speakingStyle": "calm, cinematic, clear",
+    "catchphrase": "And that is when everything changed...",
+    "voice": { "edge": "en-US-AndrewMultilingualNeural", "rate": "+0%", "pitch": "+0Hz", "openai": "onyx", "instructions": "Warm, cinematic storybook narrator.", "babble": 150 }
+  },
+  "coree": {
+    "name": "Coree",
+    "personality": "Brave, optimistic leader of the crew. Loves headphones and big beats. Always has a plan.",
+    "speakingStyle": "energetic, confident, short sentences",
+    "catchphrase": "Let's drop the beat!",
+    "behavior": "bounces on the beat, points forward when giving orders",
+    "voice": { "edge": "en-US-AnaNeural", "rate": "+8%", "pitch": "+0Hz", "openai": "nova", "instructions": "Energetic young hero, upbeat and confident.", "babble": 330 }
+  },
+  "zappi": {
+    "name": "Zappi",
+    "personality": "Hyperactive electric genius. Talks super fast, invents gadgets that sometimes explode.",
+    "speakingStyle": "very fast, excited, lots of exclamations",
+    "catchphrase": "Zap-zap, I have an idea!",
+    "behavior": "jitters and sparks, jumps a lot",
+    "voice": { "edge": "en-US-JennyNeural", "rate": "+25%", "pitch": "+15Hz", "openai": "shimmer", "instructions": "Hyper, fast-talking excited inventor.", "babble": 420 }
+  },
+  "moxi": {
+    "name": "Moxi",
+    "personality": "Sleepy, sarcastic and secretly kind. Plays deep bass notes.",
+    "speakingStyle": "slow, deadpan, dry jokes",
+    "catchphrase": "Wake me up when it's over.",
+    "behavior": "yawns, moves slowly",
+    "voice": { "edge": "en-US-GuyNeural", "rate": "-12%", "pitch": "-10Hz", "openai": "onyx", "instructions": "Sleepy, deadpan, sarcastic but friendly.", "babble": 140 }
+  },
+  "leafy": {
+    "name": "Leafy",
+    "personality": "Gentle nature lover, shy, cares about everyone's feelings.",
+    "speakingStyle": "soft, kind, a little shy",
+    "catchphrase": "Everyone deserves a song.",
+    "behavior": "sways like a plant in the wind",
+    "voice": { "edge": "en-GB-MaisieNeural", "rate": "-4%", "pitch": "+0Hz", "openai": "coral", "instructions": "Soft, shy and kind young voice.", "babble": 380 }
+  },
+  "bloop": {
+    "name": "Bloop",
+    "personality": "Clumsy comedian who always trips but makes everyone laugh.",
+    "speakingStyle": "goofy, silly, giggles",
+    "catchphrase": "Oops! I meant to do that!",
+    "behavior": "wobbles, trips, spins",
+    "voice": { "edge": "en-US-ChristopherNeural", "rate": "+5%", "pitch": "+20Hz", "openai": "echo", "instructions": "Goofy, silly comedian with giggles.", "babble": 260 }
+  },
+  "rexo": {
+    "name": "Rexo",
+    "personality": "Proud self-declared king of the stage. Dramatic, competitive, wants to win everything.",
+    "speakingStyle": "dramatic, royal, loud",
+    "catchphrase": "Bow before the king of beats!",
+    "behavior": "puffs up, poses dramatically",
+    "voice": { "edge": "en-GB-RyanNeural", "rate": "-2%", "pitch": "-5Hz", "openai": "ash", "instructions": "Dramatic, proud, theatrical royal voice.", "babble": 180 }
+  },
+  "tiko": {
+    "name": "Tiko",
+    "personality": "Cool skater kid, chill and funny, always relaxed.",
+    "speakingStyle": "casual slang, relaxed",
+    "catchphrase": "No stress, just rhythm.",
+    "behavior": "leans back, nods to the beat",
+    "voice": { "edge": "en-US-EricNeural", "rate": "+2%", "pitch": "+10Hz", "openai": "verse", "instructions": "Chill, laid-back cool kid.", "babble": 240 }
+  },
+  "pluma": {
+    "name": "Pluma",
+    "personality": "Elegant singer, dreamy and romantic, loves high notes.",
+    "speakingStyle": "melodic, graceful, poetic",
+    "catchphrase": "La-la-la, music is magic!",
+    "behavior": "twirls gracefully",
+    "voice": { "edge": "en-AU-NatashaNeural", "rate": "+0%", "pitch": "+12Hz", "openai": "shimmer", "instructions": "Dreamy, melodic, graceful singer.", "babble": 460 }
+  },
+  "nova": {
+    "name": "Nova",
+    "personality": "Wise, calm and mysterious. Knows old legends of the music world.",
+    "speakingStyle": "calm, wise, mysterious",
+    "catchphrase": "Every sound has a story.",
+    "behavior": "floats gently, glows",
+    "voice": { "edge": "en-GB-SoniaNeural", "rate": "-8%", "pitch": "-4Hz", "openai": "sage", "instructions": "Calm, wise, mysterious voice.", "babble": 300 }
+  },
+  "grimm": {
+    "name": "Grimm",
+    "personality": "Grumpy loner who acts tough but has a big heart.",
+    "speakingStyle": "grumpy, short, low",
+    "catchphrase": "Hmph. Fine. I'll help.",
+    "behavior": "crosses arms, frowns, small shy smile",
+    "voice": { "edge": "en-US-RogerNeural", "rate": "-6%", "pitch": "-15Hz", "openai": "onyx", "instructions": "Grumpy, gravelly, secretly soft-hearted.", "babble": 120 }
+  },
+  "mintz": {
+    "name": "Mintz",
+    "personality": "Techy DJ robot fan, analytical and precise, loves numbers.",
+    "speakingStyle": "precise, robotic jokes, nerdy",
+    "catchphrase": "Calculating... maximum groove!",
+    "behavior": "moves in sharp robot steps",
+    "voice": { "edge": "en-IN-PrabhatNeural", "rate": "+4%", "pitch": "+0Hz", "openai": "alloy", "instructions": "Precise, nerdy, slightly robotic.", "babble": 280 }
+  },
+  "bongo": {
+    "name": "Bongo",
+    "personality": "Big-hearted drummer, loud laugh, loves food and friends.",
+    "speakingStyle": "loud, warm, laughing",
+    "catchphrase": "Boom-boom, let's eat!",
+    "behavior": "drums on everything",
+    "voice": { "edge": "en-AU-WilliamNeural", "rate": "+0%", "pitch": "-8Hz", "openai": "ballad", "instructions": "Big, warm, laughing drummer.", "babble": 160 }
+  },
+  "saxo": {
+    "name": "Saxo",
+    "personality": "Smooth jazz saxophone, charming and smooth-talking.",
+    "speakingStyle": "smooth, cool, jazzy",
+    "catchphrase": "Smooth as a sax solo.",
+    "behavior": "sways like playing jazz",
+    "voice": { "edge": "en-US-BrianNeural", "rate": "-4%", "pitch": "+0Hz", "openai": "ash", "instructions": "Smooth, charming jazz voice.", "babble": 200 }
+  },
+  "uku": {
+    "name": "Uku",
+    "personality": "Happy beach ukulele, sunny and cheerful, a bit naive.",
+    "speakingStyle": "cheerful, sunny, simple",
+    "catchphrase": "Strum it happy!",
+    "behavior": "bounces happily",
+    "voice": { "edge": "en-NZ-MitchellNeural", "rate": "+6%", "pitch": "+10Hz", "openai": "fable", "instructions": "Sunny, cheerful, slightly naive.", "babble": 350 }
+  },
+  "barky": {
+    "name": "Barky",
+    "personality": "Ancient tree drummer, slow, wise grandpa of the band.",
+    "speakingStyle": "slow, old, wise",
+    "catchphrase": "Patience, young beats.",
+    "behavior": "creaks, slow sway",
+    "voice": { "edge": "en-GB-ThomasNeural", "rate": "-15%", "pitch": "-12Hz", "openai": "sage", "instructions": "Slow, ancient, wise grandpa.", "babble": 110 }
+  },
+  "brie": {
+    "name": "Brie",
+    "personality": "Sassy cheese pop star, funny and confident, loves the spotlight.",
+    "speakingStyle": "sassy, witty, confident",
+    "catchphrase": "Say cheese, darling!",
+    "behavior": "poses for cameras",
+    "voice": { "edge": "en-US-AriaNeural", "rate": "+6%", "pitch": "+5Hz", "openai": "coral", "instructions": "Sassy, witty, confident pop star.", "babble": 400 }
+  }
+}
